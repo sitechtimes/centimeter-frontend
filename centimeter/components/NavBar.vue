@@ -27,9 +27,6 @@
           <a class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1"
             ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3></a
           >
-          /<a class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/app"
-            ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Go to dashboard</h3></a
-          >
         </div>
       </div>
 
@@ -228,14 +225,6 @@ const navButtons: NavButtons[] = [
       }
     ]
   },
-  {
-    name: "Pricing",
-    path: "/"
-  },
-  {
-    name: "Talk to Sales",
-    path: "/"
-  }
 ];
 </script>
 
