@@ -3,7 +3,7 @@
     <header class="transition duration-500 bg-[color:var(--bg-color)] h-16 w-screen">
       <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] relative z-20">
         <a class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
-          <!-- <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" /> -->
+          <!-- <img class="h-16" src="/ui/TEMP.webp" alt="Vent Defeater logo" /> -->
         </a>
         <nav class="flex items-center justify-center gap-3">
           <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import ThemeToggle from './ThemeToggle.vue'
 type NavButtons = {
   name: string;
   path: string;
