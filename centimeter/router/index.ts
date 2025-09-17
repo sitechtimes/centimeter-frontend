@@ -9,6 +9,11 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    {
+      path: '/join',
+      name: 'join',
+      component: () => import('../views/JoinView.vue'),
+    }
   ],
 })
 
