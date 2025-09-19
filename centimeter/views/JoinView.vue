@@ -19,7 +19,7 @@
         v-model="digits[idx]"
         @focus="focusedIndex = idx"
         @input="onInput(idx, $event)"
-        @keydown.backspace="onBackspace(idx, $event)"
+        @keydown.backspace="onBackspace(idx)"
         autocomplete="one-time-code"
         aria-label="Digit"
       />
@@ -75,7 +75,7 @@ function onInput(idx: number, e: Event) {
   }
 }
 
-function onBackspace(idx: number, e: KeyboardEvent) {
+function onBackspace(idx: number) {
   if (digits.value[idx] === "") {
     if (idx > 0) {
       digits.value[idx - 1] = "";
