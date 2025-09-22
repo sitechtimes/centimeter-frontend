@@ -30,7 +30,7 @@
       <button
         @click="join"
         :disabled="!isComplete"
-        :class="['btn btn-primary btn-lg rounded-full mt-6 px-8', !isComplete ? 'btn-disabled' : '']"
+        class="btn btn-primary btn-lg rounded-full mt-6 px-8"
       >
         Join
       </button>
@@ -41,11 +41,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeMount, nextTick } from "vue";
 import NavBar from "../components/NavBar.vue";
+import { useTemplateRefsList } from '@vueuse/core';
 
-const showBanner = ref<boolean>(false);
+const showBanner = ref(false);
 const digits = ref<string[]>(Array(6).fill(""));
 const focusedIndex = ref<number>(0);
-const digitRefs = ref<(HTMLInputElement | null)[]>([]);
+const digitRefs = useTemplateRefsList<HTMLInputElement>();
 
 const isComplete = computed<boolean>(() => digits.value.every((d) => d !== ""));
 
@@ -67,12 +68,8 @@ function focusInput(idx: number) {
 
 function onInput(idx: number, e: Event) {
   const input = e.target as HTMLInputElement;
-  let val = input.value.replace(/\D/g, "");
-  if (val.length > 1) val = val.slice(-1);
-  digits.value[idx] = val;
-  if (val && idx < digits.value.length - 1) {
-    nextTick(() => focusInput(idx + 1));
-  }
+  digits.value[idx] = input.value.replace(/\D/g, "").slice(-1);
+  nextTick(() => focusInput(idx + 1));
 }
 
 function onBackspace(idx: number) {
