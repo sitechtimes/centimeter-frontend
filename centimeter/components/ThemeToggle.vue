@@ -1,13 +1,17 @@
 <template>
   <button
     @click="toggleTheme"
-    class="bg-[color:var(--bg-color)] w-14 h-8 px-8 border-solid border-2 border-[color:var(--text-color)] rounded-full relative transition duration-300"
+    class="bg-[color:var(--bg-color)] hover:bg-[color:var(--faded-bg-color)] w-14 h-8 px-8 border-solid border-2 border-[color:var(--text-color)] rounded-full relative transition-all duration-300"
+    :class="{ 'h-11 px-10': big }"
     :id="big ? 'big' : ''"
   >
     <img
-      class="absolute top-0.5 left-1 h-6 transition duration-500"
-      :class="{ 'translate-x-8': dark, 'translate-x-10': dark && big }"
-      :style="{ left: dark && big ? '1rem' : '0.25rem' }"
+      class="absolute top-0.5 left-1 h-6 transition-all duration-500"
+      :class="{ 
+        'translate-x-8': dark && !big, 
+        'translate-x-10': dark && big,
+        'top-1.5 h-7.5 left-1.5': big
+      }"
       :src="dark ? '/ui/moon.svg' : '/ui/sun.svg'"
       aria-hidden="true"
     />
@@ -18,7 +22,7 @@
 type Props = {
   big?: boolean;
 };
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 defineProps<Props>();
 
 const dark = ref(false);
@@ -36,22 +40,4 @@ onMounted(() => {
 }); */
 </script>
 
-<style lang="scss" scoped>
-#big {
-  height: 2.75rem;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
 
-  img {
-    top: 0.3125rem;
-    height: 1.875rem;
-    left: 0.375rem;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  button:hover {
-    background-color: var(--faded-bg-color);
-  }
-}
-</style>

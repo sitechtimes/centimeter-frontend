@@ -15,7 +15,7 @@
         inputmode="numeric"
         maxlength="1"
         class="w-14 h-14 text-center text-2xl rounded-md border-2 bg-base-200 focus:ring-2 focus:ring-primary transition-all duration-200"
-        :class="{'border-primary/30 bg-transparent': digit !== ''}"
+        :class="{ 'border-primary/30 bg-transparent': digit !== '' }"
         v-model="digits[idx]"
         @focus="focusedIndex = idx"
         @input="onInput(idx, $event)"
