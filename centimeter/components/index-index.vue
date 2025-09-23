@@ -7,11 +7,6 @@
         <p class="text-2xl">Turn presentations into conversations with interactive polls that engage meetings and classrooms.</p>
         <button
           class="bg-black text-white dark:bg-white dark:text-black capsule"
-          @click="
-            () => {
-              console.log('no');
-            }
-          "
         >
           Get started for free
         </button>
