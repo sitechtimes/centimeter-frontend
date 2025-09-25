@@ -27,7 +27,7 @@ defineProps<Props>();
 
 const dark = ref(false);
 
-/* function toggleTheme() {
+function toggleTheme() {
   const wasLight = userStore.theme === "light";
   userStore.theme = wasLight ? "dark" : "light";
   dark.value = wasLight;
@@ -37,7 +37,7 @@ const dark = ref(false);
 
 onMounted(() => {
   dark.value = userStore.theme == "dark";
-}); */
+}); 
 </script>
 
 

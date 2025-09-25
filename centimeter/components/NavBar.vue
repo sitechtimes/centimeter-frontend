@@ -3,7 +3,7 @@
     <header class="transition duration-500 bg-[color:var(--bg-color)] h-16 w-screen">
       <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] relative z-20">
         <RouterLink class="flex items-center justify-center gap-2 no-underline text-[color:var(--text-color)]" to="/">
-          <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
+          <!-- <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" /> -->
         </RouterLink>
         <nav class="flex items-center justify-center gap-3">
           <div class="relative group" v-for="button in navButtons" :key="button.name">
