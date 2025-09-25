@@ -22,10 +22,10 @@
         </nav>
         <div class="flex items-center justify-center gap-3">
           <ThemeToggle />
-          <RouterLink class="no-underline" to="/login">
+          <RouterLink class="no-underline" to="/auth/login">
             <h3 class="font-bold m-0">Log in</h3>
           </RouterLink>
-          <RouterLink class="no-underline bg-[color:var(--primary)] hover:bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" to="/login?signup=1">
+          <RouterLink class="no-underline bg-[color:var(--primary)] hover:bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" to="/auth/signup">
             <h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3>
           </RouterLink>
         </div>
@@ -56,7 +56,7 @@ type NavButtons = {
   dropdown?: { name: string; path: string }[];
 };
 
-const props = defineProps<{ showJoinBanner?: boolean }>();
+defineProps<{ showJoinBanner?: boolean }>();
 const emit = defineEmits<{ toggleBanner: [void] }>();
 
 const navButtons = [

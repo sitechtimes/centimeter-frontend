@@ -27,6 +27,13 @@ defineProps<Props>();
 
 const dark = ref(false);
 
+function toggleTheme() {
+  dark.value = !dark.value;
+  // TODO: Implement actual theme switching
+  document.body.classList.toggle('dark');
+  localStorage.setItem('theme', dark.value ? 'dark' : 'light');
+}
+
 /* function toggleTheme() {
   const wasLight = userStore.theme === "light";
   userStore.theme = wasLight ? "dark" : "light";
