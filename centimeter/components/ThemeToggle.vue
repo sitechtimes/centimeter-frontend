@@ -34,17 +34,6 @@ function toggleTheme() {
   localStorage.setItem('theme', dark.value ? 'dark' : 'light');
 }
 
-/* function toggleTheme() {
-  const wasLight = userStore.theme === "light";
-  userStore.theme = wasLight ? "dark" : "light";
-  dark.value = wasLight;
-  document.body.classList[wasLight ? "add" : "remove"]("dark");
-  localStorage.setItem("theme", userStore.theme);
-}
-
-onMounted(() => {
-  dark.value = userStore.theme == "dark";
-}); */
 </script>
 
 

@@ -8,10 +8,12 @@
         <button
           class="bg-black text-white dark:bg-white dark:text-black capsule"
         >
-          Get started, it's free
+          Get started for free
         </button>
-        <p class="text-sm text-gray-600 dark:text-gray-300">No credit card needed</p>
       </section>
+      <div class="video-container">
+        <video loop autoplay muted src="https://static.mentimeter.com/static/motion/Square.mp4"></video>
+      </div>
       <section class="flex flex-col gap-3 items-center">
         <p class="rounded bg-gray-200 dark:bg-gray-800">Audience experience</p>
         <h2 class="text-5xl">From presentations to conversations</h2>
@@ -37,6 +39,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@reference "tailwindcss"
+
+
 section {
   max-width: 800px;
   overflow-x: hidden;
