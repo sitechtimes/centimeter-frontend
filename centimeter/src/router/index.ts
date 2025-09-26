@@ -21,7 +21,8 @@ const router = createRouter({
       path: '/createpresentation',
       name: 'createpresentation',
       component: () => import('../views/CreatePresentation.vue'),
-    }
+    },
+
   ],
 })
 
