@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NavBar from '../../components/NavBar.vue';
-import indexindex from '../../components/index-index.vue'
+import homeindex from '../../components/home-index.vue'
 
 </script>
 
@@ -8,7 +8,7 @@ import indexindex from '../../components/index-index.vue'
   <main>
     <NavBar/>
   </main>
-  <indexindex/>
+  <homeindex/>
 
   <div>
     

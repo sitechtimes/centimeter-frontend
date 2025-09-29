@@ -24,6 +24,8 @@ type Props = {
 };
 import { onMounted, ref } from "vue";
 defineProps<Props>();
+import { useUserStore } from "../src/stores/user";
+const userStore = useUserStore();
 
 const dark = ref(false);
 

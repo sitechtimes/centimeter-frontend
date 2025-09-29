@@ -36,7 +36,8 @@ onMounted(() => {
 });
 </script>
 
-<style module>
+<style scoped>
+@reference "tailwindcss";
 section {
   max-width: 800px;
   overflow-x: hidden;
