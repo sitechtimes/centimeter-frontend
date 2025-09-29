@@ -17,7 +17,7 @@
       <section class="flex flex-col gap-3 items-center">
         <p class="rounded bg-gray-200 dark:bg-gray-800">Audience experience</p>
         <h2 class="text-5xl">From presentations to conversations</h2>
-        <p class="text-xl">Vent Defeater ensures all voices are heard, even those who might not usually speak up. Anonymous questions means your audience won't be afraid to ask and engage.</p>
+        <p class="text-xl">Centimeter ensures all voices are heard, even those who might not usually speak up. Anonymous questions means your audience won't be afraid to ask and engage.</p>
         <div class="flex gap-6">
           <button class="capsule switcher active">one</button>
           <button class="capsule switcher">two</button>

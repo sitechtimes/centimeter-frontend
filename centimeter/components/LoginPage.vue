@@ -4,7 +4,7 @@
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
     <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
-      <h3 class="mb-4" v-show="showLogin">Log in to your Vent Defeater account</h3>
+      <h3 class="mb-4" v-show="showLogin">Log in to your Centimeter account</h3>
       <h3 class="mb-4" v-show="!showLogin">Create a free account</h3>
 
       <div class="loginButtons flex items-center justify-center flex-col gap-2 w-96">
@@ -82,7 +82,7 @@
     </div>
     <span class="mb-4" v-show="!showLogin">By signing up, you accept our <a href="/">terms of use</a> and <a href="/">privacy policy</a>.</span>
 
-    <h3 v-show="showLogin">New to Vent Defeater?</h3>
+    <h3 v-show="showLogin">New to Centimeter?</h3>
     <h3 v-show="!showLogin">Already have an account?</h3>
     <button class="bg-transparent border-0" @click="showLogin ? router.push('/auth/signup') : router.push('/auth/login')">
       <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? "Sign up now" : "Log in" }}</h3>

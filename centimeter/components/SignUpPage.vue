@@ -53,9 +53,117 @@
 
 
 
+
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { ref, watch, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
 const router = useRouter();
+
+const showLoginAnimation = ref(false);
+const resetPassword = ref(false);
+
+const email = ref("");
+const name = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+
+const emailErr = ref("");
+const nameErr = ref("");
+const passwordErr = ref("");
+const confirmPasswordErr = ref("");
+
+watch(
+    () => email.value,
+    (value: string) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
+        else emailErr.value = "";
+    }
+);
+
+watch(
+    () => password.value,
+    (value: string) => {
+        if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
+        if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
+        else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
+        else passwordErr.value = "";
+    }
+);
+
+watch(
+    () => name.value,
+    (value: string) => {
+        if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
+        else if (value.length > 40) nameErr.value = "name must be less than 40 characters.";
+        else nameErr.value = "";
+    }
+);
+
+watch(
+    () => confirmPassword.value,
+    (value: string) => {
+        if (value != password.value) confirmPasswordErr.value = "Passwords do not match.";
+        else confirmPasswordErr.value = "";
+    }
+);
+
+onMounted(() => {
+    if (route.query["reset-password"]) resetPassword.value = true;
+});
+
+const loginButtons = [
+    {
+        name: "Google",
+        img: "/logo/google.svg",
+        function: loginWithGoogle
+    },
+    {
+        name: "Microsoft",
+        img: "/logo/microsoft.svg",
+        function: loginWithMicrosoft
+    },
+    {
+        name: "Facebook",
+        img: "/logo/facebook.svg",
+        function: loginWithFacebook
+    }
+];
+
+async function signupWithEmail() {
+    router.push("/app/dashboard");
+    return;
+    /*if (emailErr.value || passwordErr.value || nameErr.value) return;
+    try {
+        showLoginAnimation.value = true;
+        await userStore.signUp(email.value, password.value, name.value);
+    } catch (error) {
+        if (error instanceof Error) {
+            passwordErr.value = error.message;
+            if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
+        }
+        return;
+    } finally {
+        showLoginAnimation.value = false;
+    }
+    if (userStore.isAuth) router.push("/app/dashboard");
+    else passwordErr.value = "Something went wrong. Please try again.";*/
+}
+
+async function loginWithGoogle() {
+    window.location.href = "https://www.youtube.com/watch?v=uHgt8giw1LY";
+}
+
+async function loginWithMicrosoft() {
+    loginWithGoogle();
+}
+
+async function loginWithFacebook() {
+    loginWithGoogle();
+}
+
 function goToLogin() {
     router.push('/auth/login');
 }
