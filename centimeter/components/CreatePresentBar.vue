@@ -7,7 +7,8 @@
         </RouterLink>
 
         <RouterLink to="/">
-            <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
+            <img src="" alt="">
+            <!-- Image of an arrow when hover turn gray click go back to see all your presentations -->
         </RouterLink>
 
 
