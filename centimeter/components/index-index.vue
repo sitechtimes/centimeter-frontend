@@ -36,7 +36,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style module>
 section {
   max-width: 800px;
   overflow-x: hidden;

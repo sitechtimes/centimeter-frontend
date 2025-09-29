@@ -22,7 +22,7 @@
 type Props = {
   big?: boolean;
 };
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 defineProps<Props>();
 
 const dark = ref(false);
