@@ -10,10 +10,7 @@
         >
             <img
             class="absolute top-0.5 left-1 h-6 transition-all duration-500"
-            :class="{ 
-                'top-1.5 h-7.5 left-1.5': big
-            }"
-            :src="'/ui/sun.svg'"
+            :src="'/ui/arrow.svg'"
             aria-hidden="true"
     />
   </button>
@@ -37,19 +34,6 @@
         </div>
       </div>
 
-      <!-- <Transition name="goToJoin">
-        <div class="w-screen flex items-center justify-center gap-3 bg-[color:var(--primary-light)] rounded-b-3xl py-3 relative bottom-0 z-10" v-show="showJoinBanner">
-          <p class="text-lg font-medium">Trying to join a live Vent?</p>
-          <RouterLink to="/join" class="flex items-center justify-center gap-1 rounded-full bg-[color:var(--bg-color)] text-[color:var(--text-color)] font-semibold px-4 py-2 hover:bg-[color:var(--primary-light)] transition">
-            Join
-          </RouterLink>
-          <button class="absolute right-12 rounded-full w-8 h-8 flex items-center justify-center hover:bg-[color:var(--primary-shade-translucent)] transition" @click="emit('toggleBanner')">
-            <span class="sr-only">Close</span>
-            <img class="w-5 h-5 dark:invert" src="/ui/x.svg" aria-hidden="true" />
-            ×
-          </button>
-        </div>
-      </Transition> -->
     </header>
   </div>
 </template>
