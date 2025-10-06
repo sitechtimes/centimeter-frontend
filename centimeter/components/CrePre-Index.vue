@@ -4,14 +4,14 @@
             <aside class="fixed right-0 h-screen w-35 overflow-y-auto">
             <div v-for="Component in RightSBComponent" :key="Component.name" class="">
                 <button @click="toggleOwnComponent(Component.name)" class="no-underline 
-                text-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
+                color-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
                 [color:var(--primary-light)] transition border-2 w-30 m-2 p-6 ">
                     {{ Component.name }}
                 </button>
             </div>
         </aside>
         
-        <div v-if="clickedsidebar.length > 0">
+        <div class="fixed right-20 h-screen w-35 overflow-y-auto" v-if="clickedsidebar.length > 0">
             <div v-for="components in clickedsidebar">
                 {{ clickedsidebar[0] }}
             </div>
@@ -20,14 +20,14 @@
         <aside class="fixed left-0 h-screen w-40 border-2 overflow-y-auto">
             <button 
             class="o-underline 
-                text-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
+                color-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
                 [color:var(--primary-light)] transition border-2 w-35 m-2 p-6 ">
                 <h1>+ New Slides</h1>
             </button>
         </aside>
 
-        <div class="">
-
+        <div id="presentation" class="border-2 h-screen w-400 ml-40">
+            Presentations
         </div>
         
     </main>

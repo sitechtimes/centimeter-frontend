@@ -6,7 +6,7 @@
         </RouterLink>
         <button
             @click="ReturnPresent"
-            class="absolute left-2 top-0.5 -translate-y-0.5 flex items-center justify-center">
+            class="absolute left-2 top-2 -translate-y-0.5 flex items-center justify-center">
             <img
             class="h-6 transition-all duration-500"
             :src="'/ui/arrow.svg'"
