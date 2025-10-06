@@ -1,23 +1,18 @@
 <template>
-  <div class="mb-24 flex flex-col items-center justify-center sticky top-0">
-    <header class="transition duration-500 bg-[color:var(--bg-color)] h-16 w-screen">
+  <div class="flex flex-col items-center justify-center w-screen m-0">
+    <header class="transition duration-500 bg-[color:var(--bg-color)] w-screen">
       <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] relative z-20">
         <RouterLink class="flex items-center justify-center gap-2 no-underline text-[color:var(--text-color)]" to="/">
         </RouterLink>
-
         <button
             @click="ReturnPresent"
-        >
+            class="absolute left-2 top-0.5 -translate-y-0.5 flex items-center justify-center">
             <img
-            class="absolute top-0.5 left-1 h-6 transition-all duration-500"
+            class="h-6 transition-all duration-500"
             :src="'/ui/arrow.svg'"
-            aria-hidden="true"
-    />
+            aria-hidden="true"/>
   </button>
-
-  <input v-model="PresentationName" class=" border-solid border-2 border-[color:var(--text-color)]" />
-
-
+  <input v-model="PresentationName" class="h-16 border-solid border-2 border-[color:var(--text-color)]" />
         <nav class="flex items-center justify-center gap-3">
           <div class="relative group" v-for="button in PresentButtons" :key="button.name">
             <RouterLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center px-4 py-2 rounded hover:bg-[color:var(--primary-light)] transition">

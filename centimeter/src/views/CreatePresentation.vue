@@ -1,8 +1,9 @@
 <template>
     <main>
         <createpresent/>
+        <CreatePresentIndex/>
     </main>
-    <CreatePresentIndex/>
+    
 </template>
 
 <script setup lang="ts">
