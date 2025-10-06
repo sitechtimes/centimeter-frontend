@@ -20,22 +20,22 @@
                 </button>
             </div>
             <span class="m-4">or using email</span>
-            <form class="login flex items-center justify-center flex-col gap-7 w-full">
+            <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit.prevent="signupWithEmail">
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="email" type="email" required />
+                    <input v-model="email" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="email" type="email" required />
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="name" type="text" required autocomplete="name" />
+                    <input v-model="name" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="name" type="text" required autocomplete="name" />
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="password">Choose a password <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="password" type="password" required autocomplete="new-password" />
+                    <input v-model="password" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="password" type="password" required autocomplete="new-password" />
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="confirm">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="confirm" type="password" required autocomplete="new-password" />
+                    <input v-model="confirmPassword" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="confirm" type="password" required autocomplete="new-password" />
                 </div>
                 <button class="hover:bg-[var(--text-color)] w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
                     <p class="text-[color:var(--text-color-contrast)]">Sign up</p>
@@ -60,6 +60,8 @@ import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
+import { useUserStore } from '../stores/userStore';
+const userStore = useUserStore();
 
 const showLoginAnimation = ref(false);
 const resetPassword = ref(false);
@@ -133,12 +135,10 @@ const loginButtons = [
 ];
 
 async function signupWithEmail() {
-    router.push("/app/dashboard");
-    return;
-    /*if (emailErr.value || passwordErr.value || nameErr.value) return;
     try {
         showLoginAnimation.value = true;
-        await userStore.signUp(email.value, password.value, name.value);
+        console.log('6 7');
+        await userStore.signUp(email.value, password.value);
     } catch (error) {
         if (error instanceof Error) {
             passwordErr.value = error.message;
@@ -149,7 +149,7 @@ async function signupWithEmail() {
         showLoginAnimation.value = false;
     }
     if (userStore.isAuth) router.push("/app/dashboard");
-    else passwordErr.value = "Something went wrong. Please try again.";*/
+    else passwordErr.value = "Something went wrong. Please try again.";
 }
 
 async function loginWithGoogle() {
