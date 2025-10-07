@@ -1,7 +1,7 @@
 <template>
     <div>
         <main class="flex">
-            <aside class="fixed right-0 h-screen w-35 overflow-y-auto">
+            <div class="fixed right-0 w-35 overflow-y-auto">
             <div v-for="Component in RightSBComponent" :key="Component.name" class="">
                 <button @click="toggleOwnComponent(Component.name)" class="no-underline 
                 color-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
@@ -9,25 +9,30 @@
                     {{ Component.name }}
                 </button>
             </div>
-        </aside>
-        
-        <div class="fixed right-20 h-screen w-35 overflow-y-auto" v-if="clickedsidebar.length > 0">
-            <div v-for="components in clickedsidebar">
-                {{ clickedsidebar[0] }}
-            </div>
         </div>
+        
+        
 
-        <aside class="fixed left-0 h-screen w-40 border-2 overflow-y-auto">
+        <div class="fixed left-0 h-screen w-40 overflow-y-auto">
             <button 
             class="o-underline 
                 color-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
                 [color:var(--primary-light)] transition border-2 w-35 m-2 p-6 ">
                 <h1>+ New Slides</h1>
             </button>
-        </aside>
+        </div>
 
-        <div id="presentation" class="border-2 h-screen w-400 ml-40">
-            Presentations
+
+        <div class="aspect-video border-2 flex justify-center h-fit w-screen ml-40 mr-40">
+            <div class="relative">
+                Presentations
+            </div>
+            <div class="fixed right-20 w-35 overflow-y-auto" v-if="clickedsidebar.length > 0">
+                <div v-if="clickedsidebar.length > 0" class="border-2 m-2 p-6">
+                    {{ clickedsidebar[0] }}
+                </div>
+            </div>
+            
         </div>
         
     </main>
