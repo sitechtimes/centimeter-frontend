@@ -22,12 +22,20 @@
         </nav>
         <div class="flex items-center justify-center gap-3">
           <ThemeToggle />
-          <RouterLink class="no-underline" to="/auth/login">
-            <h3 class="font-bold m-0">Log in</h3>
-          </RouterLink>
-          <RouterLink class="no-underline bg-[color:var(--primary)] hover:bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" to="/auth/signup">
-            <h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3>
-          </RouterLink>
+          <template v-if="userStore.isAuth">
+            <span class="font-bold">{{ userStore.user?.email }}</span>
+            <button class="no-underline bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" @click="userStore.user = null; userStore.isAuth = false;">
+              <h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Log out</h3>
+            </button>
+          </template>
+          <template v-else>
+            <RouterLink class="no-underline" to="/auth/login">
+              <h3 class="font-bold m-0">Log in</h3>
+            </RouterLink>
+            <RouterLink class="no-underline bg-[color:var(--primary)] hover:bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" to="/auth/signup">
+              <h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3>
+            </RouterLink>
+          </template>
         </div>
       </div>
 
@@ -50,6 +58,9 @@
 
 <script setup lang="ts">
 import ThemeToggle from './ThemeToggle.vue'
+import { useUserStore } from '../stores/userStore';
+const userStore = useUserStore();
+
 type NavButtons = {
   name: string;
   path: string;

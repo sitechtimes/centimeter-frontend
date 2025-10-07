@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import type { User } from "../utils/types";
 
 export const useUserStore = defineStore("userStore", () => {
-  const user = ref(false);
+  const user = ref<User | null>(null);
   const isAuth = ref(false);
 
   const theme = ref<"light" | "dark">("light");
@@ -16,6 +17,8 @@ export const useUserStore = defineStore("userStore", () => {
     isAuth.value = res.ok;
     if (isAuth.value) {
       user.value = await res.json();
+    } else {
+      user.value = null;
     }
   }
 
@@ -28,6 +31,8 @@ export const useUserStore = defineStore("userStore", () => {
     isAuth.value = res.ok;
     if (isAuth.value) {
       user.value = await res.json();
+    } else {
+      user.value = null;
     }
   }
 

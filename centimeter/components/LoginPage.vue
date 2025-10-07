@@ -93,9 +93,12 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+// Import userStore from your store location
+import { useUserStore } from '../stores/userStore';
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 
 const showLoginAnimation = ref(false);
 const showLogin = ref(true);
@@ -186,12 +189,6 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  router.push("/app/dashboard");
-  return;
-  /*if (emailErr.value || passwordErr.value || nameErr.value) return;
-
-  if (!showLogin.value) return signupWithEmail();
-
   try {
     showLoginAnimation.value = true;
     await userStore.logIn(email.value, password.value);
@@ -206,7 +203,7 @@ async function loginWithEmail() {
   }
 
   if (userStore.isAuth) router.push("/app/dashboard");
-  else passwordErr.value = "Something went wrong. Please try again.";*/
+  else passwordErr.value = "Something went wrong. Please try again.";
 }
 
 async function loginWithGoogle() {

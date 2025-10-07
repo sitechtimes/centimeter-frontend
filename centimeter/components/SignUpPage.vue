@@ -49,10 +49,7 @@
                     </button>
                 </div>
             </div>
-        </template>
-
-
-
+</template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
@@ -116,28 +113,9 @@ onMounted(() => {
     if (route.query["reset-password"]) resetPassword.value = true;
 });
 
-const loginButtons = [
-    {
-        name: "Google",
-        img: "/logo/google.svg",
-        function: loginWithGoogle
-    },
-    {
-        name: "Microsoft",
-        img: "/logo/microsoft.svg",
-        function: loginWithMicrosoft
-    },
-    {
-        name: "Facebook",
-        img: "/logo/facebook.svg",
-        function: loginWithFacebook
-    }
-];
-
 async function signupWithEmail() {
     try {
         showLoginAnimation.value = true;
-        console.log('6 7');
         await userStore.signUp(email.value, password.value);
     } catch (error) {
         if (error instanceof Error) {
@@ -150,18 +128,6 @@ async function signupWithEmail() {
     }
     if (userStore.isAuth) router.push("/app/dashboard");
     else passwordErr.value = "Something went wrong. Please try again.";
-}
-
-async function loginWithGoogle() {
-    window.location.href = "https://www.youtube.com/watch?v=uHgt8giw1LY";
-}
-
-async function loginWithMicrosoft() {
-    loginWithGoogle();
-}
-
-async function loginWithFacebook() {
-    loginWithGoogle();
 }
 
 function goToLogin() {

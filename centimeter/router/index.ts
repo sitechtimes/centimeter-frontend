@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/join',
@@ -20,10 +19,6 @@ const router = createRouter({
       component: () => import('../views/AuthView.vue'),
       children: [
         {
-          path: '',
-          redirect: '/auth/login'
-        },
-        {
           path: 'login',
           name: 'login',
           component: () => import('../components/LoginPage.vue')
@@ -33,11 +28,11 @@ const router = createRouter({
           name: 'signup',
           component: () => import('../components/SignUpPage.vue')
         },
-        {
+/*         {
           path: 'reset-password',
           name: 'reset-password',
           component: () => import('../components/LoginPage.vue')
-        }
+        } */
       ]
     }
   ],
