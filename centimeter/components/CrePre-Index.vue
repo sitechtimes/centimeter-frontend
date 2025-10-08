@@ -10,18 +10,29 @@
                 </button>
             </div>
         </div>
-        
-        
 
-        <div class="fixed left-0 h-screen w-40 overflow-y-auto">
-            <button 
+        <div> <!--left part of screen SLIDES  -->
+        <button @click="slidesclicker"
             class="o-underline 
-                color-[color:var(--text-color)] font-bold px-4 py-2 rounded hover:bg-
-                [color:var(--primary-light)] transition border-2 w-35 m-2 p-6 ">
-                <h1>+ New Slides</h1>
-            </button>
-        </div>
+                font-bold px-4 py-2 rounded
+                 border-2 w-35 m-2 p-6">
+            <h1>+ New Slides</h1>
+         </button>
 
+        <div v-if="isslidesclicked" class="fixed border-2 h-150 w-80">
+            <div v-for="slides in SlidesDropdown" :key="slides.TypeofSlide"
+            class="w-40 overflow-y-auto">
+                <button >
+                    {{ slides.dropdown }}
+            </button>
+            </div>
+
+        </div>
+        
+        
+
+        </div>
+        
 <!-- Almost there read the tailwind layout position -->
         <div class="aspect-video border-2 flex justify-center h-fit w-screen ml-40 mr-40">
             <div class="relative">
@@ -50,6 +61,7 @@ type MakePresentationSideBar = {
 
 const clickedbutton = ref<string|null>(null)
 const clickedsidebar = ref<any[]>([])
+const isslidesclicked = ref(false)
 
 /* SB = SideBar */
 const RightSBComponent = [
@@ -72,6 +84,7 @@ const RightSBComponent = [
 
 ]as const as MakePresentationSideBar[];
 
+
 function toggleOwnComponent(componentname: string) {
     clickedbutton.value = clickedbutton.value === componentname ? null: componentname
     if (clickedbutton.value !== null){
@@ -80,6 +93,112 @@ function toggleOwnComponent(componentname: string) {
         clickedsidebar.value = []
     }
 }
+
+function slidesclicker(){
+    isslidesclicked.value = !isslidesclicked.value
+}
+
+type SlidesDropdown ={
+    dropdown: string;
+    TypeofSlide: string; /* This is going to be an id for the slide and it's gonna put up the type of slide when clicked */
+}
+
+/* Do it later */
+const SlidesDropdown =[
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Word Cloud",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Open Ended",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    {
+        dropdown: "Multiple Choice",
+        TypeofSlide: "Multiple Choice"
+    },
+    
+]as const as SlidesDropdown[];
+
+
+
+
 
 
 
