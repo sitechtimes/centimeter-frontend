@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import JoinBar from './components/JoinBar.vue';
 </script>
 
 <template>
+  <JoinBar/>
   <header>
   </header>
 
