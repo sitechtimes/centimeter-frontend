@@ -1,15 +1,15 @@
 <template>
-  <div class="flex items-center justify-center flex-col w-screen min-h-screen py-12">
+  <div class="flex items-center justify-center flex-col w-screen min-h-screen py-12" style="background: var(--bg-color);">
     <a href="/"><img class="hover:saturate-50 h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
-  <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4 w-full max-w-md">
+  <div class="flex items-center justify-center flex-col p-4 rounded-3xl mb-4 w-full max-w-md" style="background: var(--bg-color);">
       <h3 class="mb-4" v-show="showLogin">Log in to your Centimeter account</h3>
       <h3 class="mb-4" v-show="!showLogin">Create a free account</h3>
 
       <div class="loginButtons flex items-center justify-center flex-col gap-2 w-96">
         <button
-          class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2 border-[color:var(--text-color)]"
+          class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2" style="border-color: var(--text-color);"
           v-for="button in loginButtons"
           :key="button.name"
           @click="button.function"
@@ -25,7 +25,7 @@
         <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: emailErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }"
             id="email"
             type="email"
             required
@@ -37,7 +37,7 @@
         <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
           <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: nameErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }"
             id="name"
             type="text"
             required
@@ -50,7 +50,7 @@
         <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: passwordErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }"
             id="password"
             type="password"
             required
@@ -63,7 +63,7 @@
         <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
           <label class="font-medium" for="password">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: confirmPasswordErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }"
             id="password"
             type="password"
             required
@@ -74,7 +74,8 @@
         </div>
 
         <button
-          class="btn btn-primary w-96 mt-4"
+          class="w-96 h-12 rounded-full border-0 mt-4 transition duration-500"
+          :style="{ background: 'var(--bg-color-contrast)', color: 'var(--text-color-contrast)' }"
           type="submit"
         >
           <span>{{ showLogin ? "Log in" : "Sign up" }}</span>
