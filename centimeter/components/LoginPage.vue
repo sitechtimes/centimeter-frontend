@@ -95,7 +95,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-// Import userStore from your store location
 import { useUserStore } from '../stores/userStore';
 
 const route = useRoute();

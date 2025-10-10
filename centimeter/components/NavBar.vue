@@ -67,7 +67,7 @@ type NavButtons = {
   dropdown?: { name: string; path: string }[];
 };
 
-defineProps<{ showJoinBanner?: boolean }>();
+const props = defineProps<{ showJoinBanner?: boolean }>();
 const emit = defineEmits<{ toggleBanner: [void] }>();
 
 const navButtons = [
