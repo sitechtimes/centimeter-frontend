@@ -4,7 +4,6 @@ import JoinBar from './components/JoinBar.vue';
 </script>
 
 <template>
-  <JoinBar/>
   <header>
   </header>
 
