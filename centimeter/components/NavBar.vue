@@ -59,13 +59,9 @@
 <script setup lang="ts">
 import ThemeToggle from './ThemeToggle.vue'
 import { useUserStore } from '../stores/userStore';
-const userStore = useUserStore();
+import type { NavButtons } from '../utils/types';
 
-type NavButtons = {
-  name: string;
-  path: string;
-  dropdown?: { name: string; path: string }[];
-};
+const userStore = useUserStore();
 
 const props = defineProps<{ showJoinBanner?: boolean }>();
 const emit = defineEmits<{ toggleBanner: [void] }>();
