@@ -27,7 +27,6 @@
           </div>
         </div>
         
-        <!-- X Button -->
         <button>
             <i class="pi pi-times cursor-pointer text-black"></i>
         </button>
