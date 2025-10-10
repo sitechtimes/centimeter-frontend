@@ -61,8 +61,6 @@ const router = useRouter();
 import { useUserStore } from '../stores/userStore';
 const userStore = useUserStore();
 
-// animation/loading state removed
-
 const email = ref("");
 const name = ref("");
 const password = ref("");
@@ -139,8 +137,5 @@ function goToLogin() {
 .opacity-enter-from,
 .opacity-leave-to {
     opacity: 0;
-}
-.error {
-    bottom: -1.5rem;
 }
 </style>
