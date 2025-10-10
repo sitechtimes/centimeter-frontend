@@ -3,7 +3,7 @@
     <div class="flex items-center justify-center flex-col w-screen min-h-screen py-12">
         <a href="/"><img class="hover:saturate-50 h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
         <h1 class="text-5xl font-bold mb-8">Welcome!</h1>
-        <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
+        <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4 overlay-parent w-full max-w-md">
             <h3 class="mb-4">Create a free account</h3>
             <div class="loginButtons flex items-center justify-center flex-col gap-2 w-96">
                 <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2 border-[color:var(--text-color)]">
@@ -24,22 +24,24 @@
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
                     <input v-model="email" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="email" type="email" required />
+                    <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
                     <input v-model="name" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="name" type="text" required autocomplete="name" />
+                    <p class="absolute error font-medium text-red-500" v-show="nameErr.length > 0">{{ nameErr }}</p>
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="password">Choose a password <span title="Required" class="text-red-500 font-2xl">*</span></label>
                     <input v-model="password" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="password" type="password" required autocomplete="new-password" />
+                    <p class="absolute error font-medium text-red-500" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="confirm">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
                     <input v-model="confirmPassword" class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]" id="confirm" type="password" required autocomplete="new-password" />
+                    <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
                 </div>
-                <button class="hover:bg-[var(--text-color)] w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
-                    <p class="text-[color:var(--text-color-contrast)]">Sign up</p>
-                </button>
+                <button class="btn btn-primary w-96 mt-4" type="submit">Sign up</button>
 
                     </form>
                     <span class="mb-4 mt-2">By signing up, you accept our <a href="/" class="underline">terms of use</a> and <a href="/" class="underline">privacy policy</a>.</span>
@@ -52,16 +54,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-const route = useRoute();
 const router = useRouter();
 import { useUserStore } from '../stores/userStore';
 const userStore = useUserStore();
 
-const showLoginAnimation = ref(false);
-const resetPassword = ref(false);
+// animation/loading state removed
 
 const email = ref("");
 const name = ref("");
@@ -96,7 +96,7 @@ watch(
     () => name.value,
     (value: string) => {
         if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
-        else if (value.length > 40) nameErr.value = "name must be less than 40 characters.";
+        else if (value.length > 40) nameErr.value = "Name must be less than 40 characters.";
         else nameErr.value = "";
     }
 );
@@ -109,13 +109,9 @@ watch(
     }
 );
 
-onMounted(() => {
-    if (route.query["reset-password"]) resetPassword.value = true;
-});
 
 async function signupWithEmail() {
     try {
-        showLoginAnimation.value = true;
         await userStore.signUp(email.value, password.value);
     } catch (error) {
         if (error instanceof Error) {
@@ -123,8 +119,6 @@ async function signupWithEmail() {
             if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
         }
         return;
-    } finally {
-        showLoginAnimation.value = false;
     }
     if (userStore.isAuth) router.push("/app/dashboard");
     else passwordErr.value = "Something went wrong. Please try again.";
@@ -136,4 +130,17 @@ function goToLogin() {
 </script>
 
 
-<style scoped></style>
+<style scoped>
+.overlay-parent { position: relative; }
+.opacity-enter-active,
+.opacity-leave-active {
+    transition: all 0.25s ease;
+}
+.opacity-enter-from,
+.opacity-leave-to {
+    opacity: 0;
+}
+.error {
+    bottom: -1.5rem;
+}
+</style>

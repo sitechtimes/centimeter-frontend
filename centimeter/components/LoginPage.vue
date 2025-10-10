@@ -3,7 +3,7 @@
     <a href="/"><img class="hover:saturate-50 h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
-    <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
+  <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4 w-full max-w-md">
       <h3 class="mb-4" v-show="showLogin">Log in to your Centimeter account</h3>
       <h3 class="mb-4" v-show="!showLogin">Create a free account</h3>
 
@@ -21,7 +21,7 @@
 
       <span class="m-4">or using email</span>
 
-      <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit="loginWithEmail" @submit.prevent>
+  <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit.prevent="loginWithEmail">
         <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
@@ -73,9 +73,11 @@
           <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
-        <button class="hover:bg-[var(--text-color)] w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
-          <p class="text-[color:var(--text-color-contrast)]" v-if="!showLoginAnimation">{{ showLogin ? "Log in" : "Sign up" }}</p>
-          <p class="text-[color:var(--text-color-contrast)] flex items-center justify-center gap-2"></p>
+        <button
+          class="btn btn-primary w-96 mt-4"
+          type="submit"
+        >
+          <span>{{ showLogin ? "Log in" : "Sign up" }}</span>
         </button>
         <button type="button" @click="resetPassword = true" class="no-underline font-medium" v-if="showLogin">Forgot password?</button>
       </form>
@@ -100,7 +102,7 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
-const showLoginAnimation = ref(false);
+// animation/loading state removed
 const showLogin = ref(true);
 const resetPassword = ref(false);
 watch(resetPassword, (value: boolean) => {
@@ -190,7 +192,6 @@ const loginButtons = [
 
 async function loginWithEmail() {
   try {
-    showLoginAnimation.value = true;
     await userStore.logIn(email.value, password.value);
   } catch (error) {
     if (error instanceof Error) {
@@ -198,8 +199,6 @@ async function loginWithEmail() {
       if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
     }
     return;
-  } finally {
-    showLoginAnimation.value = false;
   }
 
   if (userStore.isAuth) router.push("/app/dashboard");
@@ -219,40 +218,14 @@ async function loginWithFacebook() {
 }
 </script>
 
-<style lang="scss" scoped>
-.login {
-  input:focus {
-    box-shadow: 0 0 0 0.375rem var(--primary-shade-translucent);
-  }
-}
+<style scoped>
 .opacity-enter-active,
 .opacity-leave-active {
-  transition: all 0.25s ease;
+  transition: all 0.2s ease-in-out;
 }
 
 .opacity-enter-from,
 .opacity-leave-to {
   opacity: 0;
-}
-
-.error {
-  bottom: -1.5rem;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .loginButtons {
-    button:hover {
-      background-color: var(--faded-bg-color);
-    }
-  }
-
-  .login {
-    input:hover {
-      outline: 0.125rem solid var(--primary);
-    }
-    .submit:hover {
-      background-color: var(--text-color);
-    }
-  }
 }
 </style>
