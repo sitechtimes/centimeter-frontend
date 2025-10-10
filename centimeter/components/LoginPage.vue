@@ -102,7 +102,6 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
-// animation/loading state removed
 const showLogin = ref(true);
 const resetPassword = ref(false);
 watch(resetPassword, (value: boolean) => {
@@ -120,7 +119,6 @@ const nameErr = ref("");
 const passwordErr = ref("");
 const confirmPasswordErr = ref("");
 
-// Watch the route to determine if we should show login or signup
 watch(
   () => route.name,
   (routeName) => {
