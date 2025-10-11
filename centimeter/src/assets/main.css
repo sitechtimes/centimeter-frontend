@@ -45,17 +45,6 @@
   --faded-text-color: rgb(230, 230, 230);
   --text-color-contrast: black;
 }
-/* * {
-  box-sizing: border-box;
-  font-family: "SUSE", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  color: var(--text-color);
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 500ms;
-} */
 
 button {
   touch-action: manipulation;
