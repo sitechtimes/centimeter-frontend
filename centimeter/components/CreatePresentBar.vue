@@ -49,19 +49,19 @@ const PresentationName = ref('My Presentation');
 const PresentButtons = [
   {
     name: "Create",
-    path: "app/dashboard/create/",
+    path: "/create",
 
 },
 {
     name: "Result",
-    path: "app/dashboard/results",
+    path: "/results",
 }
 ] 
 
 const SharePresentButtons = [
     {
         name: "Preview",
-        path: "app/dashboard/create/preview",
+        path: "/create/preview",
         dropdown: [
             {
                 name: "preview",
@@ -70,7 +70,7 @@ const SharePresentButtons = [
     },
     {
         name: "Share",
-        path: "app/dashboard/share",
+        path: "/share",
         dropdown: [
             {
                 name: "Who do you want to share with?",
