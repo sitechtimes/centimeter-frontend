@@ -1,13 +1,13 @@
 <template>
     <main>
-        <createpresent/>
-        <CreatePresentIndex/>
+        <NavBar/>
+        <CreatingPresentation/>
     </main>
     
 </template>
 
 <script setup lang="ts">
-import createpresent from '/components/CreatePresentBar.vue'
-import CreatePresentIndex from '/components/CreatePresent-Index.vue'
+import NavBar from '/components/CreatePresentationNavBar.vue'
+import CreatingPresentation from '/components/CreatingPresentation.vue'
 
 </script>

@@ -12,16 +12,16 @@
             :src="'/ui/arrow.svg'"
             aria-hidden="true"/>
   </button>
-  <input v-model="PresentationName" class="h-16 border-solid border-2 border-[color:var(--text-color)]" />
+  <input v-model="presentationName" class="h-16 border-solid border-2 border-[color:var(--text-color)]" />
         <nav class="flex items-center justify-center gap-3">
-          <div class="relative group" v-for="button in PresentButtons" :key="button.name">
+          <div class="relative group" v-for="button in presentButtons" :key="button.name">
             <RouterLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center px-4 py-2 rounded hover:bg-[color:var(--primary-light)] transition">
               {{ button.name }}
             </RouterLink>
           </div>
         </nav>
         <div class="flex items-center justify-center gap-3">
-          <div v-for="button in SharePresentButtons" :key="button.name">
+          <div v-for="button in sharePresentButtons" :key="button.name">
             <RouterLink :to="button.path">
                 {{ button.name }}
             </RouterLink>
@@ -35,18 +35,14 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-type ShowButtons = {
-  name: string;
-  path: string;
-  dropdown?: { name: string;}[];
-};
+import type {ShowButtons} from "/src/utils/types.ts"
 
 const props = defineProps<{ showJoinBanner?: boolean }>();
 const emit = defineEmits<{ toggleBanner: [void] }>();
 
-const PresentationName = ref('My Presentation');
+const presentationName = ref('My Presentation');
 
-const PresentButtons = [
+const presentButtons = [
   {
     name: "Create",
     path: "/create",
@@ -58,7 +54,7 @@ const PresentButtons = [
 }
 ] 
 
-const SharePresentButtons = [
+const sharePresentButtons = [
     {
         name: "Preview",
         path: "/create/preview",
