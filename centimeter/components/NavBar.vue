@@ -22,20 +22,19 @@
         </nav>
         <div class="flex items-center justify-center gap-3">
           <ThemeToggle />
-          <template v-if="userStore.isAuth">
+          <div v-if="userStore.isAuth">
             <span class="font-bold">{{ userStore.user?.email }}</span>
             <button class="no-underline bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" @click="userStore.user = null; userStore.isAuth = false;">
               <h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Log out</h3>
             </button>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else>
             <RouterLink class="no-underline" to="/auth/login">
               <h3 class="font-bold m-0">Log in</h3>
             </RouterLink>
             <RouterLink class="no-underline bg-[color:var(--primary)] hover:bg-[color:var(--primary-shade)] px-5 py-2 transition rounded-full" to="/auth/signup">
               <h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3>
             </RouterLink>
-          </template>
         </div>
       </div>
 
