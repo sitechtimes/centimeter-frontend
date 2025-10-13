@@ -1,20 +1,20 @@
 
 <template>
-    <div class="flex items-center justify-center flex-col w-screen min-h-screen py-12" style="background: var(--bg-color);">
+    <div class="flex items-center justify-center flex-col w-screen min-h-screen py-12 bg-[color:var(--bg-color)]">
         <a href="/"><img class="hover:saturate-50 h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
         <h1 class="text-5xl font-bold mb-8">Welcome!</h1>
-        <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4 overlay-parent w-full max-w-md">
+    <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4 overlay-parent w-full max-w-md">
             <h3 class="mb-4">Create a free account</h3>
             <div class="loginButtons flex items-center justify-center flex-col gap-2 w-96">
-                <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2" style="border-color: var(--text-color);">
+                <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2 border-[color:var(--text-color)]">
                     <img class="w-4" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" aria-hidden="true" />
                     <p class="my-2 font-bold">Sign up with Google</p>
                 </button>
-                <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2" style="border-color: var(--text-color);">
+                <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2 border-[color:var(--text-color)]">
                     <img class="w-4" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg" aria-hidden="true" />
                     <p class="my-2 font-bold">Sign up with Microsoft</p>
                 </button>
-                <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2" style="border-color: var(--text-color);">
+                <button class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2 border-[color:var(--text-color)]">
                     <img class="w-4" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" aria-hidden="true" />
                     <p class="my-2 font-bold">Sign up with Facebook</p>
                 </button>
@@ -23,25 +23,25 @@
             <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit.prevent="signupWithEmail">
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input v-model="email" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: emailErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }" id="email" type="email" required />
+                    <input v-model="email" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]" id="email" type="email" required />
                     <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input v-model="name" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: nameErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }" id="name" type="text" required autocomplete="name" />
+                    <input v-model="name" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]" id="name" type="text" required autocomplete="name" />
                     <p class="absolute error font-medium text-red-500" v-show="nameErr.length > 0">{{ nameErr }}</p>
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="password">Choose a password <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input v-model="password" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: passwordErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }" id="password" type="password" required autocomplete="new-password" />
+                    <input v-model="password" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]" id="password" type="password" required autocomplete="new-password" />
                     <p class="absolute error font-medium text-red-500" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
                 </div>
                 <div class="relative flex items-start justify-center flex-col gap-1">
                     <label class="font-medium" for="confirm">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
-                    <input v-model="confirmPassword" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2" style="background: var(--faded-bg-color); outline-color: var(--primary);" :style="{ background: confirmPasswordErr.length ? 'var(--error-bg-color)' : 'var(--faded-bg-color)' }" id="confirm" type="password" required autocomplete="new-password" />
+                    <input v-model="confirmPassword" class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]" id="confirm" type="password" required autocomplete="new-password" />
                     <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
                 </div>
-                <button class="w-96 h-12 rounded-full border-0 mt-4 transition duration-500" :style="{ background: 'var(--bg-color-contrast)', color: 'var(--text-color-contrast)' }" type="submit">Sign up</button>
+                <button class="w-96 h-12 rounded-full border-0 mt-4 transition duration-500 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)]" type="submit">Sign up</button>
 
                     </form>
                     <span class="mb-4 mt-2">By signing up, you accept our <a href="/" class="underline">terms of use</a> and <a href="/" class="underline">privacy policy</a>.</span>
@@ -66,6 +66,7 @@ const name = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 
+
 const emailErr = ref("");
 const nameErr = ref("");
 const passwordErr = ref("");
@@ -80,6 +81,8 @@ watch(
     }
 );
 
+    
+
 watch(
     () => password.value,
     (value: string) => {
@@ -90,6 +93,8 @@ watch(
     }
 );
 
+    
+
 watch(
     () => name.value,
     (value: string) => {
@@ -99,6 +104,8 @@ watch(
     }
 );
 
+    
+
 watch(
     () => confirmPassword.value,
     (value: string) => {
@@ -106,6 +113,8 @@ watch(
         else confirmPasswordErr.value = "";
     }
 );
+
+    
 
 
 async function signupWithEmail() {
@@ -138,4 +147,7 @@ function goToLogin() {
 .opacity-leave-to {
     opacity: 0;
 }
+
+
+/* error-bg class removed; use CSS variables and Tailwind utilities instead */
 </style>
