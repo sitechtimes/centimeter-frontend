@@ -74,9 +74,9 @@ const confirmPasswordErr = ref("");
 
 watch(
     () => email.value,
-    (value: string) => {
+    (value) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
+        (value) => {
         else emailErr.value = "";
     }
 );
@@ -85,8 +85,8 @@ watch(
 
 watch(
     () => password.value,
-    (value: string) => {
-        if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
+    (value) => {
+        if (value !== confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
         if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
         else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
         else passwordErr.value = "";
@@ -95,21 +95,21 @@ watch(
 
     
 
-watch(
+        (value) => {
     () => name.value,
-    (value: string) => {
+    (value) => {
         if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
         else if (value.length > 40) nameErr.value = "Name must be less than 40 characters.";
         else nameErr.value = "";
     }
 );
 
-    
+        (value) => {
 
 watch(
     () => confirmPassword.value,
-    (value: string) => {
-        if (value != password.value) confirmPasswordErr.value = "Passwords do not match.";
+    (value) => {
+        if (value !== password.value) confirmPasswordErr.value = "Passwords do not match.";
         else confirmPasswordErr.value = "";
     }
 );
@@ -147,7 +147,3 @@ function goToLogin() {
 .opacity-leave-to {
     opacity: 0;
 }
-
-
-/* error-bg class removed; use CSS variables and Tailwind utilities instead */
-</style>
