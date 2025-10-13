@@ -26,8 +26,28 @@ const router = createRouter({
       path: '/join',
       name: 'join',
       component: () => import('../views/JoinView.vue'),
+    },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: () => import('../views/AuthView.vue'),
+      children: [
+        {
+          path: '',
+          redirect: '/auth/login'
+        },
+        {
+          path: 'login',
+          name: 'login',
+          component: () => import('../../components/LoginPage.vue')
+        },
+        {
+          path: 'signup',
+          name: 'signup',
+          component: () => import('../../components/SignUpPage.vue')
+        },
+      ]
     }
-
   ],
 })
 

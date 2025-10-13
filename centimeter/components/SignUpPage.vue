@@ -72,16 +72,15 @@ const nameErr = ref("");
 const passwordErr = ref("");
 const confirmPasswordErr = ref("");
 
+
 watch(
     () => email.value,
     (value) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        (value) => {
+        if (value.length > 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
         else emailErr.value = "";
     }
 );
-
-    
 
 watch(
     () => password.value,
@@ -93,9 +92,7 @@ watch(
     }
 );
 
-    
-
-        (value) => {
+watch(
     () => name.value,
     (value) => {
         if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
@@ -104,8 +101,6 @@ watch(
     }
 );
 
-        (value) => {
-
 watch(
     () => confirmPassword.value,
     (value) => {
@@ -113,9 +108,6 @@ watch(
         else confirmPasswordErr.value = "";
     }
 );
-
-    
-
 
 async function signupWithEmail() {
     try {
@@ -139,11 +131,12 @@ function goToLogin() {
 
 <style scoped>
 .overlay-parent { position: relative; }
-.opacity-enter-active,
-.opacity-leave-active {
+ .opacity-enter-active,
+ .opacity-leave-active {
     transition: all 0.25s ease;
 }
 .opacity-enter-from,
 .opacity-leave-to {
     opacity: 0;
 }
+</style>
