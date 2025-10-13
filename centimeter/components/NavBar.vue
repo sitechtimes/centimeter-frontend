@@ -9,9 +9,10 @@
           <div class="relative group" v-for="button in navButtons" :key="button.name">
             <RouterLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center px-4 py-2 rounded hover:bg-[color:var(--primary-light)] transition">
               {{ button.name }}
+              <img src="/ui/dropdownArrow.svg" class="transition duration-500 h-4 w-4 dark:invert" v-if="button.dropdown" />
             </RouterLink>
             <div
-              class="absolute left-0 mt-2 flex-col items-start justify-center gap-1 bg-[color:var(--bg-color)] shadow-2xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 rounded-sm transition opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto z-30 min-w-max"
+              class="absolute left-0 mt-2 flex-col items-start justify-center gap-1 bg-white shadow-2xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 rounded-sm transition opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto z-30 min-w-max:"
               v-if="button.dropdown"
             >
               <RouterLink class="no-underline text-[color:var(--text-color)] block w-full hover:bg-[color:var(--primary-light)] rounded px-2 py-1 transition" v-for="option in button.dropdown" :to="option.path" :key="option.name">
@@ -46,7 +47,7 @@
           </RouterLink>
           <button class="absolute right-12 rounded-full w-8 h-8 flex items-center justify-center hover:bg-[color:var(--primary-shade-translucent)] transition" @click="emit('toggleBanner')">
             <span class="sr-only">Close</span>
-            <!-- <img class="w-5 h-5 dark:invert" src="/ui/x.svg" aria-hidden="true" /> -->
+            <img class="w-5 h-5 dark:invert" src="/ui/x.svg" aria-hidden="true" />
             ×
           </button>
         </div>

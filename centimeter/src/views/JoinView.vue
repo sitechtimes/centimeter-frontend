@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeMount, nextTick } from "vue";
-import NavBar from "../components/NavBar.vue";
+import NavBar from "../../components/NavBar.vue";
 import { useTemplateRefsList } from '@vueuse/core';
 
 const showBanner = ref(false);
