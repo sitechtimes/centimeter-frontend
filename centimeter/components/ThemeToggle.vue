@@ -30,16 +30,12 @@ const userStore = useUserStore();
 const dark = ref(false);
 
 function toggleTheme() {
-  const wasLight = userStore.theme === "light";
-  userStore.theme = wasLight ? "dark" : "light";
-  dark.value = wasLight;
-  document.body.classList[wasLight ? "add" : "remove"]("dark");
-  localStorage.setItem("theme", userStore.theme);
+  dark.value = !dark.value;
+  // TODO: Implement actual theme switching
+  document.body.classList.toggle('dark');
+  localStorage.setItem('theme', dark.value ? 'dark' : 'light');
 }
 
-onMounted(() => {
-  dark.value = userStore.theme == "dark";
-}); 
 </script>
 
 
