@@ -22,10 +22,10 @@
 type Props = {
   big?: boolean;
 };
-import { onMounted, ref } from "vue";
+import {  ref } from "vue";
 defineProps<Props>();
-import { useUserStore } from "../src/stores/user";
-const userStore = useUserStore();
+//import { useUserStore } from "../src/stores/user";
+//const userStore = useUserStore();
 
 const dark = ref(false);
 

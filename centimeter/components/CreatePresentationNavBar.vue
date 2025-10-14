@@ -35,10 +35,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type {ShowButtons} from "/src/utils/types.ts"
+import type {ShowButtons} from "../src/utils/types.ts"
 
-const props = defineProps<{ showJoinBanner?: boolean }>();
-const emit = defineEmits<{ toggleBanner: [void] }>();
+defineProps<{ showJoinBanner?: boolean }>();
+defineEmits<{ toggleBanner: [void] }>();
 
 const presentationName = ref('My Presentation');
 

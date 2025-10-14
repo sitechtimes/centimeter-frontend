@@ -55,7 +55,7 @@ import type { NavButtons } from '../utils/types';
 
 const userStore = useUserStore();
 
-const props = defineProps<{ showJoinBanner?: boolean }>();
+defineProps<{ showJoinBanner?: boolean }>();
 const emit = defineEmits<{ toggleBanner: [void] }>();
 
 const navButtons = [

@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { SlidesDropdown, MakePresentationSideBar } from "/src/utils/types.ts"
+import type { SlidesDropdown, MakePresentationSideBar } from "../src/utils/types.ts"
 
 const clickedButton = ref<string|null>(null)
 const clickedSidebar = ref<string[]>([])
