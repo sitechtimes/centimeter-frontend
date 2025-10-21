@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-[var(--primary-light)]"
+    class="bg-[var(--primary-light)] mb-16"
   >
     <div class="container mx-auto px-4 py-2">
       <div class="flex items-center justify-between gap-4">

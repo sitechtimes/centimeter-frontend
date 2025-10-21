@@ -34,19 +34,6 @@
           <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
         </div>
 
-        <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
-          <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
-          <input
-            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]"
-            id="name"
-            type="text"
-            required
-            v-model="name"
-            autocomplete="name"
-          />
-          <p class="absolute error font-medium text-red-500" v-show="nameErr.length > 0">{{ nameErr }}</p>
-        </div>
-
         <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
@@ -57,24 +44,11 @@
             v-model="password"
             :autocomplete="showLogin ? 'current-password' : 'new-password'"
           />
-          <p class="absolute error font-medium text-red-500" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
-        </div>
-
-        <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
-          <label class="font-medium" for="password">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
-          <input
-            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]"
-            id="password"
-            type="password"
-            required
-            v-model="confirmPassword"
-            autocomplete="new-password"
-          />
-          <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
+          <p class="absolute error font-medium text-red-500 mt-28" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
         </div>
 
         <button
-          class="w-96 h-12 rounded-full border-0 mt-4 transition duration-500 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)]"
+          class="w-96 h-12 rounded-full border-0 mt-4 transition duration-200 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] active:brightness-60"
           type="submit"
         >
           <span>{{ showLogin ? "Log in" : "Sign up" }}</span>
