@@ -34,3 +34,8 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { useUserStore } from '../stores/userStore';
+
+</script>
