@@ -1,8 +1,13 @@
 <template>
   <div class="dropdown">
-    <div tabindex="0" role="button" class="btn m-1">Click</div>
-    <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-104 p-2 shadow-sm">
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md my-8 relative">
+    <div @click="toggleIcon" tabindex="0" role="button" class="btn m-1 rounded-4xl">
+      <Plus v-if="isPlus" key="'plus'" :size="20" />
+      <X v-else key="'x'" :size="20" />
+
+      New Slide
+    </div>
+    <ul tabindex="-1" class="dropdown-content menu rounded-box z-1 w-104">
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md relative">
         <!-- Header -->
         <div class="flex items-center justify-between p-6 border-b">
           <div class="flex items-center gap-2">
@@ -22,11 +27,11 @@
         <!-- Content -->
         <div class="p-6 space-y-6">
           <!-- Interactive Questions Section -->
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-1">
             <button
               v-for="option in interactiveOptions"
               :key="option.label"
-              class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all text-left relative group"
+              class="flex items-center gap-3 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left relative group"
             >
               <component :is="option.icon" :size="20" :class="option.color" />
               <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
@@ -50,7 +55,7 @@
               <button
                 v-for="option in quizOptions"
                 :key="option.label"
-                class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all text-left"
+                class="flex items-center gap-1 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left"
               >
                 <component :is="option.icon" :size="20" :class="option.color" />
                 <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
@@ -85,6 +90,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+const isOpen = ref(false)
+const isPlus = ref(true)
 import {
   BarChart3,
   Cloud,
@@ -97,13 +104,13 @@ import {
   Grid2x2,
   Edit3,
   MapPin,
-  CheckSquare,
   Hourglass,
   Type,
   Image,
   Play,
   LayoutGrid,
   X,
+  Plus,
   Star,
 } from 'lucide-vue-next'
 const interactiveOptions = [
@@ -118,6 +125,7 @@ const interactiveOptions = [
   { icon: Grid2x2, label: '2 x 2 Grid', color: 'text-red-500' },
   { icon: Edit3, label: 'Quick Form', color: 'text-yellow-600', featured: true },
   { icon: MapPin, label: 'Pin on Image', color: 'text-purple-600' },
+  { icon: Plus, label: 'Add Slide', color: 'text-black' },
 ]
 
 const quizOptions = [
@@ -131,6 +139,11 @@ const contentOptions = [
   { icon: Play, label: 'Video', color: 'text-purple-600' },
   { icon: LayoutGrid, label: 'Instructions', color: 'text-gray-600' },
 ]
+
+function toggleIcon() {
+  isPlus.value = !isPlus.value
+  console.log('Icon toggled')
+}
 </script>
 
 <style scoped></style>
