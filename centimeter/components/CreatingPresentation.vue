@@ -2,14 +2,15 @@
   <div>
     <main class="bg-[color:var(--bg-color)]">
       <div class="fixed right-0 w-35 overflow-y-auto">
-        <div v-for="component in RightSBComponent" :key="component.name" class="">
+        <SideBar />
+        <!-- <div v-for="component in RightSBComponent" :key="component.name" class="">
           <button
             @click="toggleOwnComponent(component.name)"
             class="no-underline color-[color:var(--text-color)] font-bold px-4 py-2 text-[color:var(--text-color)] rounded hover:bg-[color:var(--primary-light)] transition border-2 border-[color:var(--bg-color-contrast)] w-30 m-2 p-6"
           >
             {{ component.name }}
           </button>
-        </div>
+        </div> -->
       </div>
 
       <NewSlides />
@@ -36,7 +37,7 @@
 import { ref } from 'vue'
 import type { SlidesDropdown, MakePresentationSideBar } from '../src/utils/types.ts'
 import NewSlides from './Presentation/NewSlides.vue'
-
+import SideBar from './Presentation/SideBar.vue'
 const clickedButton = ref<string | null>(null)
 const clickedSidebar = ref<string[]>([])
 const isSlidesClicked = ref(false)

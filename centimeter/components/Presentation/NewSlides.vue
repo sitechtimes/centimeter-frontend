@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown">
-    <div @click="toggleIcon" tabindex="0" role="button" class="btn m-1 rounded-4xl">
+    <div @click="toggleIcon" tabindex="0" role="button" class="btn m-3 rounded-4xl">
       <Plus v-if="isPlus" key="'plus'" :size="20" />
       <X v-else key="'x'" :size="20" />
 
@@ -31,15 +31,10 @@
             <button
               v-for="option in interactiveOptions"
               :key="option.label"
-              class="flex items-center gap-3 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left relative group"
+              class="flex items-center gap-3 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left relative group cursor-pointer font-bold"
             >
               <component :is="option.icon" :size="20" :class="option.color" />
               <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
-              <Star
-                v-if="option.featured"
-                :size="16"
-                class="absolute top-2 right-2 text-green-600 fill-green-600"
-              />
             </button>
           </div>
 
@@ -111,7 +106,6 @@ import {
   LayoutGrid,
   X,
   Plus,
-  Star,
 } from 'lucide-vue-next'
 const interactiveOptions = [
   { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600' },
@@ -125,7 +119,6 @@ const interactiveOptions = [
   { icon: Grid2x2, label: '2 x 2 Grid', color: 'text-red-500' },
   { icon: Edit3, label: 'Quick Form', color: 'text-yellow-600', featured: true },
   { icon: MapPin, label: 'Pin on Image', color: 'text-purple-600' },
-  { icon: Plus, label: 'Add Slide', color: 'text-black' },
 ]
 
 const quizOptions = [
