@@ -152,7 +152,7 @@ const navButtons = [
         path: "/"
       },
       {
-        name: "AI Menti Builder",
+        name: "AI Centi Builder",
         path: "/"
       },
       {
