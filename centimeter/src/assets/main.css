@@ -1,9 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui";
-@import "primeicons/primeicons.css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'primeicons/primeicons.css';
 :root {
   --primary: #802392;
   --primary-light: #e9d2f0;
@@ -51,7 +48,7 @@ button {
 }
 
 .comic-sans {
-  font-family: "Comic Sans MS", sans-serif;
+  font-family: 'Comic Sans MS', sans-serif;
 }
 
 input::-webkit-outer-spin-button,
@@ -60,7 +57,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type="number"] {
+input[type='number'] {
   appearance: textfield;
 }
 
