@@ -46,7 +46,7 @@ export const useUserStore = defineStore("userStore", () => {
 
  async function joinSession(join_code: string) {
     const { ok, data } = await apiCall(
-      import.meta.env.VITE_BACKEND_URL + "/join/",
+      import.meta.env.VITE_BACKEND_URL + "/session/join/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
