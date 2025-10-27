@@ -34,14 +34,19 @@
         </button>
       </div>
     </div>
+    <ToastContainer ref="toastContainer" position="top-right" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import ToastContainer from './ToastContainer.vue';
+
 const emit = defineEmits<{
   (e: 'join', joinCode: string): void;
 }>();
+
+const toastContainer = ref<InstanceType<typeof ToastContainer>>();
 
 const joinCode = ref<string>('');
 const loading = ref(false);
@@ -70,9 +75,10 @@ async function onJoin() {
   loading.value = true;
   try {
     await joinActiveSession(joinCode.value);
+    toastContainer.value?.add({ title: 'Successfully joined session!' });
     emit('join', joinCode.value);
-  } catch (error) {
-    console.log('Failed to join session:', error);
+  } catch {
+    toastContainer.value?.add({ title: 'Failed to join session. Please try again.' });
   } finally {
     loading.value = false;
   }
