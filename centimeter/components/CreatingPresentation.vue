@@ -1,7 +1,7 @@
 <template>
   <div>
     <main class="bg-[color:var(--bg-color)]">
-      <div class="fixed right-0 w-35 overflow-y-auto">
+      <div class="fixed right-0 overflow-y-auto">
         <SideBar />
         <!-- <div v-for="component in RightSBComponent" :key="component.name" class="">
           <button
@@ -19,7 +19,8 @@
       <div
         class="aspect-video border-2 border-[color:var(--text-color)] flex justify-center h-fit w-screen ml-40 mr-40"
       >
-        <div class="relative text-[color:var(--bg-color-contrast)]">Presentations</div>
+        <div class="relative text-[color:var(--bg-color-contrast)]">Presentation</div>
+        <PresentationModal v-if="showModal" />
         <div class="fixed right-20 w-35 overflow-y-auto" v-if="clickedSidebar.length > 0">
           <div
             v-if="clickedSidebar.length > 0"
@@ -38,122 +39,12 @@ import { ref } from 'vue'
 import type { SlidesDropdown, MakePresentationSideBar } from '../src/utils/types.ts'
 import NewSlides from './Presentation/NewSlides.vue'
 import SideBar from './Presentation/SideBar.vue'
-const clickedButton = ref<string | null>(null)
+import PresentationModal from './Presentation/PresentationModal.vue'
 const clickedSidebar = ref<string[]>([])
-const isSlidesClicked = ref(false)
-
-/* SB = SideBar */
-const RightSBComponent = [
-  {
-    name: 'Edit',
-    ownComponents: ['Edit'],
-  },
-  {
-    name: 'Comments',
-    ownComponents: ['Comments'],
-  },
-  {
-    name: 'Interactivity',
-    ownComponents: ['Interactivity'],
-  },
-  {
-    name: 'Templates',
-    ownComponents: ['Bam'],
-  },
-] as const satisfies MakePresentationSideBar[]
-
-function toggleOwnComponent(componentName: string) {
-  clickedButton.value = clickedButton.value === componentName ? null : componentName
-  if (clickedButton.value !== null) {
-    clickedSidebar.value.push(clickedButton.value)
-  } else {
-    clickedSidebar.value = []
-  }
+const showModal = ref(true)
+const toggleModal = () => {
+  showModal.value = !showModal.value
 }
-
-function slidesClicker() {
-  isSlidesClicked.value = !isSlidesClicked.value
-}
-
-/* Do it later */
-const makingSlidesDropdown = [
-  {
-    dropdown: 'Multiple Choice',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Word Cloud',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Open Ended',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Scales',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Ranking',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Q&A',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Guess the Number',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: '100 points',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: '2 x 2 Grid',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Quick Form',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Pin on Image',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Select Answer ',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Type Answer',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Text',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Image',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Video',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Google slides',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Powerpoint',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-  {
-    dropdown: 'Miro',
-    typeOfSlide: 'There Will Be An Id Here',
-  },
-] as const satisfies SlidesDropdown[]
 </script>
 
 <style scoped></style>

@@ -85,6 +85,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { defineEmits } from 'vue'
 const isOpen = ref(false)
 const isPlus = ref(true)
 import {
@@ -136,6 +137,12 @@ const contentOptions = [
 function toggleIcon() {
   isPlus.value = !isPlus.value
   console.log('Icon toggled')
+}
+
+const emits = defineEmits(['open-modal'])
+
+const openModal = () => {
+  emit('open-modal')
 }
 </script>
 
