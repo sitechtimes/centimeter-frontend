@@ -1,4 +1,3 @@
-
 <template>
   <div v-if="showBar" class="bg-[var(--primary-light)]">
     <div class="container mx-auto px-4 py-2">
@@ -30,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const showBar = ref(true);
+const showBar = ref(true)
 
 function closeBar() {
-  showBar.value = false;
+  showBar.value = false
 }
 </script>
