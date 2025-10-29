@@ -5,7 +5,7 @@
       :key="item.id"
       @click="handleClick(item.id)"
       :class="[
-        'flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-2xl shadow-sm transition-all duration-200',
+        'flex flex-col items-center justify-center gap-2 p-4 bg-[var(--bg-color)] rounded-2xl shadow-sm transition-all duration-200',
         'hover:bg-gray-200 cursor-pointer',
         activeItem === item.id ? 'ring-2 ring-purple-300 shadow-md' : '',
       ]"
@@ -35,3 +35,5 @@ const handleClick = (id) => {
   console.log(`Clicked: ${id}`)
 }
 </script>
+
+, ,
