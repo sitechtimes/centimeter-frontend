@@ -32,6 +32,7 @@
               v-for="option in interactiveOptions"
               :key="option.label"
               class="flex items-center gap-3 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left relative group cursor-pointer font-bold"
+              @click="handleClick(option)"
             >
               <component :is="option.icon" :size="20" :class="option.color" />
               <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
@@ -51,6 +52,7 @@
                 v-for="option in quizOptions"
                 :key="option.label"
                 class="flex items-center gap-1 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left"
+                @click="handleClick(option)"
               >
                 <component :is="option.icon" :size="20" :class="option.color" />
                 <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
@@ -71,6 +73,7 @@
                 v-for="option in contentOptions"
                 :key="option.label"
                 class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all text-left"
+                @click="handleClick(option)"
               >
                 <component :is="option.icon" :size="20" :class="option.color" />
                 <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
@@ -138,7 +141,16 @@ function toggleIcon() {
   isPlus.value = !isPlus.value
   console.log('Icon toggled')
 }
+interface Option {
+  icon: any
+  label: string
+  color?: string
+  featured?: boolean
+}
 
+function handleClick(option: Option): void {
+  console.log('Option clicked:', option.label)
+}
 const emits = defineEmits(['open-modal'])
 
 const openModal = () => {

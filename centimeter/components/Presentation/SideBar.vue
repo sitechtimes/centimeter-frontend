@@ -30,7 +30,7 @@ const menuItems = [
 
 const activeItem = ref(null)
 
-const handleClick = (id) => {
+function handleClick(id: string) {
   activeItem.value = id
   console.log(`Clicked: ${id}`)
 }
