@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3 p-4 bg-gray-50 w-fit">
+  <div class="flex flex-col gap-3 p-4 w-fit">
     <button
       v-for="item in menuItems"
       :key="item.id"
@@ -28,7 +28,7 @@ const menuItems = [
   { id: 'templates', label: 'Templates', icon: LayoutTemplate },
 ]
 
-const activeItem = ref(null)
+const activeItem = ref<string | null>(null)
 
 function handleClick(id: string) {
   activeItem.value = id

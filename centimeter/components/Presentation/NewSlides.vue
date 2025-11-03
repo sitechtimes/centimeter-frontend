@@ -3,47 +3,45 @@
     <div @click="toggleIcon" tabindex="0" role="button" class="btn m-3 rounded-4xl">
       <Plus v-if="isPlus" key="'plus'" :size="20" />
       <X v-else key="'x'" :size="20" />
-
       New Slide
     </div>
-    <ul tabindex="-1" class="dropdown-content menu rounded-box z-1 w-104">
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md relative">
-        <!-- Header -->
-        <div class="flex items-center justify-between p-6 border-b">
+
+    <ul tabindex="-1" class="dropdown-content menu rounded-box z-10 w-96">
+      <div class="bg-[var(--bg-color)] rounded-xl shadow-2xl w-full relative border border-[var(--faded-bg-color)]">
+        <div class="flex items-center justify-between p-6 border-b border-[var(--faded-bg-color)]">
           <div class="flex items-center gap-2">
-            <h2 class="text-lg font-semibold text-gray-900">Interactive questions</h2>
-            <button class="text-gray-400 hover:text-gray-600">
+            <h2 class="text-lg font-semibold text-[var(--text-color)]">Interactive questions</h2>
+            
+            <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
               <HelpCircle :size="18" />
             </button>
           </div>
+
           <button
             @click="isOpen = false"
-            class="text-gray-400 hover:text-gray-600 transition-colors"
+            class="text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors"
           >
             <X :size="20" />
           </button>
-        </div>
-
-        <!-- Content -->
-        <div class="p-6 space-y-6">
-          <!-- Interactive Questions Section -->
+          
+        </div>        <div class="p-6 space-y-6">
           <div class="grid grid-cols-2 gap-1">
             <button
               v-for="option in interactiveOptions"
               :key="option.label"
-              class="flex items-center gap-3 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left relative group cursor-pointer font-bold"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--faded-bg-color)] transition-all text-left relative group cursor-pointer font-bold"
               @click="handleClick(option)"
             >
               <component :is="option.icon" :size="20" :class="option.color" />
-              <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
+              <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
             </button>
           </div>
 
-          <!-- Quiz Competitions Section -->
+
           <div>
             <div class="flex items-center gap-2 mb-3">
-              <h3 class="text-sm font-medium text-gray-700">Quiz competitions</h3>
-              <button class="text-gray-400 hover:text-gray-600">
+              <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Quiz competitions</h3>
+              <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
                 <HelpCircle :size="16" />
               </button>
             </div>
@@ -51,20 +49,20 @@
               <button
                 v-for="option in quizOptions"
                 :key="option.label"
-                class="flex items-center gap-1 p-3 rounded-4xl hover:bg-gray-200 transition-all text-left"
+                class="flex items-center gap-1 p-3 rounded-lg hover:bg-[var(--faded-bg-color)] transition-all text-left"
                 @click="handleClick(option)"
               >
                 <component :is="option.icon" :size="20" :class="option.color" />
-                <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
+                <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
               </button>
             </div>
           </div>
 
-          <!-- Content Slides Section -->
+ 
           <div>
             <div class="flex items-center gap-2 mb-3">
-              <h3 class="text-sm font-medium text-gray-700">Content slides</h3>
-              <button class="text-gray-400 hover:text-gray-600">
+              <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Content slides</h3>
+              <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
                 <HelpCircle :size="16" />
               </button>
             </div>
@@ -72,11 +70,11 @@
               <button
                 v-for="option in contentOptions"
                 :key="option.label"
-                class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all text-left"
+                class="flex items-center gap-3 p-3 rounded-lg border border-[var(--faded-bg-color)] hover:border-[var(--faded-bg-color-dark)] hover:bg-[var(--faded-bg-color)] transition-all text-left"
                 @click="handleClick(option)"
               >
                 <component :is="option.icon" :size="20" :class="option.color" />
-                <span class="text-sm font-medium text-gray-900">{{ option.label }}</span>
+                <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
               </button>
             </div>
           </div>
@@ -150,12 +148,12 @@ interface Option {
 
 function handleClick(option: Option): void {
   console.log('Option clicked:', option.label)
+  emits('open-modal', option.label)
 }
-const emits = defineEmits(['open-modal'])
 
-const openModal = () => {
-  emit('open-modal')
-}
+const emits = defineEmits<{
+  'open-modal': [selectedOption: string]
+}>()
 </script>
 
 <style scoped></style>
