@@ -7,6 +7,7 @@
         <EditorBar class="w-56 flex-none" />
         <!-- let the canvas fill the remaining space -->
         <PresentationCanvas class="flex-1"/>
+        <EditPanel v-if="ToggleEdit"/>
         <SideBar class="w-72 flex-shrink-0" />
       </div>
 
@@ -28,13 +29,18 @@ import SideBar from '../../components/Presentation/SideBar.vue'
 import PresentationModal from '../../components/Presentation/PresentationModal.vue'
 import EditorBar from '../../components/Presentation/EditorBar.vue'
 import PresentationCanvas from '../../components/Presentation/PresentationCanvas.vue'
-
+import EditPanel from '../../components/Presentation/EditPanel.vue'
 const showModal = ref(false)
 const selectedOption = ref('')
+const ToggleEdit = ref(false)
 
 function openModal(option: string) {
   selectedOption.value = option
   showModal.value = true
+}
+
+function openEdit(){
+
 }
 
 function closeModal() {
