@@ -5,9 +5,10 @@
       <div class="flex flex-1">
         <!-- give EditorBar a fixed width and prevent it from growing -->
         <EditorBar class="w-56 flex-none" />
-        <!-- let the canvas fill the remaining space -->
-        <PresentationCanvas class="flex-1"/>
-        <EditPanel v-if="ToggleEdit"/>
+  <!-- let the canvas fill the remaining space; allow it to shrink to avoid overflow -->
+  <PresentationCanvas class="flex-1 min-w-0"/>
+  <!-- give EditPanel a fixed width and prevent it from growing -->
+  <EditPanel v-if="ToggleEdit" class="w-80 flex-none"/>
         <SideBar class="w-72 flex-shrink-0" />
       </div>
 
@@ -32,7 +33,7 @@ import PresentationCanvas from '../../components/Presentation/PresentationCanvas
 import EditPanel from '../../components/Presentation/EditPanel.vue'
 const showModal = ref(false)
 const selectedOption = ref('')
-const ToggleEdit = ref(false)
+const ToggleEdit = ref(true)
 
 function openModal(option: string) {
   selectedOption.value = option
