@@ -1,8 +1,5 @@
-@import "tailwindcss";
-@plugin "daisyui";
 @import "primeicons/primeicons.css";
-@tailwind base;
-@tailwind components;
+@import "tailwindcss/preflight";
 @tailwind utilities;
 :root {
   --primary: #802392;
