@@ -3,7 +3,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noEmit": true,
-    "skipLibCheck": true,
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -18,22 +17,20 @@
         "./types/nitro-imports"
       ],
       "~/*": [
+        "../*",
         "../*"
       ],
       "@/*": [
+        "../*",
         "../*"
       ],
       "~~/*": [
+        "../*",
         "../*"
       ],
       "@@/*": [
+        "../*",
         "../*"
-      ],
-      "nitropack/types": [
-        "../node_modules/nitropack/types"
-      ],
-      "nitropack/runtime": [
-        "../node_modules/nitropack/runtime"
       ],
       "nitropack": [
         "../node_modules/nitropack"
@@ -71,23 +68,38 @@
       "nuxt": [
         "../node_modules/nuxt"
       ],
-      "#shared": [
-        "../shared"
-      ],
-      "#shared/*": [
-        "../shared/*"
-      ],
-      "#build": [
-        "./"
-      ],
-      "#build/*": [
-        "./*"
-      ],
       "#internal/nuxt/paths": [
-        "../node_modules/@nuxt/nitro-server/dist/runtime/utils/paths"
+        "../node_modules/nuxt/dist/core/runtime/nitro/paths"
       ],
-      "#unhead/composables": [
-        "../node_modules/nuxt/dist/head/runtime/composables"
+      "~": [
+        "./.."
+      ],
+      "@": [
+        "./.."
+      ],
+      "~~": [
+        "./.."
+      ],
+      "@@": [
+        "./.."
+      ],
+      "assets": [
+        "../assets"
+      ],
+      "assets/*": [
+        "../assets/*"
+      ],
+      "public": [
+        "../public"
+      ],
+      "public/*": [
+        "../public/*"
+      ],
+      "pinia": [
+        "../node_modules/pinia/dist/pinia"
+      ],
+      "#vue-router": [
+        "./vue-router"
       ]
     },
     "lib": [
@@ -98,19 +110,17 @@
   },
   "include": [
     "./types/nitro-nuxt.d.ts",
-    "../node_modules/runtime/server",
-    "../node_modules/dist/runtime/server",
-    "../shared/**/*.d.ts",
+    "../node_modules/@pinia/nuxt/runtime/server",
+    "../node_modules/@nuxt/devtools/runtime/server",
+    "../node_modules/@nuxt/telemetry/runtime/server",
     "./types/nitro.d.ts",
+    "../**/*",
     "../server/**/*"
   ],
   "exclude": [
     "../node_modules",
     "../../node_modules",
     "../node_modules/nuxt/node_modules",
-    "../node_modules/@pinia/nuxt/node_modules",
-    "../node_modules/@nuxt/devtools/node_modules",
-    "../node_modules/@nuxt/telemetry/node_modules",
     "../dist"
   ]
 }

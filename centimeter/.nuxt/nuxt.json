@@ -1,9 +1,9 @@
 {
-  "_hash": "agiZgVsqubyRPYVSKiOutJVTJ2gVGcZXjnIWGlTRWgg",
+  "_hash": "7FfOORfKue",
   "project": {
     "rootDir": "C:/Users/oleg.ponyatyshyn/Documents/GitHub/centimeter-frontend/centimeter"
   },
   "versions": {
-    "nuxt": "4.2.0"
+    "nuxt": "3.13.2"
   }
 }

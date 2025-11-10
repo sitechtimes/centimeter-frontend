@@ -26,7 +26,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: "Centimeter",
+      title: "Vent Defeater",
       meta: [
         { charset: "UTF-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1.0" },
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
           hid: "description",
           name: "description",
           content:
-            "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Centimeter enables the imagination of anyone looking to build modern, sleek, and top-quality presentations."
+            "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Vent Defeater enables the imagination of anyone looking to build modern, sleek, and top-quality presentations."
         }
       ],
       link: [{ rel: "icon", type: "image/svg+xml", href: "/logo/logo.svg" }]
