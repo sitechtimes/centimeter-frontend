@@ -7,11 +7,13 @@
     </div>
 
     <ul tabindex="-1" class="dropdown-content menu rounded-box z-10 w-96">
-      <div class="bg-[var(--bg-color)] rounded-xl shadow-2xl w-full relative border border-[var(--faded-bg-color)]">
+      <div
+        class="bg-[var(--bg-color)] rounded-xl shadow-2xl w-full relative border border-[var(--faded-bg-color)]"
+      >
         <div class="flex items-center justify-between p-6 border-b border-[var(--faded-bg-color)]">
           <div class="flex items-center gap-2">
             <h2 class="text-lg font-semibold text-[var(--text-color)]">Interactive questions</h2>
-            
+
             <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
               <HelpCircle :size="18" />
             </button>
@@ -23,8 +25,8 @@
           >
             <X :size="20" />
           </button>
-          
-        </div>        <div class="p-6 space-y-6">
+        </div>
+        <div class="p-6 space-y-6">
           <div class="grid grid-cols-2 gap-1">
             <button
               v-for="option in interactiveOptions"
@@ -36,7 +38,6 @@
               <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
             </button>
           </div>
-
 
           <div>
             <div class="flex items-center gap-2 mb-3">
@@ -58,7 +59,6 @@
             </div>
           </div>
 
- 
           <div>
             <div class="flex items-center gap-2 mb-3">
               <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Content slides</h3>
@@ -148,11 +148,11 @@ interface Option {
 
 function handleClick(option: Option): void {
   console.log('Option clicked:', option.label)
-  emits('open-modal', option.label)
+  emits('add-slide', option.label)
 }
 
 const emits = defineEmits<{
-  'open-modal': [selectedOption: string]
+  'add-slide': [slideType: string]
 }>()
 </script>
 

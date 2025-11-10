@@ -3,7 +3,12 @@
     <button
       v-for="item in menuItems"
       :key="item.id"
-      @click="handleClick(item.id)"
+      @click="
+        () => {
+          handleClick(item.id)
+          $emit(`open-${item.id}-panel`)
+        }
+      "
       :class="[
         'flex flex-col items-center justify-center gap-2 p-4 bg-[var(--bg-color)] rounded-2xl shadow-sm transition-all duration-200',
         'hover:bg-gray-200 cursor-pointer',
@@ -35,5 +40,3 @@ function handleClick(id: string) {
   console.log(`Clicked: ${id}`)
 }
 </script>
-
-, ,

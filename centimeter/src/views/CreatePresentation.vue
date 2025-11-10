@@ -1,15 +1,32 @@
 <template>
   <main class="h-screen overflow-hidden">
-    <NavBar/>
+    <NavBar />
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
-        <!-- give EditorBar a fixed width and prevent it from growing -->
         <EditorBar class="w-56 flex-none" />
-  <!-- let the canvas fill the remaining space; allow it to shrink to avoid overflow -->
-  <PresentationCanvas class="flex-1 min-w-0"/>
-  <!-- give EditPanel a fixed width and prevent it from growing -->
-  <EditPanel v-if="ToggleEdit" class="w-80 flex-none"/>
-        <SideBar class="w-72 flex-shrink-0" />
+        <PresentationCanvas class="flex-1 min-w-0" />
+        <EditPanel v-if="showEditPanel" class="w-80 flex-none" @close="showEditPanel = false" />
+        <CommentsPanel
+          v-if="showCommentsPanel"
+          class="w-80 flex-none"
+          @close="showCommentsPanel = false"
+        />
+        <InteractivityPanel
+          v-if="showInteractivityPanel"
+          class="w-80 flex-none"
+          @close="showInteractivityPanel = false"
+        />
+        <ThemesPanel
+          v-if="showThemesPanel"
+          class="w-80 flex-none"
+          @close="showThemesPanel = false"
+        />
+        <TemplatesPanel
+          v-if="showTemplatesPanel"
+          class="w-80 flex-none"
+          @close="showTemplatesPanel = false"
+        />
+        <SideBar class="w-72 flex-shrink-0" @open-edit-panel="toggleEditPanel" />
       </div>
 
       <!-- <PresentationModal
@@ -33,15 +50,19 @@ import PresentationCanvas from '../../components/Presentation/PresentationCanvas
 import EditPanel from '../../components/Presentation/EditPanel.vue'
 const showModal = ref(false)
 const selectedOption = ref('')
-const ToggleEdit = ref(true)
+const showEditPanel = ref(false)
+const showCommentsPanel = ref(false)
+const showInteractivityPanel = ref(false)
+const showThemesPanel = ref(false)
+const showTemplatesPanel = ref(false)
+
+function toggleEditPanel() {
+  showEditPanel.value = !showEditPanel.value
+}
 
 function openModal(option: string) {
   selectedOption.value = option
   showModal.value = true
-}
-
-function openEdit(){
-
 }
 
 function closeModal() {
