@@ -1,4 +1,3 @@
-// Reusable API call function
 async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<{ ok: boolean; data?: ApiResponse }> {
   const res = await fetch(url, options);
   let data: ApiResponse | undefined = undefined;
@@ -45,5 +44,20 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
-  return { user, isAuth, theme, logIn, signUp };
+ async function joinSession(join_code: string) {
+    const { ok, data } = await apiCall(
+      import.meta.env.VITE_BACKEND_URL + "/session/join/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ join_code })
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to join session");
+    }
+    return data;
+  }
+
+  return { user, isAuth, theme, logIn, signUp, joinSession };
 });
