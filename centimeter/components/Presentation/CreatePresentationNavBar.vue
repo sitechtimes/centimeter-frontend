@@ -1,5 +1,6 @@
 <template>
   <header class="flex items-center justify-between px-4 py-2 bg-[var(--bg-color)] border-b border-[var(--faded-bg-color-dark)]">
+    <!-- Left Section -->
     <div class="flex items-center gap-3">
       
       <router-link to="/" class="inline-flex">
@@ -23,7 +24,7 @@
       </button>
     </div>
 
-
+    <!-- Tabs -->
     <div class="flex items-center gap-2">
       <div class="flex items-center border-b-2 border-transparent">
         <button
@@ -52,7 +53,7 @@
         </button>
       </div>
 
-
+      <!-- Right Buttons -->
       <div class="flex items-center gap-1 ml-4">
         <button class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1">
           <Plus class="w-5 h-5 text-[var(--text-color)]" />

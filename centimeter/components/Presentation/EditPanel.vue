@@ -1,5 +1,6 @@
 <template>
   <div class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
+    <!-- Header -->
     <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Slide</h2>
       <button
@@ -81,10 +82,11 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import { toRef } from 'vue'
 
 type Slide = { type?: string; title?: string } | null
 
 const props = defineProps<{ selectedSlide?: Slide }>()
+import { toRef } from 'vue'
+// keep a reactive ref to the prop for template reactivity
 const selectedSlide = toRef(props, 'selectedSlide')
 </script>
