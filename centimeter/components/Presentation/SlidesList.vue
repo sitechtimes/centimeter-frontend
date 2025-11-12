@@ -1,5 +1,4 @@
 <template>
-  <!-- allow this list to size naturally for centering; keep internal scrolling when needed -->
   <div class="flex flex-col items-center gap-3 p-4 overflow-y-auto h-auto max-h-[90vh] min-h-0">
     <div
       v-for="(slide, index) in slides"
@@ -34,11 +33,11 @@ const emit = defineEmits<{
 function addSlide(slideType: string) {
   slides.value.push({ type: slideType })
   selectedSlide.value = slides.value.length - 1
+  emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
 }
 
 function selectSlide(index: number) {
   selectedSlide.value = index
-  // notify parent about selected slide
   emit('select-slide', index, slides.value[index])
 }
 
