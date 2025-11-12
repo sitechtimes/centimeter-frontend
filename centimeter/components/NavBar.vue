@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-24 flex flex-col items-center justify-center sticky top-0">
+  <div class="flex flex-col items-center justify-center sticky top-0">
     <header class="transition duration-500 bg-[color:var(--bg-color)] h-16 w-screen">
       <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] relative z-20">
         <RouterLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
@@ -152,7 +152,7 @@ const navButtons = [
         path: "/"
       },
       {
-        name: "AI Menti Builder",
+        name: "AI Centi Builder",
         path: "/"
       },
       {

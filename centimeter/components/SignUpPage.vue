@@ -50,16 +50,20 @@
                         <h3 class="m-0 font-medium cursor-pointer">Log in</h3>
                     </button>
                 </div>
+                
+                <ToastContainer ref="toastRef" />
             </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import ToastContainer from './ToastContainer.vue';
 
 const router = useRouter();
 import { useUserStore } from '../stores/userStore';
 const userStore = useUserStore();
+const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null);
 
 const email = ref("");
 const name = ref("");
@@ -112,15 +116,27 @@ watch(
 async function signupWithEmail() {
     try {
         await userStore.signUp(email.value, password.value);
+        
+        if (userStore.isAuth) {
+            toastRef.value?.add({ 
+                title: 'Account created!', 
+                message: 'Welcome to Centimeter'
+            });
+            setTimeout(() => router.push("/app/dashboard"), 1000);
+        } else {
+            passwordErr.value = "Account creation failed. Please try again.";
+        }
     } catch (error) {
         if (error instanceof Error) {
             passwordErr.value = error.message;
             if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
         }
+        toastRef.value?.add({ 
+            title: 'Sign up failed', 
+            message: 'Please check your information and try again'
+        });
         return;
     }
-    if (userStore.isAuth) router.push("/app/dashboard");
-    else passwordErr.value = "Something went wrong. Please try again.";
 }
 
 function goToLogin() {
