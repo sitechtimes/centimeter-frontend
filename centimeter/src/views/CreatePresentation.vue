@@ -3,7 +3,7 @@
     <NavBar />
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
-        <EditorBar class="w-56 flex-none" />
+        <EditorBar class="w-48 flex-none" />
         <PresentationCanvas class="flex-1 min-w-0" />
         <EditPanel v-if="showEditPanel" class="w-80 flex-none" @close="showEditPanel = false" />
         <CommentsPanel

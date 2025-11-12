@@ -13,15 +13,15 @@
 
     <div class="flex-1 overflow-y-auto p-6 space-y-8">
       <div class="space-y-3">
-        <h3 class="text-sm font-semibold text-gray-900">Question type</h3>
+        <h3 class="text-sm font-semibold text-[var(--text-color)]">Question type</h3>
         <div class="relative">
           <button
             class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--faded-bg-color-light)] hover:bg-[var(--faded-bg-color)] rounded-lg border border-[var(--faded-bg-color-dark)] transition-colors"
           >
-            <BookPlus class="w-6 h-6 text-black" />
-            <span class="text-sm font-medium text-[var(--faded-text-color)]">Multiple Choice</span>
+            <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
+            <span class="text-sm font-medium text-[var(--faded-text-color)]">{{ selectedSlide?.type ?? 'Multiple Choice' }}</span>
             <span class="ml-auto">
-              <ArrowDown class="w-6 h-6 text-black" />
+              <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
             </span>
           </button>
         </div>
@@ -82,4 +82,11 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
+
+type Slide = { type?: string; title?: string } | null
+
+const props = defineProps<{ selectedSlide?: Slide }>()
+import { toRef } from 'vue'
+// keep a reactive ref to the prop for template reactivity
+const selectedSlide = toRef(props, 'selectedSlide')
 </script>
