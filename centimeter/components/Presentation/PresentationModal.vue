@@ -8,7 +8,7 @@
       @click.stop
       class="relative bg-[var(--bg-color)] rounded-3xl shadow-2xl w-[900px] h-[600px] flex items-center justify-center border border-[var(--faded-bg-color-dark)]"
     >
-      <!-- Close Button -->
+
       <button
         class="absolute top-4 right-4 text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition"
         @click="closeModal"
@@ -16,7 +16,7 @@
         ✕
       </button>
 
-      <!-- Slide Content -->
+
       <div class="text-center px-10">
         <h1 class="text-3xl font-bold text-[var(--primary)] mb-4">
           {{ selectedOption }}
