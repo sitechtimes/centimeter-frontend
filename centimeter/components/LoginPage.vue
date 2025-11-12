@@ -34,6 +34,19 @@
           <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
         </div>
 
+        <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
+          <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <input
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]"
+            id="name"
+            type="text"
+            required
+            v-model="name"
+            autocomplete="name"
+          />
+          <p class="absolute error font-medium text-red-500" v-show="nameErr.length > 0">{{ nameErr }}</p>
+        </div>
+
         <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
@@ -44,11 +57,24 @@
             v-model="password"
             :autocomplete="showLogin ? 'current-password' : 'new-password'"
           />
-          <p class="absolute error font-medium text-red-500 mt-28" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
+          <p class="absolute error font-medium text-red-500" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
+        </div>
+
+        <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
+          <label class="font-medium" for="password">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <input
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]"
+            id="password"
+            type="password"
+            required
+            v-model="confirmPassword"
+            autocomplete="new-password"
+          />
+          <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
         <button
-          class="w-96 h-12 rounded-full border-0 mt-4 transition duration-200 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] active:brightness-60"
+          class="w-96 h-12 rounded-full border-0 mt-4 transition duration-500 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)]"
           type="submit"
         >
           <span>{{ showLogin ? "Log in" : "Sign up" }}</span>
@@ -63,8 +89,6 @@
     <button class="bg-transparent border-0" @click="showLogin ? router.push('/auth/signup') : router.push('/auth/login')">
       <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
     </button>
-    
-    <ToastContainer ref="toastRef" />
   </div>
 </template>
 
@@ -72,12 +96,10 @@
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '../stores/userStore';
-import ToastContainer from './ToastContainer.vue';
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
-const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null);
 
 const showLogin = ref(true);
 const resetPassword = ref(false);
@@ -176,27 +198,16 @@ const loginButtons = [
 async function loginWithEmail() {
   try {
     await userStore.logIn(email.value, password.value);
-    
-    if (userStore.isAuth) {
-      toastRef.value?.add({ 
-        title: 'Login successful!', 
-        message: 'Welcome back to Centimeter'
-      });
-      setTimeout(() => router.push("/app/dashboard"), 1000);
-    } else {
-      passwordErr.value = "Invalid credentials. Please try again.";
-    }
   } catch (error) {
     if (error instanceof Error) {
       passwordErr.value = error.message;
       if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
     }
-    toastRef.value?.add({ 
-      title: 'Login failed', 
-      message: 'Please check your credentials and try again'
-    });
     return;
   }
+
+  if (userStore.isAuth) router.push("/app/dashboard");
+  else passwordErr.value = "Something went wrong. Please try again.";
 }
 
 async function loginWithGoogle() {

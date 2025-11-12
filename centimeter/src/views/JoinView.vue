@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-start gap-4 w-screen h-screen">
     <NavBar :show-join-banner="showBanner" />
-    <div class="flex flex-col items-center justify-center gap-2 mt-24">
+    <div class="flex flex-col items-center justify-center gap-2">
       <h1 class="text-3xl">Enter the code to join</h1>
       <p class="text-lg text-[color:var(--faded-text-color)]">It's on the screen in front of you</p>
     </div>
