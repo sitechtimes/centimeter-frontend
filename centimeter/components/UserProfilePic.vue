@@ -1,9 +1,8 @@
 <template>
     <div>
         <img src="" alt="ProfilePicture" @click="changeAvatarDropdown">
-        <h3 v-if="changeAvatar">
-            Change Avatar
-        </h3>
+        <input v-if="changeAvatar" type="file" accept="image/*" >
+
         <h1>{{ UserStore.user?.username }}</h1>
         <h2>{{ email }}</h2>
     </div>
@@ -13,7 +12,7 @@
             <h1>Username</h1>
             <input type="text" placeholder="Username" ref="UsernameInput">
             <br>
-            <button>Save</button>
+            <button @click="saveProfileChanges">Save</button>
             <button @click="cancelProfileChanges">Cancel</button>
         </div>
     </div>
