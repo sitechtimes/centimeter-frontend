@@ -82,8 +82,7 @@
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
 import { toRef } from 'vue'
-
-type Slide = { type?: string; title?: string } | null
+import type { Slide } from '../../utils/types'
 
 const props = defineProps<{ selectedSlide?: Slide }>()
 const selectedSlide = toRef(props, 'selectedSlide')

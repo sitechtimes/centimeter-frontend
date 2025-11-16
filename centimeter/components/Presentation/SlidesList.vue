@@ -18,10 +18,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { defineEmits } from 'vue'
-
-interface Slide {
-  type: string
-}
+import type { Slide } from '../../utils/types'
 
 const slides = ref<Slide[]>([])
 const selectedSlide = ref<number | null>(null)

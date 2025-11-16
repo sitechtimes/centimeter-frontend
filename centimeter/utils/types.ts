@@ -18,3 +18,8 @@ export interface ToastPayload {
   message?: string;
   duration?: number;
 };
+
+export type Slide = {
+  type?: string;
+  title?: string;
+}

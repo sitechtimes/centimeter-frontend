@@ -44,9 +44,9 @@ import SideBar from '../../components/Presentation/SideBar.vue'
 import EditorBar from '../../components/Presentation/EditorBar.vue'
 import PresentationCanvas from '../../components/Presentation/PresentationCanvas.vue'
 import EditPanel from '../../components/Presentation/EditPanel.vue'
+import type { Slide } from '../../utils/types'
 
-const showModal = ref(false)
-const selectedOption = ref('')
+
 const showEditPanel = ref(false)
 const showCommentsPanel = ref(false)
 const showInteractivityPanel = ref(false)
@@ -54,22 +54,15 @@ const showThemesPanel = ref(false)
 const showTemplatesPanel = ref(false)
 
 
-const currentSelectedSlide = ref<{ type: string } | null>(null)
+const currentSelectedSlide = ref<Slide | undefined>(undefined)
 
 function toggleEditPanel() {
   showEditPanel.value = !showEditPanel.value
 }
 
-function openModal(option: string) {
-  selectedOption.value = option
-  showModal.value = true
-}
 
-function closeModal() {
-  showModal.value = false
-}
 
-function handleSlideSelect(slideIndex: number, slide: { type: string }) {
+function handleSlideSelect(slideIndex: number, slide: Slide) {
   currentSelectedSlide.value = slide
   showEditPanel.value = true
 }

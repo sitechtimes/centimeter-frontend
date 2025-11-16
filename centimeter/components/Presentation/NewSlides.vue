@@ -21,7 +21,7 @@
 
           <button
             @click="isOpen = false"
-            class="text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors"
+            class="text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors cursor-pointer"
           >
             <X :size="20" />
           </button>
@@ -139,8 +139,10 @@ function toggleIcon() {
   isPlus.value = !isPlus.value
   console.log('Icon toggled')
 }
+import type { Component } from 'vue'
+
 interface Option {
-  icon: any
+  icon: Component
   label: string
   color?: string
   featured?: boolean

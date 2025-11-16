@@ -2,7 +2,7 @@
   <header class="flex items-center justify-between px-4 py-2 bg-[var(--bg-color)] border-b border-[var(--faded-bg-color-dark)]">
     <div class="flex items-center gap-3">
       
-      <router-link to="/" class="inline-flex">
+      <router-link to="/app/dashboard" class="inline-flex">
         <ChevronLeft class="w-5 h-5 text-[var(--text-color)] cursor-pointer" />
       </router-link>
 
@@ -14,7 +14,7 @@
         />
         <div class="flex items-center gap-1 text-xs text-[var(--faded-text-color)]">
           <component :is="WorkspaceIcon ?? UserRound" class="w-3 h-3 text-[var(--text-color)]" />
-          <span>{{ CurrentWorkspaceName }}</span>
+          <span>{{ currentWorkspaceName }}</span>
         </div>
       </div>
 
@@ -48,7 +48,7 @@
           @click="activeTab = 'results'"
         >
           Results
-          <span class="text-xs text-[var(--gray)]">{{ Results }}</span>
+          <span class="text-xs text-[var(--gray)]">{{ results }}</span>
         </button>
       </div>
 
@@ -82,13 +82,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Component } from 'vue'
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucide-vue-next'
 
 
-const WorkspaceIcon: any = null
+const WorkspaceIcon: Component | null = null
 
 const presentationName = ref('Untitled Presentation')
 const activeTab = ref('create')
-const CurrentWorkspaceName = ref("Workspace Name")
-const Results = ref(0)
+const currentWorkspaceName = ref("Workspace Name")
+const results = ref(0)
 </script>

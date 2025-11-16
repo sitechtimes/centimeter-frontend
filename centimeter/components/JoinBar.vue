@@ -9,10 +9,12 @@
           </span>
           <div class="flex items-center gap-2">
             <input
-              placeholder="12345678"
+              placeholder="123456"
               type="text"
               class="bg-[var(--bg-color)] text-[var(--text-color)] px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent w-30"
-            />
+              inputmode="numeric"
+              maxlength="6"
+              />
             <button
               class="bg-[var(--faded-bg-color)] text-[var(--faded-text-color)] hover:bg-[var(--primary-shade-translucent)] px-6 py-2 font-semibold rounded-3xl transition-colors duration-200 cursor-pointer"
             >
