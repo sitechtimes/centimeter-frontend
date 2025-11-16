@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type {ShowButtons} from "../src/utils/types.ts"
+import type {ShowButtons} from "../pages/utils/types.ts"
 
 defineProps<{ showJoinBanner?: boolean }>();
 defineEmits<{ toggleBanner: [void] }>();

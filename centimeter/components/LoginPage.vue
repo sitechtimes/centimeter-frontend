@@ -60,7 +60,7 @@
 
     <h3 v-show="showLogin">New to Centimeter?</h3>
     <h3 v-show="!showLogin">Already have an account?</h3>
-    <button class="bg-transparent border-0" @click="showLogin ? router.push('/auth/signup') : router.push('/auth/login')">
+    <button class="bg-transparent border-0" @click="showLogin ? navigateTo('/auth/signup') : navigateTo('/auth/login')">
       <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
     </button>
     
@@ -69,13 +69,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '../stores/userStore';
 import ToastContainer from './ToastContainer.vue';
 
 const route = useRoute();
-const router = useRouter();
 const userStore = useUserStore();
 const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null);
 
@@ -83,9 +80,9 @@ const showLogin = ref(true);
 const resetPassword = ref(false);
 watch(
   () => resetPassword.value,
-  (value) => {
-    if (value) router.push("/auth/reset-password");
-    else router.push(route.name === 'signup' ? '/auth/signup' : '/auth/login');
+  (value: boolean) => {
+    if (value) navigateTo("/auth/reset-password");
+    else navigateTo('/auth/login');
   }
 );
 
@@ -102,7 +99,7 @@ const confirmPasswordErr = ref("");
 
 watch(
   () => route.name,
-  (routeName) => {
+  (routeName: string | symbol | undefined) => {
     showLogin.value = routeName === 'login';
   },
   { immediate: true }
@@ -111,7 +108,7 @@ watch(
 
 watch(
   () => email.value,
-  (value) => {
+  (value: string) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
     else emailErr.value = "";
@@ -121,7 +118,7 @@ watch(
 
 watch(
   () => password.value,
-  (value) => {
+  (value: string) => {
     if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
 
     if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
@@ -132,7 +129,7 @@ watch(
 
 watch(
   () => name.value,
-  (value) => {
+  (value: string) => {
     if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
     else if (value.length > 40) nameErr.value = "name must be less than 40 characters.";
     else nameErr.value = "";
@@ -142,7 +139,7 @@ watch(
 
 watch(
   () => confirmPassword.value,
-  (value) => {
+  (value: string) => {
     if (value != password.value) confirmPasswordErr.value = "Passwords do not match.";
     else confirmPasswordErr.value = "";
   }
@@ -182,7 +179,7 @@ async function loginWithEmail() {
         title: 'Login successful!', 
         message: 'Welcome back to Centimeter'
       });
-      setTimeout(() => router.push("/app/dashboard"), 1000);
+      setTimeout(() => navigateTo("/app/dashboard"), 1000);
     } else {
       passwordErr.value = "Invalid credentials. Please try again.";
     }
