@@ -56,11 +56,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
 import ToastContainer from './ToastContainer.vue';
 
-const router = useRouter();
 import { useUserStore } from '../stores/userStore';
 const userStore = useUserStore();
 const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null);
@@ -79,7 +76,7 @@ const confirmPasswordErr = ref("");
 
 watch(
     () => email.value,
-    (value) => {
+    (value: string) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (value.length > 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
         else emailErr.value = "";
@@ -88,7 +85,7 @@ watch(
 
 watch(
     () => password.value,
-    (value) => {
+    (value: string) => {
         if (value !== confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
         if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
         else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
@@ -98,7 +95,7 @@ watch(
 
 watch(
     () => name.value,
-    (value) => {
+    (value: string) => {
         if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
         else if (value.length > 40) nameErr.value = "Name must be less than 40 characters.";
         else nameErr.value = "";
@@ -107,7 +104,7 @@ watch(
 
 watch(
     () => confirmPassword.value,
-    (value) => {
+    (value: string) => {
         if (value !== password.value) confirmPasswordErr.value = "Passwords do not match.";
         else confirmPasswordErr.value = "";
     }
@@ -122,7 +119,7 @@ async function signupWithEmail() {
                 title: 'Account created!', 
                 message: 'Welcome to Centimeter'
             });
-            setTimeout(() => router.push("/app/dashboard"), 1000);
+            setTimeout(() => navigateTo("/app/dashboard"), 1000);
         } else {
             passwordErr.value = "Account creation failed. Please try again.";
         }
@@ -140,7 +137,7 @@ async function signupWithEmail() {
 }
 
 function goToLogin() {
-    router.push('/auth/login');
+    navigateTo('/auth/login');
 }
 </script>
 
