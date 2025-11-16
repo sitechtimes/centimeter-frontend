@@ -1,11 +1,11 @@
 <p align="center">
   <a href="https://ventdefeater.netlify.app">
-    <img alt="Vent Defeater" src="https://github.com/sitechtimes/vent-defeater/blob/dev/public/logo/logoWithWords.svg?raw=true" width="500" />
+    <img alt="Centimeter" src="https://github.com/sitechtimes/vent-defeater/blob/dev/public/logo/logoWithWords.svg?raw=true" width="500" />
   </a>
 </p>
 
 <h1 align="center">
-  Vent Defeater
+  Centimeter
 </h1>
 
 <p align="center">
@@ -17,7 +17,7 @@
 
 <h2 align="center">
   <a href="https://ventdefeater.netlify.app">
-    Vent Defeater
+    Centimeter
   </a>
   <span> · </span>
   <a href="https://ventdefeater.netlify.app/game">
