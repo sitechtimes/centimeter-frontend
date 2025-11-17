@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import { useUserStore } from '../stores/userStore';
-import { ref } from 'vue';
 
 const UserStore = useUserStore()
 const email = ref("")
