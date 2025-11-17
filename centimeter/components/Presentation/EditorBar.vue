@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <NewSlides @add-slide="handleAddSlide" />
-  <SlidesList ref="slidesListRef" @select-slide="forwardSelect" />
+    <SlidesList ref="slidesListRef" @select-slide="forwardSelect" />
   </div>
 </template>
 

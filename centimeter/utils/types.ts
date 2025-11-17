@@ -1,3 +1,4 @@
+import type { Component } from 'vue'
 export interface User {
   id?: string;
   email?: string;
@@ -22,4 +23,11 @@ export interface ToastPayload {
 export type Slide = {
   type?: string;
   title?: string;
+}
+
+export interface Option {
+  icon: Component
+  label: string
+  color?: string
+  featured?: boolean
 }

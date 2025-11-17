@@ -39,45 +39,9 @@
             </button>
           </div>
 
-          <div>
-            <div class="flex items-center gap-2 mb-3">
-              <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Quiz competitions</h3>
-              <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
-                <HelpCircle :size="16" />
-              </button>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                v-for="option in quizOptions"
-                :key="option.label"
-                class="flex items-center gap-1 p-3 rounded-lg hover:bg-[var(--faded-bg-color)] transition-all text-left"
-                @click="handleClick(option)"
-              >
-                <component :is="option.icon" :size="20" :class="option.color" />
-                <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
-              </button>
-            </div>
-          </div>
 
-          <div>
-            <div class="flex items-center gap-2 mb-3">
-              <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Content slides</h3>
-              <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
-                <HelpCircle :size="16" />
-              </button>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                v-for="option in contentOptions"
-                :key="option.label"
-                class="flex items-center gap-3 p-3 rounded-lg border border-[var(--faded-bg-color)] hover:border-[var(--faded-bg-color-dark)] hover:bg-[var(--faded-bg-color)] transition-all text-left"
-                @click="handleClick(option)"
-              >
-                <component :is="option.icon" :size="20" :class="option.color" />
-                <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
-              </button>
-            </div>
-          </div>
+          <ContentSlides/>
+          
         </div>
       </div>
     </ul>
@@ -87,6 +51,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { defineEmits } from 'vue'
+import type { Option } from '../../utils/types'
+import ContentSlides from './SlideTypes.vue/ContentSlides.vue'
 const isOpen = ref(false)
 const isPlus = ref(true)
 import {
@@ -102,10 +68,6 @@ import {
   Edit3,
   MapPin,
   Hourglass,
-  Type,
-  Image,
-  Play,
-  LayoutGrid,
   X,
   Plus,
 } from 'lucide-vue-next'
@@ -127,26 +89,12 @@ const quizOptions = [
   { icon: BarChart3, label: 'Select Answer', color: 'text-blue-600' },
   { icon: Hourglass, label: 'Type Answer', color: 'text-green-600' },
 ]
-
-const contentOptions = [
-  { icon: Type, label: 'Text', color: 'text-blue-600' },
-  { icon: Image, label: 'Image', color: 'text-blue-500' },
-  { icon: Play, label: 'Video', color: 'text-purple-600' },
-  { icon: LayoutGrid, label: 'Instructions', color: 'text-gray-600' },
-]
-
 function toggleIcon() {
   isPlus.value = !isPlus.value
   console.log('Icon toggled')
 }
-import type { Component } from 'vue'
 
-interface Option {
-  icon: Component
-  label: string
-  color?: string
-  featured?: boolean
-}
+
 
 function handleClick(option: Option): void {
   console.log('Option clicked:', option.label)
