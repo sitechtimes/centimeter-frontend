@@ -1,7 +1,13 @@
 <template>
     <div>
-        <img src="" alt="ProfilePicture" @click="changeAvatarDropdown">
-        <input v-if="changeAvatar" type="file" accept="image/*" >
+        <div>   
+            <img class="w-100 h-100":src="BasicAvatar" v-if="!imageURL" alt="BasicAvatar" @click="changeAvatarDropdown">
+            <img v-if="imageURL" :src="imageURL" alt="CustomAcatar" @click="changeAvatarDropdown">            
+        </div>
+        <div v-if="changeAvatar">
+        <label for="uploadAvatar">Upload Picture</label>
+        <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar">
+        </div>
 
         <h1>{{ UserStore.user?.username }}</h1>
         <h2>{{ email }}</h2>
@@ -26,6 +32,8 @@ const UserStore = useUserStore()
 const email = ref("")
 const changeAvatar = ref(false)
 const editProfile = ref(false)
+const BasicAvatar = "/logo/basicProfilePic.svg"
+const imageURL = ref<string|null>(null)
 
 const UsernameInput = ref("")
 
@@ -42,6 +50,13 @@ const saveProfileChanges = () => {
 }
 const cancelProfileChanges = () => {
     editProfile.value = false
+}
+const getAvatar = async (event) => {
+    const picture = event.target.files[0]
+    imageURL.value = URL.createObjectURL(picture)
+    changeAvatar.value = false
+
+    console.log(picture)
 }
 
 </script>

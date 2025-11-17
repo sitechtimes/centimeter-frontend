@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import UserProfilePic from '../../components/UserProfilePic.vue';
+import UserProfilePic from '../components/UserProfilePic.vue';
 </script>
 
 <style scoped>
