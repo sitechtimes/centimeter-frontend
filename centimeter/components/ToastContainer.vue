@@ -42,7 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import type { ToastItem, ToastPayload } from '../utils/types';
 
 const props = defineProps({
@@ -73,7 +72,7 @@ function add(toast: ToastPayload) {
 }
 
 function remove(id: string) {
-  const index = toasts.value.findIndex((t) => t.id === id);
+  const index = toasts.value.findIndex((t: ToastItem) => t.id === id);
   if (index >= 0) toasts.value.splice(index, 1);
 }
 defineExpose({ add, remove });

@@ -19,3 +19,19 @@ export interface ToastPayload {
   message?: string;
   duration?: number;
 };
+
+export interface SlidesDropdown {
+    dropdown: string;
+    typeOfSlide: string;
+}
+
+export interface MakePresentationSideBar {
+    name: string;
+    ownComponents: string[]
+}
+
+export interface ShowButtons {
+  name: string;
+  path: string;
+  dropdown?: { name: string;}[];
+};
