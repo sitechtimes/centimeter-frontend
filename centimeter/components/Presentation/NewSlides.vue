@@ -1,12 +1,12 @@
 <template>
-  <div class="">
+  <div class="relative inline-block">
     <div @click="toggleIcon" tabindex="0" role="button" class="btn m-3 rounded-4xl">
       <Plus v-if="isPlus" key="'plus'" :size="20" />
       <X v-else key="'x'" :size="20" />
       New Slide
     </div>
 
-    <ul v-if="isPlus" tabindex="-1" class="dropdown-content menu rounded-box z-10 w-96">
+    <ul v-if="isPlus" tabindex="-1" class="absolute left-0 mt-2 dropdown-content menu rounded-box z-50 w-96">
       <div
         class="bg-[var(--bg-color)] rounded-xl shadow-2xl w-full relative border border-[var(--faded-bg-color)]"
       >
@@ -20,10 +20,10 @@
           </div>
 
           <button
-            @click="isOpen = false"
+            @click="toggleIcon"
             class="text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors cursor-pointer"
           >
-            <X :size="20" @click="toggleIcon"/>
+            <X :size="20" />
           </button>
         </div>
         <div class="p-6 space-y-6">
@@ -62,6 +62,7 @@ const emits = defineEmits<{
 
 function forwardAddSlide(slideType: string): void {
   emits('add-slide', slideType)
+  isPlus.value = !isPlus.value
 }
 </script>
 

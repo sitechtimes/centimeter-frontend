@@ -20,6 +20,8 @@
   --text-color: black;
   --faded-text-color: rgb(70, 70, 70);
   --text-color-contrast: white;
+  --danger: #e11d48;
+  --danger-bg: #fee2e2;
 }
 
 .dark {
@@ -41,6 +43,8 @@
   --text-color: white;
   --faded-text-color: rgb(230, 230, 230);
   --text-color-contrast: black;
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
 }
 
 button {
