@@ -17,7 +17,7 @@ export default defineNuxtConfig({
       url: import.meta.env.VITE_URL
     }
   },
-  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss"],
+  modules: ["@pinia/nuxt"],
   postcss: {
     plugins: {
       tailwindcss: {},

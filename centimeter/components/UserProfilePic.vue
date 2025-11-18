@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div>   
-            <img class="w-100 h-100":src="BasicAvatar" v-if="!imageURL" alt="BasicAvatar" @click="changeAvatarDropdown">
-            <img v-if="imageURL" :src="imageURL" alt="CustomAcatar" @click="changeAvatarDropdown">            
+        <div class="rounded-full max-h-32 max-w-32">   
+            <img class="border-2 object-cover rounded-full h-max w-max" :src="BasicAvatar" v-if="!imageURL" alt="BasicAvatar" @click="changeAvatarDropdown">
+            <img  v-if="imageURL" class="border-2 object-cover  rounded-full h-max w-max" :src="imageURL" alt="CustomAcatar" @click="changeAvatarDropdown">            
         </div>
         <div v-if="changeAvatar">
         <label for="uploadAvatar">Upload Picture</label>
@@ -13,7 +13,7 @@
         <h2>{{ email }}</h2>
     </div>
     <div>
-        <button v-if="!editProfile" @click="editProfileComponent">Edit Profile</button>
+        <button v-if="!editProfile" @click="editProfileComponent" class="w-20 h-20">Edit Profile</button>
         <div v-if="editProfile">
             <h1>Username</h1>
             <input type="text" placeholder="Username" ref="UsernameInput">
