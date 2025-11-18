@@ -31,10 +31,10 @@
 </template>
 
 <script setup lang="ts">
+import ToastContainer from './ToastContainer.vue';
 import { ref } from 'vue'
-
 const showBar = ref(true)
-
+const toastContainer = ref<InstanceType<typeof ToastContainer>>();
 function closeBar() {
   showBar.value = false
 }

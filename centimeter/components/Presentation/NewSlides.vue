@@ -1,12 +1,12 @@
 <template>
-  <div class="dropdown">
+  <div class="">
     <div @click="toggleIcon" tabindex="0" role="button" class="btn m-3 rounded-4xl">
       <Plus v-if="isPlus" key="'plus'" :size="20" />
       <X v-else key="'x'" :size="20" />
       New Slide
     </div>
 
-    <ul tabindex="-1" class="dropdown-content menu rounded-box z-10 w-96">
+    <ul v-if="isPlus" tabindex="-1" class="dropdown-content menu rounded-box z-10 w-96">
       <div
         class="bg-[var(--bg-color)] rounded-xl shadow-2xl w-full relative border border-[var(--faded-bg-color)]"
       >
@@ -23,25 +23,13 @@
             @click="isOpen = false"
             class="text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors cursor-pointer"
           >
-            <X :size="20" />
+            <X :size="20" @click="toggleIcon"/>
           </button>
         </div>
         <div class="p-6 space-y-6">
-          <div class="grid grid-cols-2 gap-1">
-            <button
-              v-for="option in interactiveOptions"
-              :key="option.label"
-              class="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--faded-bg-color)] transition-all text-left relative group cursor-pointer font-bold"
-              @click="handleClick(option)"
-            >
-              <component :is="option.icon" :size="20" :class="option.color" />
-              <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
-            </button>
-          </div>
-
-
-          <ContentSlides/>
-          
+          <InteractiveOptions @add-slide="forwardAddSlide"/>
+          <ContentSlides @add-slide="forwardAddSlide"/>
+          <QuizCompletions @add-slide ="forwardAddSlide"/>
         </div>
       </div>
     </ul>
@@ -51,59 +39,30 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { defineEmits } from 'vue'
-import type { Option } from '../../utils/types'
 import ContentSlides from './SlideTypes.vue/ContentSlides.vue'
+import QuizCompletions from './SlideTypes.vue/QuizCompletions.vue'
+import InteractiveOptions from './SlideTypes.vue/InteractiveOptions.vue'
 const isOpen = ref(false)
-const isPlus = ref(true)
+const isPlus = ref(false)
 import {
-  BarChart3,
-  Cloud,
-  MessageSquare,
-  Scale,
-  List,
-  Users,
   HelpCircle,
-  Award,
-  Grid2x2,
-  Edit3,
-  MapPin,
-  Hourglass,
   X,
   Plus,
 } from 'lucide-vue-next'
-const interactiveOptions = [
-  { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600' },
-  { icon: Cloud, label: 'Word Cloud', color: 'text-red-400' },
-  { icon: MessageSquare, label: 'Open Ended', color: 'text-pink-400' },
-  { icon: Scale, label: 'Scales', color: 'text-indigo-600' },
-  { icon: List, label: 'Ranking', color: 'text-green-600' },
-  { icon: Users, label: 'Q&A', color: 'text-pink-400' },
-  { icon: HelpCircle, label: 'Guess the Number', color: 'text-yellow-600' },
-  { icon: Award, label: '100 points', color: 'text-blue-600' },
-  { icon: Grid2x2, label: '2 x 2 Grid', color: 'text-red-500' },
-  { icon: Edit3, label: 'Quick Form', color: 'text-yellow-600', featured: true },
-  { icon: MapPin, label: 'Pin on Image', color: 'text-purple-600' },
-]
 
-const quizOptions = [
-  { icon: BarChart3, label: 'Select Answer', color: 'text-blue-600' },
-  { icon: Hourglass, label: 'Type Answer', color: 'text-green-600' },
-]
-function toggleIcon() {
+function toggleIcon() { //this toggles the visibility of the component as well not just icon!
   isPlus.value = !isPlus.value
   console.log('Icon toggled')
 }
 
-
-
-function handleClick(option: Option): void {
-  console.log('Option clicked:', option.label)
-  emits('add-slide', option.label)
-}
-
 const emits = defineEmits<{
   'add-slide': [slideType: string]
+  'toggle-icon': [boolean]
 }>()
+
+function forwardAddSlide(slideType: string): void {
+  emits('add-slide', slideType)
+}
 </script>
 
 <style scoped></style>
