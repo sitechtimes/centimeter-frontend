@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="rounded-full max-h-32 max-w-32">   
-            <img class="border-2 object-cover rounded-full h-max w-max" :src="BasicAvatar" v-if="!imageURL" alt="BasicAvatar" @click="changeAvatarDropdown">
-            <img  v-if="imageURL" class="border-2 object-cover  rounded-full h-max w-max" :src="imageURL" alt="CustomAcatar" @click="changeAvatarDropdown">            
+        <div class="rounded-full h-32 w-32 border-2 object-cover rounded-full">   
+            <img src="/logo/basicProfilePic.svg" v-if="!imageURL" alt="BasicAvatar" @click="changeAvatarDropdown">
+            <img  v-if="imageURL"src="imageURL" alt="CustomAcatar" @click="changeAvatarDropdown">            
         </div>
         <div v-if="changeAvatar">
         <label for="uploadAvatar">Upload Picture</label>
