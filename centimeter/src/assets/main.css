@@ -84,3 +84,7 @@ input[type='number'] {
     width: 100%;
   }
 }
+:deep(*) {
+  -webkit-user-select: none;
+  user-select: none;
+}

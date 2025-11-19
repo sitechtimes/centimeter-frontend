@@ -27,24 +27,20 @@
     <div class="flex items-center gap-2">
       <div class="flex items-center border-b-2 border-transparent">
         <button
-          :class="[
-            'px-4 py-2 text-sm font-medium transition-colors',
-            activeTab === 'create'
-              ? 'text-[var(--primary)] border-b-2 border-[var(--primary)]'
-              : 'text-[var(--faded-text-color)] hover:bg-[var(--faded-bg-color-light)] rounded-t',
-          ]"
+          class="px-4 py-2 text-sm font-medium transition-colors"
+          :class="activeTab === 'create'
+            ? 'text-[var(--primary)] border-b-2 border-[var(--primary)]'
+            : 'text-[var(--faded-text-color)] hover:bg-[var(--faded-bg-color-light)] rounded-t'"
           @click="activeTab = 'create'"
         >
           Create
         </button>
 
         <button
-          :class="[
-            'px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2',
-            activeTab === 'results'
-              ? 'text-[var(--primary)] border-b-2 border-[var(--primary)]'
-              : 'text-[var(--faded-text-color)] hover:bg-[var(--faded-bg-color-light)] rounded-t',
-          ]"
+          class="px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2"
+          :class="activeTab === 'results'
+            ? 'text-[var(--primary)] border-b-2 border-[var(--primary)]'
+            : 'text-[var(--faded-text-color)] hover:bg-[var(--faded-bg-color-light)] rounded-t'"
           @click="activeTab = 'results'"
         >
           Results
@@ -89,7 +85,7 @@ import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucid
 const WorkspaceIcon: Component | null = null
 
 const presentationName = ref('Untitled Presentation')
-const activeTab = ref('create')
+const activeTab = ref<"create" | "results">("create");
 const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
 </script>

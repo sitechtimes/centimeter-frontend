@@ -5,7 +5,6 @@
     >
       <div
         v-for="(slide, index) in slides"
-        :key="index"
         class="w-40 h-24 bg-[var(--bg-color)] border border-[var(--faded-bg-color)] flex items-center justify-center rounded-lg shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer relative slide-item"
         :class="{
           'border-blue-500 border-2': selectedSlide === index,
@@ -253,8 +252,4 @@ defineExpose({
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-:deep(*) {
-  -webkit-user-select: none;
-  user-select: none;
-}
 </style>

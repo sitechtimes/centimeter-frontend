@@ -7,7 +7,7 @@
             </button>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <<button
+            <button
             v-for="option in quizOptions"
             :key="option.label"
             class="flex items-center gap-1 p-3 rounded-lg hover:bg-[var(--faded-bg-color)] transition-all text-left"
@@ -15,7 +15,7 @@
             >
             <component :is="option.icon" :size="20" :class="option.color" />
             <span class="text-sm font-medium text-[var(--text-color)]">{{ option.label }}</span>
-            </button>>
+            </button>
         </div>
     </div>
 

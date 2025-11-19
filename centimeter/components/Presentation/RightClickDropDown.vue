@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue'
 import { Trash } from 'lucide-vue-next'
 
 const props = defineProps<{

@@ -43,10 +43,10 @@ const interactiveOptions = [
 
 function handleClick(option: Option): void {
   console.log('Option clicked:', option.label)
-  emits('add-slide', option.label)
+  emit('add-slide', option.label)
 }
 
-const emits = defineEmits<{
+const emit = defineEmits<{
   'add-slide': [slideType: string]
 }>()
 </script>

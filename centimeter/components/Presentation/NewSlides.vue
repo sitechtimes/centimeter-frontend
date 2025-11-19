@@ -42,13 +42,13 @@ import { defineEmits } from 'vue'
 import ContentSlides from './SlideTypes.vue/ContentSlides.vue'
 import QuizCompletions from './SlideTypes.vue/QuizCompletions.vue'
 import InteractiveOptions from './SlideTypes.vue/InteractiveOptions.vue'
-const isOpen = ref(false)
-const isPlus = ref(false)
 import {
   HelpCircle,
   X,
   Plus,
 } from 'lucide-vue-next'
+
+const isPlus = ref(false)
 
 function toggleIcon() { //this toggles the visibility of the component as well not just icon!
   isPlus.value = !isPlus.value
