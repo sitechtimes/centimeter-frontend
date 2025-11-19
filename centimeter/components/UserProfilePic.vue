@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="rounded-full h-32 w-32 border-2 object-cover rounded-full">   
-            <img src="/logo/basicProfilePic.svg" v-if="!imageURL" alt="BasicAvatar" @click="changeAvatarDropdown">
-            <img  v-if="imageURL"src="imageURL" alt="CustomAcatar" @click="changeAvatarDropdown">            
+        <div class="rounded-full max-h-32 max-w-32 border-2 object-cover">   
+            <img class="h-32 w-32":src="BasicAvatar" alt="BasicAvatar" @click="changeAvatarDropdown">
+            <img v-if="changeAvatar && isImportedAvatar" :src="imageURL ?? BasicAvatar" alt="CustomAvatar" @click="changeAvatarDropdown">            
         </div>
         <div v-if="changeAvatar">
         <label for="uploadAvatar">Upload Picture</label>
@@ -31,6 +31,7 @@ const UserStore = useUserStore()
 const email = ref("")
 const changeAvatar = ref(false)
 const editProfile = ref(false)
+const isImportedAvatar = ref(false)
 const BasicAvatar = "/logo/basicProfilePic.svg"
 const imageURL = ref<string|null>(null)
 
@@ -39,7 +40,6 @@ const UsernameInput = ref("")
 const changeAvatarDropdown = () => {
     changeAvatar.value = !changeAvatar.value
 }
-/* pretty sure theres a better name for this */
 const editProfileComponent = () => {
     editProfile.value = !editProfile.value
 }
@@ -54,6 +54,7 @@ const getAvatar = async (event) => {
     const picture = event.target.files[0]
     imageURL.value = URL.createObjectURL(picture)
     changeAvatar.value = false
+    isImportedAvatar.value = true
 
     console.log(picture)
 }
