@@ -14,7 +14,7 @@ import type { User } from "../utils/types";
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
   const isAuth = ref(false);
-
+  
   const theme = ref<"light" | "dark">("light");
 
   async function logIn(email: string, password: string) {

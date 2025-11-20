@@ -20,23 +20,22 @@
 
 <script setup lang="ts">
 type Props = {
+  dark?: boolean;
   big?: boolean;
 };
 defineProps<Props>();
-import { useUserStore } from "#imports";
 const userStore = useUserStore()
 const userTheme = userStore.theme
-
-const dark = userTheme == "dark" ? ref(true) : ref(false);
+const isdark = ref(userTheme === "dark");
 
 function toggleTheme() {
-  if(userTheme == "light"){
+  if(!isdark.value){
     userTheme = "dark"
   }
   // TODO: Implement actual theme switching
   document.body.classList.toggle('dark');
-  localStorage.setItem('theme', dark.value ? 'dark' : 'light');
-  console.log(dark.value)
+  localStorage.setItem('theme', isdark.value ? 'dark' : 'light');
+  console.log(isdark.value)
 }
 
 </script>

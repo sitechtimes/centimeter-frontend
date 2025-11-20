@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="rounded-full max-h-32 max-w-32 border-2 object-cover">   
-            <img class="h-32 w-32":src="BasicAvatar" alt="BasicAvatar" @click="changeAvatarDropdown">
-            <img v-if="changeAvatar && isImportedAvatar" :src="imageURL ?? BasicAvatar" alt="CustomAvatar" @click="changeAvatarDropdown">            
+            <img class="h-32 w-32":src="BasicAvatar" alt="BasicAvatar" @click="changeAvatarDropdown" v-if="!isImportedAvatar">
+            <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" @click="changeAvatarDropdown" class="h-32 w-32">            
         </div>
         <div v-if="changeAvatar">
         <label for="uploadAvatar">Upload Picture</label>
         <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar">
         </div>
 
-        <h1>{{ UserStore.user?.username }}</h1>
+        <h1>{{ userStore.user?.username }}</h1>
         <h2>{{ email }}</h2>
     </div>
     <div>
@@ -25,9 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '../stores/userStore';
-
-const UserStore = useUserStore()
+const userStore = useUserStore()
 const email = ref("")
 const changeAvatar = ref(false)
 const editProfile = ref(false)
@@ -44,7 +42,7 @@ const editProfileComponent = () => {
     editProfile.value = !editProfile.value
 }
 const saveProfileChanges = () => {
-    UserStore.user?.username == UsernameInput.value
+    userStore.user?.username == UsernameInput.value
     editProfile.value = false
 }
 const cancelProfileChanges = () => {
