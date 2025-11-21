@@ -19,7 +19,7 @@
           >
             <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
             <span class="text-sm font-medium text-[var(--faded-text-color)]"> 
-              {{ $props.selectedSlide?.type ?? 'Multiple Choice' }}
+              {{ selectedSlide?.type ?? 'Multiple Choice' }}
             </span> 
             <span class="ml-auto">
               <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
