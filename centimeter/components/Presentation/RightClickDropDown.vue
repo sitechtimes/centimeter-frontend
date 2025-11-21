@@ -24,15 +24,18 @@
 import { Trash } from 'lucide-vue-next'
 
 const props = defineProps<{
-    x: number
-    y: number
-    slideIndex?: number
+  x: number
+  y: number
+  slideIndex?: number
 }>()
 
-const emit = defineEmits()
+const emit = defineEmits<{
+  delete: [index?: number]  
+  close: []
+}>()
 
 function onDelete() {
-    emit('delete', props.slideIndex)
-    emit('close')
+  emit('delete', props.slideIndex)
+  emit('close')
 }
 </script>

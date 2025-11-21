@@ -57,7 +57,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { defineEmits } from 'vue'
 import type { Slide } from '../../utils/types'
 import RightClickDropDown from './RightClickDropDown.vue'
 
@@ -67,7 +66,7 @@ const selectedSlide = ref<number | null>(null)
 const contextVisible = ref(false)
 const contextX = ref(0)
 const contextY = ref(0)
-const contextIndex = ref<number | null>(null)
+const contextIndex = ref<number | undefined>(undefined)
 
 const dragIndex = ref<number | null>(null)
 const dragOverIndex = ref<number | null>(null)
@@ -171,7 +170,7 @@ function updateSelectionAfterReorder(from: number, to: number) {
 
 function closeContext() {
   contextVisible.value = false
-  contextIndex.value = null
+  contextIndex.value = undefined
 }
 
 function handleDelete(index?: number | null) {
