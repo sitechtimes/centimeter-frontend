@@ -18,7 +18,9 @@
             class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--faded-bg-color-light)] hover:bg-[var(--faded-bg-color)] rounded-lg border border-[var(--faded-bg-color-dark)] transition-colors"
           >
             <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
-            <span class="text-sm font-medium text-[var(--faded-text-color)]">{{ selectedSlide?.type ?? 'Multiple Choice' }}</span>
+            <span class="text-sm font-medium text-[var(--faded-text-color)]"> 
+              {{ $props.selectedSlide?.type ?? 'Multiple Choice' }}
+            </span> 
             <span class="ml-auto">
               <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
             </span>
@@ -81,9 +83,6 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import { toRef } from 'vue'
 import type { Slide } from '../../utils/types'
-
-const props = defineProps<{ selectedSlide?: Slide }>()
-const selectedSlide = toRef(props, 'selectedSlide')
+defineProps<{ selectedSlide?: Slide }>()
 </script>

@@ -66,8 +66,7 @@ const selectedSlide = ref<number | null>(null)
 const contextVisible = ref(false)
 const contextX = ref(0)
 const contextY = ref(0)
-const contextIndex = ref<number | undefined>(undefined)
-
+const contextIndex = ref<number>();
 const dragIndex = ref<number | null>(null)
 const dragOverIndex = ref<number | null>(null)
 const dragging = ref(false)
