@@ -29,13 +29,12 @@ const userTheme = userStore.theme
 const isdark = ref(userTheme === "dark");
 
 function toggleTheme() {
-  if(!isdark.value){
-    userTheme = "dark"
+  if(isdark.value){
+    console.log(userTheme)
   }
   // TODO: Implement actual theme switching
-  document.body.classList.toggle('dark');
+  
   localStorage.setItem('theme', isdark.value ? 'dark' : 'light');
-  console.log(isdark.value)
 }
 
 </script>
