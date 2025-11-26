@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar :show-join-banner="showBanner" @toggle-banner="showBanner = !showBanner" />
     <main class="flex flex-col items-center text-center gap-20">
       <section class="flex flex-col gap-3 items-center">
         <h1 class="text-6xl">What will you ask your audience?</h1>
@@ -30,17 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-
-const showBanner = ref(false);
-onMounted(() => {
-  sessionStorage.setItem("previousIsHome", "true");
-  showBanner.value = true;
-});
 </script>
 
 <style scoped>
-@reference "tailwindcss";
 section {
   max-width: 800px;
   overflow-x: hidden;
@@ -55,12 +46,21 @@ section {
 }
 
 .switcher {
-  @apply bg-gray-200 dark:bg-gray-700;
+  background-color: rgb(229 231 235);
+}
+
+.dark .switcher {
+  background-color: rgb(55 65 81);
 }
 
 .switcher.active {
-  @apply bg-white dark:bg-black border-black dark:border-white;
-  border: 2px solid;
+  background-color: white;
+  border: 2px solid black;
+}
+
+.dark .switcher.active {
+  background-color: black;
+  border: 2px solid white;
 }
 
 .rounded {

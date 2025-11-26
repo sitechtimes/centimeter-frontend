@@ -20,14 +20,18 @@ export interface ToastPayload {
   duration?: number;
 };
 
-export type Slide = {
-  type?: string;
-  title?: string;
+export interface SlidesDropdown {
+    dropdown: string;
+    typeOfSlide: string;
 }
 
-export interface Option {
-  icon: Component
-  label: string
-  color?: string
-  featured?: boolean
+export interface MakePresentationSideBar {
+    name: string;
+    ownComponents: string[]
 }
+
+export interface ShowButtons {
+  name: string;
+  path: string;
+  dropdown?: { name: string;}[];
+};
