@@ -30,7 +30,9 @@ const isdark = ref(userTheme === "dark");
 
 function toggleTheme() {
   if(isdark.value){
-    console.log(userTheme)
+    
+  } else if(!isdark.value){
+    
   }
   // TODO: Implement actual theme switching
   

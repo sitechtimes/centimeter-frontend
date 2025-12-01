@@ -11,6 +11,7 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 import { defineStore } from "pinia";
 import type { User } from "../utils/types";
 
+
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
   const isAuth = ref(false);
@@ -60,3 +61,4 @@ export const useUserStore = defineStore("userStore", () => {
 
   return { user, isAuth, theme, logIn, signUp, joinSession };
 });
+export const bang = ref(false)
