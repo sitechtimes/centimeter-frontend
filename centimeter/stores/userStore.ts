@@ -9,7 +9,6 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
   return { ok: res.ok, data };
 }
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import type { User } from "../utils/types";
 
 export const useUserStore = defineStore("userStore", () => {
