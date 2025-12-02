@@ -61,4 +61,3 @@ export const useUserStore = defineStore("userStore", () => {
 
   return { user, isAuth, theme, logIn, signUp, joinSession };
 });
-export const bang = ref(false)

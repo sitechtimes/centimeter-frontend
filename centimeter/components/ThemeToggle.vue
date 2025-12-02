@@ -25,19 +25,15 @@ type Props = {
 };
 defineProps<Props>();
 const userStore = useUserStore()
-const isTheme = storeToRefs(userStore).theme
-const isdark = computed(() => isTheme.value === 'dark')
+const isdark = computed(() => userStore.theme === 'dark')
 
 function toggleTheme() {
   if(isdark.value){
-    isTheme.value = "light"
-    return isdark.value 
+    userStore.theme = "light"
   } else if(!isdark.value){
-    isTheme.value = "dark"
-    return isdark.value
+    userStore.theme = "dark"
   }
-  // TODO: Implement actual theme switching
-  
+  document.body.classList[isdark.value ? "add" : "remove"]("dark")
   localStorage.setItem('theme', isdark.value ? 'dark' : 'light');
 }
 

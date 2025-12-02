@@ -4,18 +4,17 @@ let previousRoute: RouteLocationNormalizedGeneric | undefined = undefined;
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const userStore = useUserStore();
-  const isAuth = storeToRefs(userStore).isAuth;
   const router = useRouter();
 
   if (
-    !isAuth.value &&
+    !userStore.isAuth &&
     router
       .getRoutes()
       .filter((route) => route.meta.requiresAuth == true)
       .flatMap((route) => route.path)
       .includes(to.path)
   )
-    return navigateTo("/auth/login");
+    return navigateTo("/login");
 
   previousRoute = from;
 });
