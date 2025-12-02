@@ -4,10 +4,11 @@ let previousRoute: RouteLocationNormalizedGeneric | undefined = undefined;
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const userStore = useUserStore();
+  const isAuth = storeToRefs(userStore).isAuth;
   const router = useRouter();
 
   if (
-    !userStore.isAuth &&
+    !isAuth.value &&
     router
       .getRoutes()
       .filter((route) => route.meta.requiresAuth == true)
