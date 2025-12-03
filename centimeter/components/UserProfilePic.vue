@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="rounded-full max-h-32 max-w-32 border-2 object-cover">   
-            <img class="h-32 w-32":src="BasicAvatar" alt="BasicAvatar" @click="changeAvatarDropdown" v-if="!isImportedAvatar">
-            <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" @click="changeAvatarDropdown" class="h-32 w-32">            
+        <div class="rounded-full max-h-16 max-w-16 border-2 object-cover">   
+            <img class="rounded-full h-16 w-16 object-contain":src="BasicAvatar" alt="BasicAvatar" @click="changeAvatarDropdown" v-if="!isImportedAvatar">
+            <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" @click="changeAvatarDropdown" class="h-16 w-16 rounded-full object-contain">            
         </div>
         <div v-if="changeAvatar">
         <label for="uploadAvatar">Upload Picture</label>
@@ -21,6 +21,8 @@
             <button @click="saveProfileChanges">Save</button>
             <button @click="cancelProfileChanges">Cancel</button>
         </div>
+        <br>
+        <theme-toggle/>
     </div>
 </template>
 

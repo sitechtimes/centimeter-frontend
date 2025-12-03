@@ -1,13 +1,13 @@
 <template>
-<UserProfilePic/>
-<ThemeToggle/>
+  <UserProfilePic/>
+
 </template>
 
 <script setup lang="ts">
-definePageMeta({
+/* definePageMeta({
   middleware: 'auth',
   requiresAuth: true
-});
+}); */
 </script>
 
 <style scoped>
