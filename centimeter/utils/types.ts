@@ -1,3 +1,4 @@
+import type { Component } from 'vue'
 export interface User {
   id?: string;
   email?: string;
