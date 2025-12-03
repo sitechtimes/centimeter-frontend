@@ -25,6 +25,13 @@ export interface SlidesDropdown {
     typeOfSlide: string;
 }
 
+export interface Slide {
+  id?: string;
+  type?: string;
+  // arbitrary payload for different slide types
+  [key: string]: any;
+}
+
 export interface MakePresentationSideBar {
     name: string;
     ownComponents: string[]

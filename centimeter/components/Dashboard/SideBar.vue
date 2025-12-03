@@ -1,21 +1,69 @@
 <template>
-    <nav class="fixed left-0">
-        <div class="flex flex-row ">
-            <img src="/logo/logo.svg" class="w-16 h-16" alt="">
-        </div>  
-        <div class="gap-10">
-            <div class="relative flex flex-col">
-                <div>Home</div>
-                <div>Presentation</div>
-                <div>Shared</div>
-            </div>
-            <div class="relative flex flex-col">
-    
-                <div>Workspace Presentations</div>
-                <div>Templates</div>
-            </div>
+  <div class="flex h-screen bg-white">
+    <div class="w-72 border-r border-gray-200 flex flex-col">
+  
+      <div class="p-6">
+        <img src="/logo/logo.png" class="w-8 h-8" alt="">
+      </div>
+
+      <nav class="flex-1 px-4 space-y-1">
+
+        <div class="border-l-4 border-blue-600 pl-4 py-2">
+          <a href="/" class="flex items-center gap-3 text-gray-900 font-medium hover:text-blue-600">
+            <HouseIcon/>
+            Home
+          </a>
         </div>
-    </nav>
+
+
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+          <UserIcon/>
+          My presentations
+        </a>
+
+
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+          <InboxIcon/>
+          Shared with me
+        </a>
+
+
+        <div class="pt-6 pb-3">
+          <p class="text-xs font-medium text-gray-500 px-4 uppercase">Eric's team</p>
+        </div>
+
+
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+          <UsersIcon/>
+          Workspace presentations
+        </a>
+
+
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+          <FilePlusCornerIcon/>
+          Shared templates
+        </a>
+      </nav>
+
+
+      <div class="border-t border-gray-200 p-4 space-y-2">
+        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Templates</a>
+        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Integrations</a>
+        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Merit Academy</a>
+        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Help</a>
+        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Trash</a>
+      </div>
+    </div>
+
+
+    <div class="flex-1 bg-gray-50"></div>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import {HouseIcon, UserIcon, InboxIcon, UsersIcon, FilePlusCornerIcon} from 'lucide-vue-next'
+</script>
+
+<style scoped>
+
+</style>
