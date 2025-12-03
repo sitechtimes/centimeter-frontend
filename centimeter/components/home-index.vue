@@ -1,6 +1,6 @@
 <template>
   <div>
-    <main class="flex flex-col items-center text-center gap-20">
+    <main class="flex flex-col items-center text-center gap-20 bg-color-white dark:bg-color-black">
       <section class="flex flex-col gap-3 items-center">
         <h1 class="text-6xl">What will you ask your audience?</h1>
         <p class="text-2xl">Turn presentations into conversations with interactive polls that engage meetings and classrooms.</p>

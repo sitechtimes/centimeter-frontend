@@ -26,6 +26,7 @@ type Props = {
 defineProps<Props>();
 const userStore = useUserStore()
 const isdark = computed(() => userStore.theme === 'dark')
+const router = useRouter()
 
 function toggleTheme() {
   if(isdark.value){
@@ -33,6 +34,9 @@ function toggleTheme() {
   } else if(!isdark.value){
     userStore.theme = "dark"
   }
+  console.log(router
+      .getRoutes()
+      .filter((route) => route.meta.requiresAuth == true))
   document.body.classList[isdark.value ? "add" : "remove"]("dark")
   localStorage.setItem('theme', isdark.value ? 'dark' : 'light');
 }

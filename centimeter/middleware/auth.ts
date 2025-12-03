@@ -14,7 +14,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       .flatMap((route) => route.path)
       .includes(to.path)
   )
-    return navigateTo("/login");
+    return navigateTo("/auth/login");
 
   previousRoute = from;
 });
