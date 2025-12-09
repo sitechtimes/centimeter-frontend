@@ -42,25 +42,5 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
-  async function joinSession(join_code: string) {
-    const { ok, data } = await apiCall(
-      import.meta.env.VITE_BACKEND_URL + "/session/join/",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ join_code })
-      }
-    );
-    if (!ok) {
-      throw new Error("Failed to join session");
-    }
-    return data;
-  }
-
-  function logOut() {
-    user.value = null;
-    isAuth.value = false;
-  }
-
-  return { user, isAuth, theme, logIn, signUp, joinSession, logOut };
+  return { user, isAuth, theme, logIn, signUp };
 });
