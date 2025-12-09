@@ -16,6 +16,28 @@ export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);
   const isInSession = ref(false);
 
+  if (typeof window !== 'undefined') {
+    const savedSession = localStorage.getItem('currentSession');
+    const savedIsInSession = localStorage.getItem('isInSession');
+    
+    if (savedSession) currentSession.value = JSON.parse(savedSession);
+    if (savedIsInSession) isInSession.value = JSON.parse(savedIsInSession);
+  }
+
+  if (typeof window !== 'undefined') {
+    watch(currentSession, (newSession) => {
+      if (newSession) {
+        localStorage.setItem('currentSession', JSON.stringify(newSession));
+      } else {
+        localStorage.removeItem('currentSession');
+      }
+    });
+
+    watch(isInSession, (newIsInSession) => {
+      localStorage.setItem('isInSession', JSON.stringify(newIsInSession));
+    });
+  }
+
   async function checkSessionStatus(code: string) {
     const { ok, data } = await apiCall(
       import.meta.env.VITE_BACKEND_URL + `session/${code}/status/`,
@@ -47,5 +69,14 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data;
   }
 
-  return { currentSession, isInSession, checkSessionStatus, joinSession };
+  function leaveSession() {
+    currentSession.value = null;
+    isInSession.value = false;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('currentSession');
+      localStorage.removeItem('isInSession');
+    }
+  }
+
+  return { currentSession, isInSession, checkSessionStatus, joinSession, leaveSession };
 });
