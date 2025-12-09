@@ -1,6 +1,6 @@
 <template>
-  <DashboardSideBar/>
+  <div class="flex h-screen justify-between">
+    <DashboardSideBar class="w-64 flex-shrink-0" />
+    <DashboardMain/>
+  </div>
 </template>
-
-<script setup lang="ts">
-</script>

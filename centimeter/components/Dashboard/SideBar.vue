@@ -1,25 +1,25 @@
 <template>
-  <div class="flex h-screen bg-white">
+  <div class=" bg-white">
     <div class="w-72 border-r border-gray-200 flex flex-col">
   
-      <div class="p-6">
+      <router-link to="/" class="p-6 hover:bg-slate-50 cursor-pointer flex items-center gap-3">
         <img src="/logo/logo.png" class="w-8 h-8" alt="">
-      </div>
+      </router-link>
 
       <nav class="flex-1 px-4 space-y-1">
 
-        <div class="border-l-4 border-blue-600 pl-4 py-2">
-          <a href="/" class="flex items-center gap-3 text-gray-900 font-medium hover:text-blue-600">
-            <HouseIcon/>
-            Home
-          </a>
-        </div>
+
+        <router-link to="/" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        <HouseIcon/>
+        Home
+        </router-link>
 
 
-        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        
+        <router-link to="" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
           <UserIcon/>
           My presentations
-        </a>
+        </router-link>
 
 
         <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
@@ -29,7 +29,7 @@
 
 
         <div class="pt-6 pb-3">
-          <p class="text-xs font-medium text-gray-500 px-4 uppercase">Eric's team</p>
+          <p class="text-xs font-medium text-gray-500 px-4 uppercase">Eric's team</p> 
         </div>
 
 
