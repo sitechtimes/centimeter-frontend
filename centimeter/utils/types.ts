@@ -35,3 +35,22 @@ export interface ShowButtons {
   path: string;
   dropdown?: { name: string;}[];
 };
+
+export interface JoinSessionRequest {
+  joinCode: string;
+  nickname: string;
+}
+
+export interface JoinSessionResponse {
+  sessionId: string;
+  userId: string;
+  nickname: string;
+  status: 'waiting' | 'active';
+}
+
+export interface Session {
+  id: string;
+  code: string;
+  allowsWaitingRoom: boolean;
+  isActive: boolean;
+}
