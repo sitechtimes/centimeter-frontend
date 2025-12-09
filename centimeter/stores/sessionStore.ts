@@ -30,13 +30,13 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data;
   }
 
-  async function joinSession(joinCode: string, nickname: string) {
+  async function joinSession(join_code: string, nickname: string) {
     const { ok, data } = await apiCall<JoinSessionResponse>(
       import.meta.env.VITE_BACKEND_URL + "session/join/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ joinCode, nickname })
+        body: JSON.stringify({ join_code, nickname })
       }
     );
     if (!ok) {

@@ -37,7 +37,7 @@ export interface ShowButtons {
 };
 
 export interface JoinSessionRequest {
-  joinCode: string;
+  join_code: string;
   nickname: string;
 }
 
