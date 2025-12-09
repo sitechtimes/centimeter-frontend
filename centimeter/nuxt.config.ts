@@ -18,6 +18,9 @@ export default defineNuxtConfig({
     }
   },
   modules: ["@pinia/nuxt"],
+  pinia: {
+    storesDirs: ['./stores/**'],
+  },
   postcss: {
     plugins: {
       tailwindcss: {},

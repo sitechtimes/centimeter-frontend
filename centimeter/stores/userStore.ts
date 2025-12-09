@@ -14,7 +14,6 @@ import type { User } from "../utils/types";
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
   const isAuth = ref(false);
-
   const theme = ref<"light" | "dark">("light");
 
   async function logIn(email: string, password: string) {
@@ -43,7 +42,7 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
- async function joinSession(join_code: string) {
+  async function joinSession(join_code: string) {
     const { ok, data } = await apiCall(
       import.meta.env.VITE_BACKEND_URL + "/session/join/",
       {
@@ -58,5 +57,10 @@ export const useUserStore = defineStore("userStore", () => {
     return data;
   }
 
-  return { user, isAuth, theme, logIn, signUp, joinSession };
+  function logOut() {
+    user.value = null;
+    isAuth.value = false;
+  }
+
+  return { user, isAuth, theme, logIn, signUp, joinSession, logOut };
 });
