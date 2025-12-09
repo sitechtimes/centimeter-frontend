@@ -65,7 +65,6 @@ const nickname = ref('')
 const joining = ref(false)
 const hasJoined = ref(false)
 
-// Redirect if no session code
 onMounted(() => {
   if (!sessionCode.value) {
     router.push('/')
@@ -79,7 +78,6 @@ const handleJoin = async () => {
     return
   }
   
-  // Only join if we haven't already joined
   if (hasJoined.value || joining.value) {
     return
   }
@@ -99,7 +97,7 @@ const joinSession = async (nicknameValue: string) => {
       message: err?.message || 'Please try again.'
     })
     joining.value = false
-    nickname.value = '' // Clear nickname on error
+    nickname.value = ''
   } finally {
     if (hasJoined.value) {
       joining.value = false
