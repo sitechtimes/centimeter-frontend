@@ -1,5 +1,5 @@
 <template>
-  <div class=" bg-white">
+  <div class="flex h-screen bg-white">
     <div class="w-72 border-r border-gray-200 flex flex-col">
   
       <router-link to="/" class="p-6 hover:bg-slate-50 cursor-pointer flex items-center gap-3">
