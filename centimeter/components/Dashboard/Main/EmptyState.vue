@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-4">
-    <!-- Empty state container with centered content -->
     <div class="text-center max-w-md">
       <h2 class="text-2xl font-semibold text-gray-900 mb-2">
         No presentations here yet!

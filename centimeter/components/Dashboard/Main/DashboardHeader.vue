@@ -1,5 +1,5 @@
 <template>
-  <header class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+  <header class="flex items-center justify-between px-6 py-4 border-b border-gray-200 w-full">
     <h1 class="text-lg font-medium text-gray-900">My presentations</h1>
     <div class="flex items-center gap-4">
       <button class="relative p-2 text-gray-600 hover:text-gray-900 transition-colors">
