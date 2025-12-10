@@ -57,6 +57,23 @@ export const useUserStore = defineStore("userStore", () => {
     }
     return data;
   }
-
-  return { user, isAuth, theme, logIn, signUp, joinSession };
+  async function getPresentation(){
+    const token = localStorage.getItem("token");
+    const { ok, data } = await apiCall(
+      import.meta.env.VITE_BACKEND_URL + "/presentation/get/",
+      {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
+    if (!ok) {
+      throw new Error("Presentations Not Found");
+    }
+    return data;
+  }
+  
+  return { user, isAuth, theme, logIn, signUp, joinSession, getPresentation };
 });
