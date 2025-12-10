@@ -1,32 +1,32 @@
 <template>
+    <h1>Name & Image</h1>
+    <ChevronDown @click="changeProfileDropdown"/>
     <div>
         <div class="rounded-full max-h-16 max-w-16 border-2 object-cover">   
-            <img class="rounded-full h-16 w-16 object-contain":src="BasicAvatar" alt="BasicAvatar" @click="changeAvatarDropdown" v-if="!isImportedAvatar">
-            <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" @click="changeAvatarDropdown" class="h-16 w-16 rounded-full object-contain">            
+            <img class="rounded-full h-16 w-16 object-contain":src="BasicAvatar" alt="BasicAvatar" v-if="!isImportedAvatar">
+            <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" class="h-16 w-16 rounded-full object-contain">            
         </div>
         <div v-if="changeAvatar">
-        <label for="uploadAvatar">Upload Picture</label>
+        <label class="border-2" for="uploadAvatar">Upload Picture</label>
         <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar">
+        <h1>Username</h1>
+            <input type="text" placeholder="Username" ref="UsernameInput">
+            <br>
+            <button @click="saveProfileChanges">Save</button>
+            <button @click="cancelProfileChanges">Cancel</button>
         </div>
 
         <h1>{{ userStore.user?.username }}</h1>
         <h2>{{ email }}</h2>
     </div>
     <div>
-        <button v-if="!editProfile" @click="editProfileComponent" class="w-20 h-20">Edit Profile</button>
-        <div v-if="editProfile">
-            <h1>Username</h1>
-            <input type="text" placeholder="Username" ref="UsernameInput">
-            <br>
-            <button @click="saveProfileChanges">Save</button>
-            <button @click="cancelProfileChanges">Cancel</button>
         </div>
         <br>
         <theme-toggle/>
-    </div>
 </template>
 
 <script setup lang="ts">
+    import { ChevronDown } from 'lucide-vue-next'
 const userStore = useUserStore()
 const email = ref("")
 const changeAvatar = ref(false)
@@ -37,11 +37,8 @@ const imageURL = ref<string|null>(null)
 
 const UsernameInput = ref("")
 
-const changeAvatarDropdown = () => {
+const changeProfileDropdown = () => {
     changeAvatar.value = !changeAvatar.value
-}
-const editProfileComponent = () => {
-    editProfile.value = !editProfile.value
 }
 const saveProfileChanges = () => {
     userStore.user?.username == UsernameInput.value
