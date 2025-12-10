@@ -58,5 +58,19 @@ export const useUserStore = defineStore("userStore", () => {
     return data;
   }
 
-  return { user, isAuth, theme, logIn, signUp, joinSession };
+ async function getPresentation(presentation_code: string){
+    const { ok, data } = await apiCall(
+      import.meta.env.VITE_BACKEND_URL + "/presentation/get/",
+      {
+        method: "GET",
+        body: JSON.stringify({ presentation_code })
+      }
+    )
+    if (!ok) {
+      throw new Error("Failed to get presentation")
+    }
+    return data;
+  }
+
+  return { user, isAuth, theme, logIn, signUp, joinSession, getPresentation };
 });
