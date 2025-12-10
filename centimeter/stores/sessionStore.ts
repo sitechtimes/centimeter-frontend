@@ -18,7 +18,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function checkSessionStatus(code: string) {
     const { ok, data } = await apiCall(
-      import.meta.env.VITE_BACKEND_URL + `session/${code}/status/`,
+      import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" }
@@ -32,7 +32,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function joinSession(join_code: string, nickname: string) {
     const { ok, data } = await apiCall<JoinSessionResponse>(
-      import.meta.env.VITE_BACKEND_URL + "session/join/",
+      import.meta.env.VITE_BACKEND_URL + "/session/join/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
