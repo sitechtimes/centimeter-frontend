@@ -10,14 +10,14 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 }
 
 import { defineStore } from "pinia";
-import type { JoinSessionResponse } from "../utils/types";
+import type { JoinSessionResponse, SessionStatus } from "../utils/types";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);
   const isInSession = ref(false);
 
-  async function checkSessionStatus(code: string) {
-    const { ok, data } = await apiCall(
+  async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
+    const { ok, data } = await apiCall<SessionStatus>(
       import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`,
       {
         method: "GET",
@@ -27,7 +27,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
     if (!ok) {
       throw new Error("Session not found");
     }
-    return data;
+    return (data ?? null) as SessionStatus | null;
   }
 
   async function joinSession(join_code: string, nickname: string) {

@@ -54,3 +54,8 @@ export interface Session {
   allowsWaitingRoom: boolean;
   isActive: boolean;
 }
+
+export interface SessionStatus {
+  is_active: boolean;
+  status: 'waiting' | 'active' | string;
+}
