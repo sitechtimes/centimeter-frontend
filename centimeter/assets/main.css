@@ -1,7 +1,7 @@
 /* If you need primeicons, install it with:
   npm i primeicons --save
   then re-enable the import below */
-@import "primeicons/primeicons.css";
+/* @import "primeicons/primeicons.css"; */
 
 @tailwind base;
 @tailwind components;

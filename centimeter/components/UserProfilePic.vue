@@ -1,38 +1,36 @@
 <template>
-    <h1>Name & Image</h1>
-    <ChevronDown @click="changeProfileDropdown"/>
-    <div>
-        <div class="rounded-full max-h-16 max-w-16 border-2 object-cover">   
-            <img class="rounded-full h-16 w-16 object-contain":src="BasicAvatar" alt="BasicAvatar" v-if="!isImportedAvatar">
+    <div class="bg-[var(--bg-color)] dark:bg-[var(--bg-color)]">
+    <h1 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)]">Name & Image</h1>
+    
+    <ChevronDown @click="changeProfileDropdown" class="w-6 h-6 cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
+
+    <!-- PFP -->
+    <div class="flex rounded-full max-h-16 max-w-16 border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)] overflow-hidden">   
+            <User v-if="!isImportedAvatar" class="rounded-full h-16 w-16 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"/>
             <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" class="h-16 w-16 rounded-full object-contain">            
-        </div>
+    </div>
+    <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-opacity duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0">    
         <div v-if="changeAvatar">
         <label class="border-2" for="uploadAvatar">Upload Picture</label>
         <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar">
         <h1>Username</h1>
             <input type="text" placeholder="Username" ref="UsernameInput">
             <br>
-            <button @click="saveProfileChanges">Save</button>
-            <button @click="cancelProfileChanges">Cancel</button>
+            <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)]cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
         </div>
-
-        <h1>{{ userStore.user?.username }}</h1>
-        <h2>{{ email }}</h2>
-    </div>
-    <div>
-        </div>
-        <br>
+    </transition>
         <theme-toggle/>
+    </div>
+    
 </template>
 
 <script setup lang="ts">
-    import { ChevronDown } from 'lucide-vue-next'
+import { ChevronDown } from 'lucide-vue-next'
+import { User } from 'lucide-vue-next'
+
 const userStore = useUserStore()
-const email = ref("")
 const changeAvatar = ref(false)
-const editProfile = ref(false)
 const isImportedAvatar = ref(false)
-const BasicAvatar = "/logo/basicProfilePic.svg"
 const imageURL = ref<string|null>(null)
 
 const UsernameInput = ref("")
@@ -42,10 +40,6 @@ const changeProfileDropdown = () => {
 }
 const saveProfileChanges = () => {
     userStore.user?.username == UsernameInput.value
-    editProfile.value = false
-}
-const cancelProfileChanges = () => {
-    editProfile.value = false
 }
 const getAvatar = async (event) => {
     const picture = event.target.files[0]

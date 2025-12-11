@@ -8,11 +8,11 @@
     <img
       class="absolute top-0.5 left-1 h-6 transition-all duration-500"
       :class="{ 
-        'translate-x-8': dark && !big, 
-        'translate-x-10': dark && big,
+        'translate-x-8': isdark && !big, 
+        'translate-x-10': isdark && big,
         'top-1.5 h-7.5 left-1.5': big
       }"
-      :src="dark ? '/ui/moon.svg' : '/ui/sun.svg'"
+      :src="isdark ? '/ui/moon.svg' : '/ui/sun.svg'"
       aria-hidden="true"
     />
   </button>
@@ -20,13 +20,11 @@
 
 <script setup lang="ts">
 type Props = {
-  dark?: boolean;
   big?: boolean;
 };
 defineProps<Props>();
 const userStore = useUserStore()
 const isdark = computed(() => userStore.theme === 'dark')
-const router = useRouter()
 
 function toggleTheme() {
   if(isdark.value){
@@ -34,9 +32,7 @@ function toggleTheme() {
   } else if(!isdark.value){
     userStore.theme = "dark"
   }
-  console.log(router
-      .getRoutes()
-      .filter((route) => route.meta.requiresAuth == true))
+
   document.body.classList[isdark.value ? "add" : "remove"]("dark")
   localStorage.setItem('theme', isdark.value ? 'dark' : 'light');
 }

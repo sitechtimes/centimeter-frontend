@@ -1,6 +1,10 @@
 <template>
-  <UserProfilePic/>
+  <main class="h-screen overflow-hidden">
+    <UserProfilePic/>
+    <div>
 
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
