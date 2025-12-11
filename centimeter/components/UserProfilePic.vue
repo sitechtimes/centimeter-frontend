@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[var(--bg-color)] dark:bg-[var(--bg-color)]">
+    <div class="flex justify-center bg-[var(--bg-color)] dark:bg-[var(--bg-color)] h-screen w-4/5">
     <h1 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)]">Name & Image</h1>
     
     <ChevronDown @click="changeProfileDropdown" class="w-6 h-6 cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
@@ -25,8 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDown } from 'lucide-vue-next'
-import { User } from 'lucide-vue-next'
+import { ChevronDown, User } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const changeAvatar = ref(false)

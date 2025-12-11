@@ -1,5 +1,6 @@
 <template>
-  <main class="h-screen overflow-hidden">
+  <main class="h-screen w-screen overflow-hidden flex flex-row">
+   <UserProfileSideBar/>
     <UserProfilePic/>
     <div>
 
