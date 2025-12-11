@@ -7,7 +7,7 @@
         v-for="message in toasts"
         :key="message.id"
         class="
-          flex items-start justify-between gap-3 
+          relative flex items-start justify-between gap-3 
           bg-red-50 border border-red-400
           text-red-900 
           rounded-lg shadow-lg backdrop-blur-sm
@@ -16,8 +16,10 @@
           transition-all duration-300
           hover:shadow-xl hover:scale-[1.02] hover:bg-red-200
         "
+        @click="remove(message.id)"
+        :style="{ ['--duration-ms']: (message.duration ?? props.defaultDuration) + 'ms' }"
       >
-        <div class="flex-1 space-y-1">
+        <div class="flex-1 space-y-1 pr-3">
           <div class="font-semibold text-sm leading-tight">{{ message.title }}</div>
           <div v-if="message.message" class="text-sm text-red-800 leading-tight">{{ message.message }}</div>
         </div>
@@ -30,12 +32,20 @@
             rounded-full p-1 transition-all duration-200
             focus:outline-none focus:ring-2 focus:ring-red-500
           "
-          @click="remove(message.id)"
+          @click.stop="remove(message.id)"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
+
+        <div class="absolute left-0 bottom-0 h-1 w-full bg-red-100 rounded-b-lg overflow-hidden">
+            <div
+              class="h-full bg-red-300 progress-shrink"
+              :style="{ animationDuration: (message.duration ?? props.defaultDuration) + 'ms', transformOrigin: 'left' }"
+              :key="message.id + '-bar'"
+            ></div>
+        </div>
       </div>
     </TransitionGroup>
   </div>
@@ -100,5 +110,21 @@ defineExpose({ add, remove });
 }
 .toast-leave-active {
   transition: all 200ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.progress-shrink {
+  animation-name: progressShrink;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes progressShrink {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-100%); }
+}
+
+/* Ensure clicks on the container are possible */
+.pointer-events-auto {
+  pointer-events: auto;
 }
 </style>
