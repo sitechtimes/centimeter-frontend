@@ -143,20 +143,22 @@ const templates = ref([
   }
 ])
 
+const PRESENTATION_EDITOR_PATH = '/CreatePresentation'
+
 function createNewCenti() {
-  navigateTo('/CreatePresentation')
+  navigateTo(PRESENTATION_EDITOR_PATH)
 }
 
 function openPresentation(id?: string) {
   if (id) {
     // In a real app, you would load the presentation data
-    navigateTo('/CreatePresentation')
+    navigateTo(PRESENTATION_EDITOR_PATH)
   }
 }
 
 function createFromTemplate(template: any) {
   // In a real app, you would create a presentation from the template
-  navigateTo('/CreatePresentation')
+  navigateTo(PRESENTATION_EDITOR_PATH)
 }
 
 function deletePresentation(id?: string) {
