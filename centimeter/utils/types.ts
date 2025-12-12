@@ -59,3 +59,17 @@ export interface SessionStatus {
   is_active: boolean;
   status: 'waiting' | 'active' | string;
 }
+
+export interface Slide {
+  type: string;
+  id?: string;
+  content?: any;
+}
+
+export interface Presentation {
+  id?: string;
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
+  slides?: Slide[];
+}
