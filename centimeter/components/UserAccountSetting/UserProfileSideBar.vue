@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[var(--bg-color)] dark:bg-[var(--bg-color)] w-2/5">
+    <div class="bg-[var(--bg-color)] dark:bg-[var(--bg-color)] w-1/6">
         <div class="cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">
         <nuxt-link to="/app" class="">
             <ArrowLeft class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"/>

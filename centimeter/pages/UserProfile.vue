@@ -1,7 +1,7 @@
 <template>
   <main class="h-screen w-screen overflow-hidden flex flex-row">
-   <UserProfileSideBar/>
-    <UserProfilePic/>
+   <UserAccountSettingUserProfileSideBar/>
+    <UserAccountSettingContainer/>
     <div>
 
     </div>
