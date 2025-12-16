@@ -9,20 +9,20 @@
       <nav class="flex-1 px-4 space-y-1">
 
 
-        <router-link to="/" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        <router-link to="/" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-gray-900">
         <HouseIcon/>
         Home
         </router-link>
 
 
         
-        <router-link to="" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        <router-link to="" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-gray-900">
           <UserIcon/>
           My presentations
         </router-link>
 
 
-        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-gray-900">
           <InboxIcon/>
           Shared with me
         </a>
@@ -33,13 +33,13 @@
         </div>
 
 
-        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-gray-900">
           <UsersIcon/>
           Workspace presentations
         </a>
 
 
-        <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900">
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-gray-900">
           <FilePlusCornerIcon/>
           Shared templates
         </a>
@@ -47,11 +47,11 @@
 
 
       <div class="border-t border-gray-200 p-4 space-y-2">
-        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Templates</a>
-        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Integrations</a>
-        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Merit Academy</a>
-        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Help</a>
-        <a href="#" class="block text-sm text-gray-700 hover:text-gray-900">Trash</a>
+        <a href="#" class="block text-xs text-gray-700 hover:text-gray-900">Templates</a>
+        <a href="#" class="block text-xs text-gray-700 hover:text-gray-900">Integrations</a>
+        <a href="#" class="block text-xs text-gray-700 hover:text-gray-900">Merit Academy</a>
+        <a href="#" class="block text-xs text-gray-700 hover:text-gray-900">Help</a>
+        <a href="#" class="block text-xs text-gray-700 hover:text-gray-900">Trash</a>
       </div>
     </div>
 
@@ -65,5 +65,7 @@ import {HouseIcon, UserIcon, InboxIcon, UsersIcon, FilePlusCornerIcon} from 'luc
 </script>
 
 <style scoped>
-
+  body {
+  font-family: 'Newsreader', serif;
+} 
 </style>

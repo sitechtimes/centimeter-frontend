@@ -19,3 +19,9 @@
 
 <script setup lang = "ts">
 </script>
+
+<style scoped>
+  body {
+    font-family: 'Newsreader', serif;
+  } 
+</style>

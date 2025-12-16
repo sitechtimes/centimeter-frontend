@@ -4,3 +4,6 @@
     <DashboardMain class="flex-1 min-w-0 w-full" />
   </div>
 </template>
+
+<style scoped>
+</style>
