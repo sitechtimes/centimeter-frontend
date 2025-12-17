@@ -10,5 +10,5 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const empty = ref(true)
+const empty = ref(false)
 </script>

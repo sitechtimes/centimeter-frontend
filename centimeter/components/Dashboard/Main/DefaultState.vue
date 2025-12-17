@@ -1,19 +1,45 @@
 <template>
-    <div class="flex flex-col flex-1">
-        <div>
-            <button class="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white font-medium rounded-full hover:bg-gray-800 transition-colors">
-                <span>+</span>
-                <span>New Menti</span>
-            </button>
-            <button class="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white font-medium rounded-full hover:bg-gray-800 transition-colors">
-                <span>+</span>
-                <span>New Folder</span>
-            </button>
-        </div>
+  <div class="flex flex-col flex-1 p-4">
+    <div class="flex items-center justify-between gap-4 mb-4">
+      <div class="flex items-center gap-3">
+        <button class="inline-flex items-center gap-2 px-6 py-2 bg-gray-900 text-white font-medium rounded-full hover:bg-gray-800 transition-colors">
+          <span class="text-lg">+</span>
+          <span>New Menti</span>
+        </button>
+        <button class="inline-flex items-center gap-2 px-6 py-2 bg-gray-900 text-white font-medium rounded-full hover:bg-gray-800 transition-colors">
+          <span class="text-lg">+</span>
+          <span>New Folder</span>
+        </button>
+      </div>
+
+      <div class="flex-1 max-w-md ml-6">
+        <input
+          type="search"
+          placeholder="Search presentations"
+          class="w-full px-3 py-2 rounded-md border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
     </div>
+
+
+    <div class="grid">
+      <div class="flex flex-col items-center justify-center">
+        <div class="mb-4">
+            <img src="https://placehold.co/300x200" alt="" class="max-w-full h-auto rounded-md shadow-sm">
+        </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center justify-center w-9 h-9 bg-purple-400 rounded-full shrink-0">
+        <span class="text-sm font-semibold text-white">GG</span>
+      </div>
+      <div class="text-left text-lg font-semibold">My first presentation</div>
+    </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+    import { Search } from 'lucide-vue-next';
     const presentations = [
   {
     "presentation_name": "AI in Modern Healthcare",
