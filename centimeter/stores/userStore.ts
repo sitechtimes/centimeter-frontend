@@ -18,6 +18,8 @@ export const useUserStore = defineStore("userStore", () => {
   
   const theme = ref<"light" | "dark">("light");
 
+  const profilePic = ref<string>("")
+
   async function logIn(email: string, password: string) {
     const { ok, data } = await apiCall<User>(
       import.meta.env.VITE_BACKEND_URL + "/users/login/",
@@ -44,5 +46,5 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
-  return { user, isAuth, theme, logIn, signUp };
+  return { user, isAuth, theme, profilePic ,logIn, signUp };
 });

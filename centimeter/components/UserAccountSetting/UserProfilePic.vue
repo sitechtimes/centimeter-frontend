@@ -1,5 +1,8 @@
 <template>
-    <div class="mt-10 w-50">
+    <header>
+        <UserAccountSettingBellAndProfileIcon/>
+    </header>
+    <div class="mt-10 flex flex-col flex-none items-start min-w-0 min-h-0 relative w-auto">
 
         <div class="flex flex-row">
             <h1 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)]">Name & Image</h1>
@@ -11,7 +14,7 @@
 
             <div class="flex rounded-full max-h-16 max-w-16 border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)] overflow-hidden">   
                     <User v-if="!isImportedAvatar" class="rounded-full h-16 w-16 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"/>
-                    <img v-if="isImportedAvatar" :src="imageURL" alt="CustomAvatar" class="h-16 w-16 rounded-full object-contain">            
+                    <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-16 w-16 rounded-full object-contain">            
             </div>
 
                 <theme-toggle/>
@@ -40,8 +43,7 @@ import { ChevronDown, User } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const changeAvatar = ref(false)
-const isImportedAvatar = ref(false)
-const imageURL = ref<string|null>(null)
+export const isImportedAvatar = ref(false)
 
 const UsernameInput = ref("")
 
@@ -54,11 +56,11 @@ const saveProfileChanges = () => {
 }
 const getAvatar = async (event) => {
     const picture = event.target.files[0]
-    imageURL.value = URL.createObjectURL(picture)
+    userStore.profilePic = URL.createObjectURL(picture)
     changeAvatar.value = false
     isImportedAvatar.value = true
 
-    console.log(picture)
+    
 }
 
 </script>

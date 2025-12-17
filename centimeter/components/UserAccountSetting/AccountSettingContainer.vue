@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row justify-center bg-[var(--bg-color)] dark:bg-[var(--bg-color)] h-screen w-2/3">
+    <div class="flex flex-row justify-center bg-[var(--bg-color)] dark:bg-[var(--bg-color)] h-screen w-5/6">
         <UserAccountSettingUserProfilePic/>
     </div>
 </template>
