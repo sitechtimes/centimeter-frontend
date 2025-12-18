@@ -1,7 +1,4 @@
 <template>
-    <header>
-        <UserAccountSettingBellAndProfileIcon/>
-    </header>
     <div class="mt-10 flex flex-col flex-none items-start min-w-0 min-h-0 relative w-auto">
 
         <div class="flex flex-row">
@@ -43,7 +40,7 @@ import { ChevronDown, User } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const changeAvatar = ref(false)
-export const isImportedAvatar = ref(false)
+const isImportedAvatar = ref(false)
 
 const UsernameInput = ref("")
 
@@ -59,8 +56,6 @@ const getAvatar = async (event) => {
     userStore.profilePic = URL.createObjectURL(picture)
     changeAvatar.value = false
     isImportedAvatar.value = true
-
-    
 }
 
 </script>
