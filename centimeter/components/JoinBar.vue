@@ -39,6 +39,7 @@
 import ToastContainer from './ToastContainer.vue';
 import { ref } from 'vue'
 import { useSessionStore } from '~/stores/sessionStore'
+import type { SessionStatus } from '~/utils/types'
 
 const router = useRouter()
 const sessionStore = useSessionStore()
@@ -56,7 +57,19 @@ async function handleJoin() {
   checking.value = true
   error.value = ''
   try {
-    await sessionStore.checkSessionStatus(sessionCode.value.trim())
+    const data: SessionStatus | null = await sessionStore.checkSessionStatus(sessionCode.value.trim())
+    if (!data) {
+      throw new Error('Session not found')
+    }
+    if (!data.is_active) {
+      toastContainer.value?.add({
+        title: 'Session is not active',
+        message: 'This session is currently inactive and cannot be joined.'
+      })
+      error.value = 'Session inactive'
+      return
+    }
+
     router.push({
       path: '/session/waiting',
       query: { code: sessionCode.value.trim() }
@@ -67,7 +80,6 @@ async function handleJoin() {
       title: 'Failed to join session',
       message
     })
-    error.value = message
   } finally {
     checking.value = false
   }
