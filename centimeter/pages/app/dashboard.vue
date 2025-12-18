@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-screen">
-    <DashboardSideBar class="w-64 flex-shrink-0" />
+    <DashboardSideBar class="w-64 flex-shrink-0 fixed" />
     <DashboardMain class="flex-1 min-w-0 w-full" />
   </div>
 </template>
