@@ -43,5 +43,37 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
-  return { user, isAuth, theme, logIn, signUp };
+ async function joinSession(join_code: string) {
+    const { ok, data } = await apiCall(
+      import.meta.env.VITE_BACKEND_URL + "/session/join/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ join_code })
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to join session");
+    }
+    return data;
+  }
+  async function getPresentation(){
+    const token = localStorage.getItem("token");
+    const { ok, data } = await apiCall(
+      import.meta.env.VITE_BACKEND_URL + "/presentation/get/",
+      {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
+    if (!ok) {
+      throw new Error("Presentations Not Found");
+    }
+    return data;
+  }
+  
+  return { user, isAuth, theme, logIn, signUp, joinSession, getPresentation };
 });
