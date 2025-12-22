@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-[var(--faded-bg-color-light)] text-[var(--text-color)]">
     <main class="max-w-7xl mx-auto px-6 py-8">
       <h1 class="text-3xl font-normal mb-8">My presentations</h1>
       
       <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-3">
-          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors">
+          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-[var(--text-color-contrast)] text-sm font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
             <span class="text-lg leading-none">+</span>
             <span>New Menti</span>
           </button>
-          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 transition-colors">
+          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--faded-bg-color-light)] text-[var(--faded-text-color)] text-sm font-medium rounded-full hover:bg-[var(--faded-bg-color)] transition-colors">
             <span class="text-lg leading-none">+</span>
             <span>New folder</span>
           </button>
@@ -17,21 +17,23 @@
 
         <div class="flex items-center gap-3">
           <div class="relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"" />
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--gray)]" />
             <input
               v-model="searchQuery"
               type="text"
               placeholder="Search my presentations"
-              class="w-96 pl-9 pr-9 py-2 bg-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+              class="w-96 pl-9 pr-9 py-2 bg-[var(--faded-bg-color-light)] text-[var(--text-color)] placeholder:text-[var(--faded-text-color)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-shade)]"
             />
           </div>
 
-          <div class="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
+          <div class="flex items-center gap-1 border border-[var(--faded-bg-color)] rounded-lg p-1 bg-[var(--bg-color)]">
             <button
               @click="viewMode = 'grid'"
               :class="[
                 'p-1.5 rounded transition-colors',
-                viewMode === 'grid' ? 'bg-gray-200' : 'hover:bg-gray-100'
+                viewMode === 'grid'
+                  ? 'bg-[var(--primary)] text-[var(--text-color-contrast)]'
+                  : 'text-[var(--faded-text-color)] hover:bg-[var(--faded-bg-color-light)]'
               ]"
             >
               <LayoutGrid />
@@ -40,7 +42,9 @@
               @click="viewMode = 'list'"
               :class="[
                 'p-1.5 rounded transition-colors',
-                viewMode === 'list' ? 'bg-gray-200' : 'hover:bg-gray-100'
+                viewMode === 'list'
+                  ? 'bg-[var(--primary)] text-[var(--text-color-contrast)]'
+                  : 'text-[var(--faded-text-color)] hover:bg-[var(--faded-bg-color-light)]'
               ]"
             >
               <Menu/>
@@ -51,7 +55,7 @@
 
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-sm font-medium">Presentations ({{ filteredPresentations.length }})</h2>
-        <button class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+        <button class="flex items-center gap-2 text-sm text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
           <span>Last modified</span>
           <ChevronDown/>
         </button>
@@ -64,23 +68,23 @@
           class="group cursor-pointer"
         >
 
-          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-            <div class="relative aspect-[4/3] bg-gray-100">
-              <div class="absolute top-3 right-3 bg-white rounded p-1.5 shadow-sm">
+          <div class="bg-[var(--bg-color)] rounded-lg border border-[var(--faded-bg-color)] overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="relative aspect-[4/3] bg-[var(--faded-bg-color-light)]">
+              <div class="absolute top-3 right-3 bg-[var(--bg-color)] rounded p-1.5 shadow-sm">
                 <LayoutGrid />
               </div>
             </div>
           </div>
 
           <div class="mt-3 flex items-start gap-3">
-            <div class="flex items-center justify-center w-9 h-9 bg-gray-200 rounded-full text-xs font-semibold shrink-0">
+            <div class="flex items-center justify-center w-9 h-9 bg-[var(--faded-bg-color)] rounded-full text-xs font-semibold shrink-0 text-[var(--text-color)]">
               {{ getInitials(presentation.host) }}
             </div>
             <div class="flex-1 min-w-0">
-              <h3 class="text-sm font-medium text-gray-900 truncate group-hover:text-blue-600">
+              <h3 class="text-sm font-medium text-[var(--text-color)] truncate group-hover:text-[var(--primary)]">
                 {{ presentation.presentation_name }}
               </h3>
-              <p class="text-xs text-gray-500 mt-0.5">
+              <p class="text-xs text-[var(--gray)] mt-0.5">
                 Edited {{ formatDate(presentation.last_interacted) }}
               </p>
             </div>
