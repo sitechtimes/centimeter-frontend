@@ -61,35 +61,16 @@
         </button>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="viewMode === 'grid'">
+        <GridPresentation
           v-for="presentation in filteredPresentations"
           :key="presentation.presentation_name"
-          class="group cursor-pointer"
-        >
+          :presentation="presentation"
+        />
+      </div>
 
-          <div class="bg-[var(--bg-color)] rounded-lg border border-[var(--faded-bg-color)] overflow-hidden hover:shadow-lg transition-shadow">
-            <div class="relative aspect-[4/3] bg-[var(--faded-bg-color-light)]">
-              <div class="absolute top-3 right-3 bg-[var(--bg-color)] rounded p-1.5 shadow-sm">
-                <LayoutGrid />
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-3 flex items-start gap-3">
-            <div class="flex items-center justify-center w-9 h-9 bg-[var(--faded-bg-color)] rounded-full text-xs font-semibold shrink-0 text-[var(--text-color)]">
-              {{ getInitials(presentation.host) }}
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-sm font-medium text-[var(--text-color)] truncate group-hover:text-[var(--primary)]">
-                {{ presentation.presentation_name }}
-              </h3>
-              <p class="text-xs text-[var(--gray)] mt-0.5">
-                Edited {{ formatDate(presentation.last_interacted) }}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div v-else>
+        <CompactPresentationView :presentations="filteredPresentations" />
       </div>
     </main>
   </div>
@@ -98,6 +79,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import {Search, LayoutGrid, Menu, ChevronDown} from 'lucide-vue-next'
+import GridPresentation from './PresentationCards.vue/GridPresentation.vue'
+import CompactPresentationView from './PresentationCards.vue/CompactPresentationView.vue'
+
 interface Presentation {
   presentation_name: string
   host: string
@@ -144,28 +128,4 @@ const filteredPresentations = computed(() => {
     p.host.toLowerCase().includes(query)
   )
 })
-
-const getInitials = (name: string): string => {
-  const words = name.split(' ')
-  if (words.length >= 2) {
-    return (words[0][0] + words[words.length - 1][0]).toUpperCase()
-  }
-  return name.substring(0, 2).toUpperCase()
-}
-
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffInMs = now.getTime() - date.getTime()
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
-  
-  if (diffInDays === 0) return 'today'
-  if (diffInDays === 1) return 'yesterday'
-  if (diffInDays < 30) return `${diffInDays} days ago`
-  
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                  'July', 'August', 'September', 'October', 'November', 'December']
-  
-  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
-}
 </script>
