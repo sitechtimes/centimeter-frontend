@@ -28,11 +28,7 @@
 import { computed } from 'vue'
 import { LayoutGrid } from 'lucide-vue-next'
 
-interface Presentation {
-	presentation_name: string
-	host: string
-	last_interacted: string
-}
+import type {Presentation} from '../../../../utils/types.ts'
 
 const props = defineProps<{ presentation: Presentation }>()
 

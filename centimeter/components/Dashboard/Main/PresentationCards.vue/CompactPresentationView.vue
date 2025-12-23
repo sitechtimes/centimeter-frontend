@@ -46,13 +46,7 @@
 
 <script setup lang="ts">
 import { Play, MoreHorizontal, BarChart3 } from 'lucide-vue-next'
-
-interface Presentation {
-  presentation_name: string
-  host: string
-  last_interacted: string
-}
-
+import type {Presentation} from '../../../../utils/types.ts'
 defineProps<{ presentations: Presentation[] }>()
 
 const formatDate = (dateString: string): string => {

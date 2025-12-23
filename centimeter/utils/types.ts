@@ -28,8 +28,6 @@ export interface SlidesDropdown {
 export interface Slide {
   id?: string;
   type?: string;
-  // arbitrary payload for different slide types
-  [key: string]: any;
 }
 
 export interface MakePresentationSideBar {
@@ -42,3 +40,9 @@ export interface ShowButtons {
   path: string;
   dropdown?: { name: string;}[];
 };
+
+export interface Presentation {
+  presentation_name: string
+  host: string
+  last_interacted: string
+}

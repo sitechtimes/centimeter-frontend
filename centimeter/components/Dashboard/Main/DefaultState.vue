@@ -81,12 +81,7 @@ import { ref, computed } from 'vue'
 import {Search, LayoutGrid, Menu, ChevronDown} from 'lucide-vue-next'
 import GridPresentation from './PresentationCards.vue/GridPresentation.vue'
 import CompactPresentationView from './PresentationCards.vue/CompactPresentationView.vue'
-
-interface Presentation {
-  presentation_name: string
-  host: string
-  last_interacted: string
-}
+import type {Presentation} from '../../../utils/types.ts'
 
 const presentations: Presentation[] = [
   {
