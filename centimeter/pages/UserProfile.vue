@@ -1,6 +1,6 @@
 <template>
   <main class="h-screen w-screen overflow-hidden flex flex-row">
-   <UserAccountSettingUserProfileSideBar/>
+   <UserProfileSideBar/>
     <UserAccountSettingContainer/>
     <div>
 
@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import UserProfileSideBar from '~/components/UserAccountSetting/UserProfileSideBar.vue';
 /* definePageMeta({
   middleware: 'auth',
   requiresAuth: true

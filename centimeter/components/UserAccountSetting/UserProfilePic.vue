@@ -23,6 +23,7 @@
                         <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar">
                     </div>
                 <h1>Username</h1>
+                <h2>Logged in as {{ userStore.user?.email }}</h2>
                     <input type="text" placeholder="Username" ref="UsernameInput" class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)] border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)]">
                     <br>
                     <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)]cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
@@ -49,6 +50,7 @@ const changeProfileDropdown = () => {
 }
 const saveProfileChanges = () => {
     userStore.user?.username == UsernameInput.value
+    UsernameInput.value = UsernameInput.value
     changeAvatar.value = !changeAvatar.value
 }
 const getAvatar = async (event) => {
