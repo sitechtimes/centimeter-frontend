@@ -1,9 +1,9 @@
 <template>
   <div class="relative inline-block">
-    <div @click="toggleIcon" tabindex="0" role="button" class="btn m-3 rounded-4xl">
+    <div @click="toggleIcon" tabindex="0" role="button" class="m-3 rounded-4xl flex flex-row gap-2 bg-[var(--primary)]">
       <Plus v-if="isPlus" key="'plus'" :size="20" />
       <X v-else key="'x'" :size="20" />
-      New Slide
+      <h2>New Slide</h2>
     </div>
 
     <ul v-if="isPlus" tabindex="-1" class="absolute left-0 mt-2 dropdown-content menu rounded-box z-50 w-96">
@@ -38,7 +38,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { defineEmits } from 'vue'
 import ContentSlides from './SlideTypes.vue/ContentSlides.vue'
 import QuizCompletions from './SlideTypes.vue/QuizCompletions.vue'
 import InteractiveOptions from './SlideTypes.vue/InteractiveOptions.vue'
@@ -50,7 +49,7 @@ import {
 
 const isPlus = ref(false)
 
-function toggleIcon() { //this toggles the visibility of the component as well not just icon!
+function toggleIcon() { 
   isPlus.value = !isPlus.value
   console.log('Icon toggled')
 }
