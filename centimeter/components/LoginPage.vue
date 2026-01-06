@@ -31,7 +31,7 @@
             required
             v-model="email"
           />
-          <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
+          <p class="absolute error font-medium text-red-500 translate-y-12" v-show="emailErr.length > 0">{{ emailErr }}</p>
         </div>
 
         <div class="relative flex items-start justify-center flex-col gap-1">
@@ -44,7 +44,7 @@
             v-model="password"
             :autocomplete="showLogin ? 'current-password' : 'new-password'"
           />
-          <p class="absolute error font-medium text-red-500 mt-28" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
+          <p class="absolute error font-medium text-red-500 translate-y-12" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
         </div>
 
         <button
