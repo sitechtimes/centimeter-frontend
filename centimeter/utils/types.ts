@@ -46,3 +46,9 @@ export interface Presentation {
   host: string
   last_interacted: string
 }
+
+export interface Slide {
+  id?: string;
+  type: string;
+  title?: string;
+}
