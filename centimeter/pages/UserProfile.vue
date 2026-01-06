@@ -10,10 +10,10 @@
 
 <script setup lang="ts">
 import UserProfileSideBar from '~/components/UserAccountSetting/UserProfileSideBar.vue';
-/* definePageMeta({
+definePageMeta({
   middleware: 'auth',
   requiresAuth: true
-}); */
+});
 </script>
 
 <style scoped>
