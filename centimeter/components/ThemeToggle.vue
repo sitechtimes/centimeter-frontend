@@ -8,11 +8,11 @@
     <img
       class="absolute top-0.5 left-1 h-6 transition-all duration-500"
       :class="{ 
-        'translate-x-8': dark && !big, 
-        'translate-x-10': dark && big,
+        'translate-x-8': isdark && !big, 
+        'translate-x-10': isdark && big,
         'top-1.5 h-7.5 left-1.5': big
       }"
-      :src="dark ? '/ui/moon.svg' : '/ui/sun.svg'"
+      :src="isdark ? '/ui/moon.svg' : '/ui/sun.svg'"
       aria-hidden="true"
     />
   </button>
@@ -23,16 +23,18 @@ type Props = {
   big?: boolean;
 };
 defineProps<Props>();
-//import { useUserStore } from "../src/stores/user";
-//const userStore = useUserStore();
-
-const dark = ref(false);
+const userStore = useUserStore()
+const isdark = computed(() => userStore.theme === 'dark')
 
 function toggleTheme() {
-  dark.value = !dark.value;
-  // TODO: Implement actual theme switching
-  document.body.classList.toggle('dark');
-  localStorage.setItem('theme', dark.value ? 'dark' : 'light');
+  if(isdark.value){
+    userStore.theme = "light"
+  } else if(!isdark.value){
+    userStore.theme = "dark"
+  }
+
+  document.body.classList[isdark.value ? "add" : "remove"]("dark")
+  localStorage.setItem('theme', isdark.value ? 'dark' : 'light');
 }
 
 </script>

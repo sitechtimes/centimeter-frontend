@@ -2,6 +2,7 @@ import type { Component } from 'vue'
 export interface User {
   id?: string;
   email?: string;
+  username?: string;
 }
 export interface NavButtons {
   name: string;
