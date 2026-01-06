@@ -1,5 +1,5 @@
 <template>
-  <main class="h-screen overflow-hidden">
+  <main class="h-screen w-screen overflow-hidden">
     <NavBar />
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
@@ -44,7 +44,7 @@ import SideBar from '../../components/Presentation/SideBar.vue'
 import EditorBar from '../../components/Presentation/EditorBar.vue'
 import PresentationCanvas from '../../components/Presentation/PresentationCanvas.vue'
 import EditPanel from '../../components/Presentation/EditPanel.vue'
-import type { Slide } from '../../utils/types'
+import type { Slide } from './../utils/types'
 
 
 const showEditPanel = ref(false)
