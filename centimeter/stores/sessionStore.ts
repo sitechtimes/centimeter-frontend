@@ -55,7 +55,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : ''
+          "Authorization": user.refresh ? `Bearer ${user.refresh}` : ''
         },
         body: JSON.stringify({ title })
       }
@@ -70,7 +70,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function listParticipants(code: string) {
     const { ok, data } = await apiCall<any[]>(
-      import.meta.env.VITE_BACKEND_URL + `//participants/${code}/list/`,
+      import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" }
