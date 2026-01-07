@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div class="max-h-130"> <!--left part of screen SLIDES  -->
+        <div class="max-h-130">
         <button @click="slidesClicker"
             class="o-underline 
                 font-bold px-4 py-2 text-[color:var(--bg-color-contrast)] rounded border-2 border-[color:var(--text-color)] w-35 h-max m-2 p-6">
@@ -27,7 +27,6 @@
         </div>
         </div>
         
-<!-- Almost there read the tailwind layout position -->
         <div class="aspect-video border-2 border-[color:var(--text-color)] flex justify-center h-fit w-screen ml-40 mr-40">
             <div class="relative text-[color:var(--bg-color-contrast)]">
                 Presentations
