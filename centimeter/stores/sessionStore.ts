@@ -47,5 +47,40 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data;
   }
 
-  return { currentSession, isInSession, checkSessionStatus, joinSession };
+  async function openSession(title: string) {
+    const token = localStorage.getItem('authToken');
+    const { ok, data } = await apiCall<JoinSessionResponse>(
+      import.meta.env.VITE_BACKEND_URL + "/session/open/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify({ title })
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to open session");
+    }
+    currentSession.value = data ?? null;
+    isInSession.value = true;
+    return data;
+  }
+
+  async function listParticipants(code: string) {
+    const { ok, data } = await apiCall<any[]>(
+      import.meta.env.VITE_BACKEND_URL + `//participants/${code}/list/`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to fetch participants");
+    }
+    return data ?? [];
+  }
+
+  return { currentSession, isInSession, checkSessionStatus, joinSession, openSession, listParticipants };
 });
