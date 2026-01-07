@@ -41,7 +41,7 @@ import { ChevronDown, User } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const changeAvatar = ref(false)
-const isImportedAvatar = ref(false)
+const isImportedAvatar = ref(userStore.profilePic !== "")
 
 const UsernameInput = ref("")
 
@@ -57,7 +57,6 @@ const getAvatar = async (event) => {
     const picture = event.target.files[0]
     userStore.profilePic = URL.createObjectURL(picture)
     changeAvatar.value = false
-    isImportedAvatar.value = true
 }
 
 </script>
