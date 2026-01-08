@@ -50,11 +50,9 @@ export const useSessionStore = defineStore("sessionStore", () => {
   function leaveSession() {
     currentSession.value = null;
     isInSession.value = false;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('currentSession');
-      localStorage.removeItem('isInSession');
-    }
   }
 
   return { currentSession, isInSession, checkSessionStatus, joinSession, leaveSession };
+}, {
+  persist: true,
 });

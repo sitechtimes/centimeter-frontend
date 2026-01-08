@@ -49,11 +49,9 @@ export const useUserStore = defineStore("userStore", () => {
   function logOut() {
     user.value = null;
     isAuth.value = false;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('user');
-      localStorage.removeItem('isAuth');
-    }
   }
 
   return { user, isAuth, theme, profilePic, logIn, signUp, logOut };
+}, {
+  persist: true,
 });

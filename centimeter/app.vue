@@ -25,14 +25,8 @@ useSeoMeta({
 onBeforeMount(() => {
   sessionStorage.removeItem("previousIsHome");
 
-  if (localStorage.getItem("authToken")) {
-    // do auth shit
-    userStore.isAuth = true;
-  }
-
-  if (localStorage.getItem("theme") === "dark") {
+  if (userStore.theme === "dark") {
     document.body.classList.add("dark");
-    userStore.theme = "dark";
   }
   document.body.style.display = "flex";
 });
