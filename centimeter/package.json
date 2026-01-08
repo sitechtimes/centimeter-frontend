@@ -15,7 +15,6 @@
     "matter-js": "^0.20.0",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.4",
-    "pinia-plugin-persistedstate": "^4.7.1",
     "sass": "^1.79.5",
     "vue": "latest",
     "vue-router": "latest"
