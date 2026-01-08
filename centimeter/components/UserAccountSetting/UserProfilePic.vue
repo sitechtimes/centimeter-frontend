@@ -26,7 +26,7 @@
                 <h2>Logged in as {{ userStore.user?.email }}</h2>
                     <input type="text" placeholder="Username" ref="UsernameInput" class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)] border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)]">
                     <br>
-                    <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)]cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
+                    <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
                 </div>
             </transition>
 
@@ -41,7 +41,7 @@ import { ChevronDown, User } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const changeAvatar = ref(false)
-const isImportedAvatar = ref(userStore.profilePic !== "")
+const isImportedAvatar = computed(() => userStore.profilePic !== "")
 
 const UsernameInput = ref("")
 
