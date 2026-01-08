@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-10 flex flex-col items-start relative">
-    <div class="flex flex-col gap-4">
+  <div class="mt-10 flex flex-col items-start relative w-full">
+    <div class="flex flex-col gap-2 w-full">
       <div class="flex items-center">
         <h2 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)]">Name & Image</h2>
         <ChevronDown
@@ -9,20 +9,20 @@
           :class="{ 'rotate-180 ': changeAvatar }"
         />
       </div>
-      <div
-        class="flex rounded-full max-h-16 max-w-16 overflow-hidden"
-        :class="[
-          {
-            'border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)]': !isImportedAvatar
-          }
-        ]"
-      >
-        <User v-if="!isImportedAvatar" class="rounded-full h-16 w-16 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
-        <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-16 w-16 rounded-full object-cover" />
+      <div class="flex items-center gap-3">
+        <h2 class="text-gray-400">Logged in as {{ userStore.user?.email }}.</h2>
+        <div
+          class="flex rounded-full max-h-10 max-w-10 overflow-hidden"
+          :class="[
+            {
+              'border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)]': !isImportedAvatar
+            }
+          ]"
+        >
+          <User v-if="!isImportedAvatar" class="rounded-full h-10 w-10 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
+          <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-10 w-10 rounded-full object-cover" />
+        </div>
       </div>
-
-      <theme-toggle />
-
       <transition
         enter-active-class="transition-opacity duration-200"
         enter-from-class="opacity-0"
@@ -31,33 +31,32 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <div v-if="changeAvatar">
-          <div class="h-10 w-60">
-            <label
-              class="cursor-pointer rounded-md hover:bg-[var(--gray)] border-2 border-[var(--primary-shade-translucent)] dark:border-[var(--primary-shade-translucent)] text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"
-              for="uploadAvatar"
-              >Upload Picture</label
-            >
-            <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar" />
-          </div>
-          <h1>Username</h1>
-          <h2>Logged in as {{ userStore.user?.email }}</h2>
+        <div v-if="changeAvatar" class="flex flex-col w-full">
+          <h3 class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)]">Username</h3>
+
           <input
             type="text"
-            placeholder="Username"
+            placeholder="Enter your username"
             ref="UsernameInput"
-            class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)] border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)]"
+            class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)] bg-gray-200 p-2 rounded-xl text-sm w-full"
           />
           <br />
+          <label class="cursor-pointer flex gap-3 text-center rounded-md py-5 px-10 border-2 w-fit text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" for="uploadAvatar"
+            >Upload Picture <Trash class="hover:scale-110 transition-transform duration-300"></Trash
+          ></label>
+          <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar" />
+
           <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)]cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
         </div>
       </transition>
     </div>
+
+    <theme-toggle />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ChevronDown, User } from "lucide-vue-next";
+import { ChevronDown, User, Trash } from "lucide-vue-next";
 
 const userStore = useUserStore();
 const changeAvatar = ref(false);
