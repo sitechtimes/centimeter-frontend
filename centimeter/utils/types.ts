@@ -53,3 +53,17 @@ export interface Slide {
   type: string;
   title?: string;
 }
+
+export interface SessionStatus {
+  is_active: boolean;
+  session_code?: string;
+  participants_count?: number;
+}
+
+export interface JoinSessionResponse {
+  session_id: string;
+  session_code: string;
+  participant_id: string;
+  nickname: string;
+  joined_at?: string;
+}

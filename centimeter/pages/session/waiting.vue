@@ -65,9 +65,23 @@ const nickname = ref('')
 const joining = ref(false)
 const hasJoined = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
   if (!sessionCode.value) {
     router.push('/')
+    return
+  }
+
+  // Check if user is already a participant in this session
+  const isAlreadyParticipant = await sessionStore.checkIfParticipant(sessionCode.value)
+  
+  if (isAlreadyParticipant && sessionStore.currentSession) {
+    // User is already in this session, skip to the joined state
+    hasJoined.value = true
+    nickname.value = sessionStore.currentSession.nickname
+    toastContainer.value?.add({
+      title: 'Already joined!',
+      message: `Welcome back, ${nickname.value}!`
+    })
   }
 })
 

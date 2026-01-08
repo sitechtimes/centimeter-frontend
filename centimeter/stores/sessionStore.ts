@@ -47,12 +47,31 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data;
   }
 
+  async function checkIfParticipant(sessionCode: string): Promise<boolean> {
+    if (currentSession.value && currentSession.value.session_code === sessionCode) {
+      try {
+        const { ok, data } = await apiCall<{ is_participant: boolean }>(
+          import.meta.env.VITE_BACKEND_URL + `/session/${sessionCode}/participant/${currentSession.value.participant_id}/`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+        return ok && data?.is_participant === true;
+      } catch (e) {
+        console.error("Error checking participant status:", e);
+        return false;
+      }
+    }
+    return false;
+  }
+
   function leaveSession() {
     currentSession.value = null;
     isInSession.value = false;
   }
 
-  return { currentSession, isInSession, checkSessionStatus, joinSession, leaveSession };
+  return { currentSession, isInSession, checkSessionStatus, joinSession, checkIfParticipant, leaveSession };
 }, {
   persist: true,
 });
