@@ -10,37 +10,15 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 }
 
 import { defineStore } from "pinia";
-import type { JoinSessionResponse } from "../utils/types";
+import type { JoinSessionResponse, SessionStatus } from "../utils/types";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);
   const isInSession = ref(false);
 
-  if (typeof window !== 'undefined') {
-    const savedSession = localStorage.getItem('currentSession');
-    const savedIsInSession = localStorage.getItem('isInSession');
-    
-    if (savedSession) currentSession.value = JSON.parse(savedSession);
-    if (savedIsInSession) isInSession.value = JSON.parse(savedIsInSession);
-  }
-
-  if (typeof window !== 'undefined') {
-    watch(currentSession, (newSession) => {
-      if (newSession) {
-        localStorage.setItem('currentSession', JSON.stringify(newSession));
-      } else {
-        localStorage.removeItem('currentSession');
-      }
-    });
-
-    watch(isInSession, (newIsInSession) => {
-      localStorage.setItem('isInSession', JSON.stringify(newIsInSession));
-    });
-  }
-
-  async function checkSessionStatus(code: string) {
-    const { ok, data } = await apiCall(
-      import.meta.env.VITE_BACKEND_URL + `session/${code}/status/`,
+  async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
+    const { ok, data } = await apiCall<SessionStatus>(
+      import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" }
@@ -49,12 +27,12 @@ export const useSessionStore = defineStore("sessionStore", () => {
     if (!ok) {
       throw new Error("Session not found");
     }
-    return data;
+    return (data ?? null) as SessionStatus | null;
   }
 
   async function joinSession(join_code: string, nickname: string) {
     const { ok, data } = await apiCall<JoinSessionResponse>(
-      import.meta.env.VITE_BACKEND_URL + "session/join/",
+      import.meta.env.VITE_BACKEND_URL + "/session/join/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

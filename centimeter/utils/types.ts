@@ -2,6 +2,7 @@ import type { Component } from 'vue'
 export interface User {
   id?: string;
   email?: string;
+  username?: string;
 }
 export interface NavButtons {
   name: string;
@@ -25,6 +26,11 @@ export interface SlidesDropdown {
     typeOfSlide: string;
 }
 
+export interface Slide {
+  id?: string;
+  type?: string;
+}
+
 export interface MakePresentationSideBar {
     name: string;
     ownComponents: string[]
@@ -36,21 +42,14 @@ export interface ShowButtons {
   dropdown?: { name: string;}[];
 };
 
-export interface JoinSessionRequest {
-  join_code: string;
-  nickname: string;
+export interface Presentation {
+  presentation_name: string
+  host: string
+  last_interacted: string
 }
 
-export interface JoinSessionResponse {
-  sessionId: string;
-  userId: string;
-  nickname: string;
-  status: 'waiting' | 'active';
-}
-
-export interface Session {
-  id: string;
-  code: string;
-  allowsWaitingRoom: boolean;
-  isActive: boolean;
+export interface Slide {
+  id?: string;
+  type: string;
+  title?: string;
 }

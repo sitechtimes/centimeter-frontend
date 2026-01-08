@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.5",
+    "lucide-vue-next": "^0.562.0",
     "matter-js": "^0.20.0",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.4",
