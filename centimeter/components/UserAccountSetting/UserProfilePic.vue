@@ -46,7 +46,7 @@
           ></label>
           <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar" />
 
-          <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)]cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
+          <button @click="saveProfileChanges" class="flex w-fit border-[var(--bg-color-contrast)]cursor-pointer transition-all p-2 bg-[var(--gray)] rounded-md">Save</button>
         </div>
       </transition>
     </div>
