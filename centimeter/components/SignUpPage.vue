@@ -47,7 +47,7 @@
                     <span class="mb-4 mt-2">By signing up, you accept our <a href="/" class="underline">terms of use</a> and <a href="/" class="underline">privacy policy</a>.</span>
                     <h3 class="mt-2">Already have an account?</h3>
                     <button class="bg-transparent border-0" @click="goToLogin">
-                        <h3 class="m-0 font-medium cursor-pointer">Log in</h3>
+                        <h3 class="m-0 font-medium cursor-pointer text-[color:var(--text-color)]">Log in</h3>
                     </button>
                 </div>
                 
