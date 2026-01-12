@@ -6,13 +6,31 @@
         <Bell :size="20" />
         <span class="absolute top-1 right-1 w-2 h-2 bg-[var(--danger)] rounded-full"></span>
       </button>
-      <div class="flex items-center justify-center w-9 h-9 bg-[var(--primary)] rounded-full">
-        <span class="text-sm font-semibold text-[var(--text-color-contrast)]">GG</span>
+      <div @click="toggleProfileDropdown" class="flex rounded-full max-h-9 max-w-9 border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)] bg-[var(--primary-light)] dark:bg-[var(--primary-light)] overflow-hidden">   
+        <User v-if="!isImportedAvatar" class="rounded-full h-9 w-9 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"/>
+        <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-9 w-9 rounded-full object-contain">            
       </div>
+      <div v-if="profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md">
+        <button class="border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)]">Log Out</button>
+        <br>
+        <button class="border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)]" @click="goToAccSetting">Account Setting</button>
+      </div>
+
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { Bell } from 'lucide-vue-next'
+import { Bell, User } from 'lucide-vue-next'
+const userStore = useUserStore()
+const isImportedAvatar = ref(userStore.profilePic !== "")
+const profileDropdown = ref(false)
+
+const toggleProfileDropdown = () => {
+  profileDropdown.value = !profileDropdown.value
+}
+
+const goToAccSetting = () => {
+  navigateTo("/UserProfile")
+}
 </script>
