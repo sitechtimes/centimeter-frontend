@@ -58,9 +58,10 @@
           
           <button 
             @click="endSession"
-            class="px-8 py-4 text-lg font-semibold text-[var(--text-color)] bg-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-full transition-colors"
+            :disabled="isEndingSession"
+            class="px-8 py-4 text-lg font-semibold text-[var(--text-color)] bg-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            End Session
+            {{ isEndingSession ? 'Ending...' : 'End Session' }}
           </button>
         </div>
       </div>
@@ -84,6 +85,7 @@ const joinCode = ref(route.params.code as string)
 const sessionData = ref(sessionStore.currentSession)
 const participants = ref<any[]>([])
 const loading = ref(true)
+const isEndingSession = ref(false)
 
 onMounted(async () => {
   if (!joinCode.value) {
@@ -119,7 +121,28 @@ const startPresentation = () => {
   })
 }
 
-const endSession = () => {
-  router.push('/app/dashboard')
+const endSession = async () => {
+  if (isEndingSession.value) return
+  
+  isEndingSession.value = true
+  
+  try {
+    await sessionStore.endSession(joinCode.value)
+    
+    toastContainer.value?.add({
+      title: 'Session Ended',
+      message: 'The session has been successfully closed'
+    })
+    
+    router.push('/app/dashboard')
+
+  } catch (error) {
+    console.error('Failed to end session:', error)
+    toastContainer.value?.add({
+      title: 'Error',
+      message: 'Failed to end session. Please try again.'
+    })
+    isEndingSession.value = false
+  }
 }
 </script>
