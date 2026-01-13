@@ -51,7 +51,6 @@
       </transition>
     </div>
 
-    <theme-toggle />
   </div>
 </template>
 
