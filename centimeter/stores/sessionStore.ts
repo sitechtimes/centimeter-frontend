@@ -47,5 +47,12 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data;
   }
 
-  return { currentSession, isInSession, checkSessionStatus, joinSession };
+  function leaveSession() {
+    currentSession.value = null;
+    isInSession.value = false;
+  }
+
+  return { currentSession, isInSession, checkSessionStatus, joinSession, leaveSession };
+}, {
+  persist: true,
 });
