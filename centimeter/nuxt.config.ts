@@ -17,7 +17,13 @@ export default defineNuxtConfig({
       url: import.meta.env.VITE_URL
     }
   },
-  modules: ["@pinia/nuxt"],
+  modules: [
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt"
+  ],
+  pinia: {
+    storesDirs: ['./stores/**'],
+  },
   postcss: {
     plugins: {
       tailwindcss: {},

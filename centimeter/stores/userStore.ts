@@ -46,5 +46,12 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
-  return { user, isAuth, theme, profilePic ,logIn, signUp };
+  function logOut() {
+    user.value = null;
+    isAuth.value = false;
+  }
+
+  return { user, isAuth, theme, profilePic, logIn, signUp, logOut };
+}, {
+  persist: true,
 });

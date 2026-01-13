@@ -48,14 +48,16 @@ export const useSessionStore = defineStore("sessionStore", () => {
   }
 
   async function openSession(title: string) {
+    const userStore = useUserStore();
     const token = localStorage.getItem('authToken');
+    print(token)
     const { ok, data } = await apiCall<JoinSessionResponse>(
       import.meta.env.VITE_BACKEND_URL + "/session/open/",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": user.refresh ? `Bearer ${user.refresh}` : ''
+          "Authorization": token ? `Bearer ${token}` : ''
         },
         body: JSON.stringify({ title })
       }
@@ -82,5 +84,13 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data ?? [];
   }
 
-  return { currentSession, isInSession, checkSessionStatus, joinSession, openSession, listParticipants };
+  function leaveSession() {
+    currentSession.value = null;
+    isInSession.value = false;
+  }
+  return { currentSession, isInSession, checkSessionStatus, joinSession, openSession, listParticipants, leaveSession };
+
+
+}, {
+  persist: true,
 });
