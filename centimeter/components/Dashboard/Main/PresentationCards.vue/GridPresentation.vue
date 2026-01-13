@@ -13,7 +13,7 @@
 				{{ initials }}
 			</div>
 			<div class="flex-1 min-w-0">
-				<h3 class="text-sm font-medium text-[var(--text-color)] truncate group-hover:text-[var(--primary)]">
+				<h3 class="text-sm font-medium text-[var(--text-color)] truncate group-hover:text-[var(--secondary)]">
 					{{ presentation.presentation_name }}
 				</h3>
 				<p class="text-xs text-[var(--gray)] mt-0.5">

@@ -23,28 +23,28 @@
 
   <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit.prevent="loginWithEmail">
         <div class="relative flex items-start justify-center flex-col gap-1">
-          <label class="font-medium text-[color:var(--text-color)]" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <label class="font-medium text-[color:var(--text-color)]" for="email">Your email address <span title="Required" class="text-[color:var(--danger)] font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]"
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] text-[color:var(--text-color)] outline-[color:var(--primary)]"
             id="email"
             type="email"
             required
             v-model="email"
           />
-          <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
+          <p class="absolute error font-medium text-[color:var(--danger)] translate-y-14" v-show="emailErr.length > 0">{{ emailErr }}</p>
         </div>
 
         <div class="relative flex items-start justify-center flex-col gap-1">
-          <label class="font-medium text-[color:var(--text-color)]" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <label class="font-medium text-[color:var(--text-color)]" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-[color:var(--danger)] font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)]"
+            class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)] text-[color:var(--text-color)]"
             id="password"
             type="password"
             required
             v-model="password"
             :autocomplete="showLogin ? 'current-password' : 'new-password'"
           />
-          <p class="absolute error font-medium text-red-500 mt-28" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
+          <p class="absolute error font-medium text-[color:var(--danger)] translate-y-14" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
         </div>
 
         <button
@@ -53,15 +53,15 @@
         >
           <span>{{ showLogin ? "Log in" : "Sign up" }}</span>
         </button>
-        <button type="button" @click="resetPassword = true" class="no-underline font-medium" v-if="showLogin">Forgot password?</button>
+        <button type="button" @click="resetPassword = true" class="no-underline font-medium text-[color:var(--danger)]" v-if="showLogin">Forgot password?</button>
       </form>
     </div>
     <span class="mb-4" v-show="!showLogin">By signing up, you accept our <a href="/">terms of use</a> and <a href="/">privacy policy</a>.</span>
 
-    <h3 v-show="showLogin">New to Centimeter?</h3>
-    <h3 v-show="!showLogin">Already have an account?</h3>
+    <h3 v-show="showLogin" class="text-[color:var(--text-color)]">New to Centimeter?</h3>
+    <h3 v-show="!showLogin" class="text-[color:var(--text-color)]">Already have an account?</h3>
     <button class="bg-transparent border-0" @click="showLogin ? navigateTo('/auth/signup') : navigateTo('/auth/login')">
-      <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
+      <h3 class="m-0 font-medium cursor-pointer text-[color:var(--text-color)]">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
     </button>
     
     <ToastContainer ref="toastRef" />

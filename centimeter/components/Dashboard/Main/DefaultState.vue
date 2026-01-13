@@ -5,11 +5,11 @@
       
       <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-3">
-          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-[var(--text-color-contrast)] text-sm font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
+          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-white text-sm font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
             <span class="text-lg leading-none">+</span>
             <span>New Menti</span>
           </button>
-          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--faded-bg-color-light)] text-[var(--faded-text-color)] text-sm font-medium rounded-full hover:bg-[var(--faded-bg-color)] transition-colors">
+          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--faded-bg-color-light)] text-[color:var(--text-color)] text-sm font-medium rounded-full hover:bg-[var(--faded-bg-color)] transition-colors">
             <span class="text-lg leading-none">+</span>
             <span>New folder</span>
           </button>

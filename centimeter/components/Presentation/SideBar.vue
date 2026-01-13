@@ -10,13 +10,13 @@
         }
       "
       :class="[
-        'flex flex-col items-center justify-center gap-2 p-4 bg-[var(--bg-color)] rounded-2xl shadow-sm transition-all duration-200',
+        'flex flex-col items-center justify-center gap-2 p-4 bg-[var(--bg-color)]  rounded-2xl shadow-sm transition-all duration-200',
         'hover:bg-gray-200 cursor-pointer',
         activeItem === item.id ? 'ring-2 ring-purple-300 shadow-md' : '',
       ]"
     >
-      <component :is="item.icon" :size="24" class="text-gray-800" />
-      <span class="text-sm font-bold text-gray-800">{{ item.label }}</span>
+      <component :is="item.icon" :size="24" class="text-[color:var(--text-color)]" />
+      <span class="text-sm font-bold text-[color:var(--text-color)]">{{ item.label }}</span>
     </button>
   </div>
 </template>

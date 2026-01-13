@@ -25,6 +25,7 @@
 
 
     <div class="flex items-center gap-2">
+      <ThemeToggle/>
       <div class="flex items-center border-b-2 border-transparent">
         <button
           class="px-4 py-2 text-sm font-medium transition-colors"
@@ -65,8 +66,9 @@
           Share
         </button>
 
+     
         <button
-          class="px-5 py-2.5 text-sm font-medium text-[var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full flex items-center gap-2 transition-colors shadow-sm"
+          class="px-5 py-2.5 text-sm font-medium text-[color:var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full flex items-center gap-2 transition-colors shadow-sm"
         >
           <Play class="w-5 h-5" />
           Present

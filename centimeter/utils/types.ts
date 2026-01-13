@@ -50,6 +50,10 @@ export interface Presentation {
 
 export interface Slide {
   id?: string;
-  type: string;
   title?: string;
+}
+export interface Option{
+  icon: any
+  label: string
+  color: string
 }
