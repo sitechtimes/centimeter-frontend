@@ -47,12 +47,71 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data;
   }
 
+  async function openSession(title: string) {
+    const userStore = useUserStore();
+    const token = userStore.user?.access
+    const { ok, data } = await apiCall<JoinSessionResponse>(
+      import.meta.env.VITE_BACKEND_URL + "/session/open/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify({ title })
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to open session");
+    }
+    currentSession.value = data ?? null;
+    isInSession.value = true;
+    return data;
+  }
+  
+  async function endSession(sessionCode: string) {
+    const userStore = useUserStore();
+    const token = userStore.user?.access;
+    
+    const { ok } = await apiCall(
+      import.meta.env.VITE_BACKEND_URL + `/session/${sessionCode}/close/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : ''
+        }
+      }
+    );
+    
+    if (!ok) {
+      throw new Error("Failed to end session");
+    }
+    
+    currentSession.value = null;
+    isInSession.value = false;
+  }
+  async function listParticipants(code: string) {
+    const { ok, data } = await apiCall<any[]>(
+      import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to fetch participants");
+    }
+    return data ?? [];
+  }
+
   function leaveSession() {
     currentSession.value = null;
     isInSession.value = false;
   }
+  return { currentSession, isInSession, checkSessionStatus, joinSession, openSession, listParticipants, leaveSession, endSession };
 
-  return { currentSession, isInSession, checkSessionStatus, joinSession, leaveSession };
+
 }, {
   persist: true,
 });
