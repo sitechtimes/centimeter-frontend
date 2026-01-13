@@ -49,8 +49,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function openSession(title: string) {
     const userStore = useUserStore();
-    const token = localStorage.getItem('authToken');
-    print(token)
+    const token = userStore.user?.access
     const { ok, data } = await apiCall<JoinSessionResponse>(
       import.meta.env.VITE_BACKEND_URL + "/session/open/",
       {

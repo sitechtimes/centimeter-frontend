@@ -3,6 +3,8 @@ export interface User {
   id?: string;
   email?: string;
   username?: string;
+  access?: string;
+  refresh?: string;
 }
 export interface NavButtons {
   name: string;
