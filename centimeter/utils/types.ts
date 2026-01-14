@@ -3,6 +3,8 @@ export interface User {
   id?: string;
   email?: string;
   username?: string;
+  access?: string;
+  refresh?: string;
 }
 export interface NavButtons {
   name: string;
@@ -24,11 +26,6 @@ export interface ToastPayload {
 export interface SlidesDropdown {
     dropdown: string;
     typeOfSlide: string;
-}
-
-export interface Slide {
-  id?: string;
-  type?: string;
 }
 
 export interface MakePresentationSideBar {
