@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Option } from '../../../utils/types'
+import type { Option } from '~/utils/types'
 import {
   BarChart3,
   Cloud,

@@ -1,3 +1,4 @@
+import type { IconNode } from 'lucide-vue-next';
 import type { Component } from 'vue'
 export interface User {
   id?: string;
@@ -50,6 +51,12 @@ export interface Presentation {
 
 export interface Slide {
   id?: string;
-  type: string;
+  type?: string;
   title?: string;
+}
+
+export interface Option {
+  icon: IconNode;
+  label: string;
+  color: string;
 }
