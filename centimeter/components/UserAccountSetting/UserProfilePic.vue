@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10 flex flex-col items-start relative w-full">
+  <div class="flex flex-col items-start relative w-full">
     <div class="flex flex-col gap-2 w-full">
       <div class="flex items-center">
         <h2 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)]">Name & Image</h2>
@@ -50,7 +50,6 @@
         </div>
       </transition>
     </div>
-
   </div>
 </template>
 
