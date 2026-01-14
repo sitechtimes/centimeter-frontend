@@ -55,6 +55,10 @@
 import { useSessionStore } from '~/stores/sessionStore'
 import ToastContainer from '~/components/ToastContainer.vue'
 
+definePageMeta({
+  middleware: 'session',
+});
+
 const route = useRoute()
 const router = useRouter()
 const sessionStore = useSessionStore()
@@ -71,17 +75,20 @@ onMounted(async () => {
     return
   }
 
-  // Check if user is already a participant in this session
-  const isAlreadyParticipant = await sessionStore.checkIfParticipant(sessionCode.value)
-  
-  if (isAlreadyParticipant && sessionStore.currentSession) {
-    // User is already in this session, skip to the joined state
-    hasJoined.value = true
-    nickname.value = sessionStore.currentSession.nickname
-    toastContainer.value?.add({
-      title: 'Already joined!',
-      message: `Welcome back, ${nickname.value}!`
-    })
+  try {
+    const isAlreadyParticipant = await sessionStore.checkIfParticipant(sessionCode.value)
+    
+    if (isAlreadyParticipant && sessionStore.currentSession) {
+      hasJoined.value = true
+      nickname.value = sessionStore.currentSession.nickname || ''
+      
+      toastContainer.value?.add({
+        title: 'Welcome back!',
+        message: `You're already in this session as ${nickname.value}`
+      })
+    }
+  } catch (error) {
+    console.error('Failed to check participant status:', error)
   }
 })
 
