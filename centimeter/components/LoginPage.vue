@@ -61,7 +61,7 @@
     <h3 v-show="showLogin" class="text-[color:var(--text-color)]">New to Centimeter?</h3>
     <h3 v-show="!showLogin" class="text-[color:var(--text-color)]">Already have an account?</h3>
     <button class="bg-transparent border-0" @click="showLogin ? navigateTo('/auth/signup') : navigateTo('/auth/login')">
-      <h3 class="m-0 font-medium cursor-pointer text-[color:var(--text-color)]">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
+      <h3 class="m-0 font-medium cursor-pointer text-[color:var(--secondary)]">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
     </button>
     
     <ToastContainer ref="toastRef" />

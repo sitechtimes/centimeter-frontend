@@ -24,13 +24,7 @@
 import {Type, Image, Play, LayoutGrid} from 'lucide-vue-next'
 import type {Option} from "../../../utils/types.ts"
 
-interface ContentOption {
-  icon: any
-  label: string
-  color: string
-}
-
-function handleClick(option: ContentOption): void {
+function handleClick(option: Option): void {
   console.log('Option clicked:', option.label)
   emits('add-slide', option.label)
   emits('toggle-icon')

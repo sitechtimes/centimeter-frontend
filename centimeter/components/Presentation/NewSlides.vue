@@ -4,7 +4,7 @@
       @click="toggleIcon"
       tabindex="0"
       role="button"
-      class="m-3 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--primary)] text-white shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+      class="m-3 inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--primary)] text-white shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
     >
       <Plus v-if="isPlus" key="'x'" :size="20" />
       <X v-else key="'plus'" :size="20" />

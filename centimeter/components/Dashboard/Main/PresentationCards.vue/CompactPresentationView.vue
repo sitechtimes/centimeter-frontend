@@ -37,7 +37,7 @@
       </button>
 
 
-      <button class="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded transition-colors">
+      <button class="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-opacity-75 rounded transition-colors">
         <MoreHorizontal class="w-5 h-5 text-gray-700" />
       </button>
     </div>
