@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import type { Option } from '~/utils/types'
+import MultipleChoiceSlides from '../SlidesOptions/MultipleChoiceSlides.vue'
 import {
   BarChart3,
   Cloud,
@@ -28,7 +29,7 @@ import {
   MapPin,
 } from 'lucide-vue-next'
 const interactiveOptions = [
-  { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600' },
+  { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600', slides: MultipleChoiceSlides },
   { icon: Cloud, label: 'Word Cloud', color: 'text-red-400' },
   { icon: MessageSquare, label: 'Open Ended', color: 'text-pink-400' },
   { icon: Scale, label: 'Scales', color: 'text-indigo-600' },
@@ -37,7 +38,7 @@ const interactiveOptions = [
   { icon: HelpCircle, label: 'Guess the Number', color: 'text-yellow-600' },
   { icon: Award, label: '100 points', color: 'text-blue-600' },
   { icon: Grid2x2, label: '2 x 2 Grid', color: 'text-red-500' },
-  { icon: Edit3, label: 'Quick Form', color: 'text-yellow-600', featured: true },
+  { icon: Edit3, label: 'Quick Form', color: 'text-yellow-600'/* , featured: true  */},
   { icon: MapPin, label: 'Pin on Image', color: 'text-purple-600' },
 ]
 

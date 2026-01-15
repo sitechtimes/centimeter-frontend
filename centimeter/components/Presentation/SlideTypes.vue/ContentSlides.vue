@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import {Type, Image, Play, LayoutGrid} from 'lucide-vue-next'
+import {Type, Image, Play, LayoutGrid, HelpCircle} from 'lucide-vue-next'
 import type {Option} from "../../../utils/types.ts"
 
 function handleClick(option: Option): void {

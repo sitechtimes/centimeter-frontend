@@ -1,5 +1,5 @@
-import type { IconNode } from 'lucide-vue-next';
-import type { Component } from 'vue'
+import type { LucideProps } from 'lucide-vue-next';
+import type { FunctionalComponent, Component } from 'vue'
 export interface User {
   id?: string;
   email?: string;
@@ -56,7 +56,8 @@ export interface Slide {
 }
 
 export interface Option {
-  icon: IconNode;
+  icon: FunctionalComponent<LucideProps>;
   label: string;
   color: string;
+  slides: Component;
 }

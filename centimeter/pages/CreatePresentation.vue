@@ -11,22 +11,23 @@
           :selectedSlide="currentSelectedSlide"
           @close="showEditPanel = false" 
         />
-        <CommentsPanel
+        <!-- Remember to turn these back -->
+        <EditPanel
           v-if="showCommentsPanel"
           class="w-80 flex-none"
           @close="showCommentsPanel = false"
         />
-        <InteractivityPanel
+        <EditPanel
           v-if="showInteractivityPanel"
           class="w-80 flex-none"
           @close="showInteractivityPanel = false"
         />
-        <ThemesPanel
+        <EditPanel
           v-if="showThemesPanel"
           class="w-80 flex-none"
           @close="showThemesPanel = false"
         />
-        <TemplatesPanel
+        <EditPanel
           v-if="showTemplatesPanel"
           class="w-80 flex-none"
           @close="showTemplatesPanel = false"

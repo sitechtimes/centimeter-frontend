@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import type {Option} from "../../../utils/types.ts"
-import {BarChart3, Hourglass} from 'lucide-vue-next'
+import {BarChart3, Hourglass, HelpCircle} from 'lucide-vue-next'
 function handleClick(option: Option): void {
   console.log('Option clicked:', option.label)
   emits('add-slide', option.label)
