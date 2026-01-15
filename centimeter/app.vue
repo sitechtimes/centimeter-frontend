@@ -30,17 +30,6 @@ onBeforeMount(() => {
     document.body.classList.add("dark");
   }
   document.body.style.display = "flex";
-  if (sessionStore.isInSession && sessionStore.currentSession) {
-    const sessionCode = sessionStore.currentSession.session_code;
-    sessionStore.checkIfParticipant(sessionCode).then((isParticipant) => {
-      if (!isParticipant) {
-        console.log("Session invalid, clearing session data");
-        sessionStore.leaveSession();
-      }
-    }).catch((error) => {
-      console.error("Error validating session:", error);
-    });
-  }
 });
 </script>
 
