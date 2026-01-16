@@ -59,8 +59,6 @@ function toggleEditPanel() {
   showEditPanel.value = !showEditPanel.value
 }
 
-
-
 function handleSlideSelect(slideIndex: number, slide: Slide) {
   currentSelectedSlide.value = slide
   showEditPanel.value = true

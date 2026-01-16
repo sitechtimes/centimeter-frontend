@@ -68,6 +68,7 @@
 
      
         <button
+          @click="handlePresent"
           class="px-5 py-2.5 text-sm font-medium text-[color:var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full flex items-center gap-2 transition-colors shadow-sm"
         >
           <Play class="w-5 h-5" />
@@ -82,7 +83,11 @@
 import { ref } from 'vue'
 import type { Component } from 'vue'
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucide-vue-next'
+import { useSessionStore } from '~/stores/sessionStore'
+import { useRouter } from 'vue-router'
 
+const sessionStore = useSessionStore()
+const router = useRouter()
 
 const WorkspaceIcon: Component | null = null
 
@@ -90,4 +95,22 @@ const presentationName = ref('Untitled Presentation')
 const activeTab = ref<"create" | "results">("create");
 const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
+
+const handlePresent = async () => {
+  try {
+    const userStore = useUserStore();
+    
+    if (!userStore.isAuth) {
+      console.error('User is not authenticated');
+      return;
+    }
+    
+    const session = await sessionStore.openSession(presentationName.value)
+    if (session?.join_code) {
+      router.push(`/session/${session.join_code}`)
+    }
+  } catch (error) {
+    console.error('Failed to open session:', error)
+  }
+}
 </script>
