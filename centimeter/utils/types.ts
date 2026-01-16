@@ -4,6 +4,8 @@ export interface User {
   id?: string;
   email?: string;
   username?: string;
+  access?: string;
+  refresh?: string;
 }
 export interface NavButtons {
   name: string;
@@ -25,11 +27,6 @@ export interface ToastPayload {
 export interface SlidesDropdown {
     dropdown: string;
     typeOfSlide: string;
-}
-
-export interface Slide {
-  id?: string;
-  type?: string;
 }
 
 export interface MakePresentationSideBar {
@@ -60,4 +57,18 @@ export interface Option {
   label: string;
   color: string;
   slides: Component;
+}
+
+export interface JoinSessionResponse {
+  id?: string;
+  join_code: string;
+  title: string;
+  host?: string;
+  created_at?: string;
+}
+
+export interface SessionStatus {
+  status: string;
+  is_active: boolean;
+  participant_count?: number;
 }

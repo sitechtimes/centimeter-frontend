@@ -5,7 +5,7 @@
       
       <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-3">
-          <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-[var(--text-color-contrast)] text-sm font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
+          <button @click="goToCreatePresentation" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-[var(--text-color-contrast)] text-sm font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
             <span class="text-lg leading-none">+</span>
             <span>New Menti</span>
           </button>
@@ -113,6 +113,15 @@ const presentations: Presentation[] = [
 
 const searchQuery = ref('')
 const viewMode = ref<'grid' | 'list'>('grid')
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function goToCreatePresentation() {
+  const presentationId = crypto.randomUUID()
+  router.push(`/app/create/${presentationId}`)
+}
 
 const filteredPresentations = computed(() => {
   if (!searchQuery.value) return presentations
