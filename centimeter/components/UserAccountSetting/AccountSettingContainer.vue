@@ -10,14 +10,22 @@
       <Appearance />
     </div>
 
-    <footer class="flex flex-col w-2/5 border-t mt-6">
-      <br />
-      <h3 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)">Log out everywhere else</h3>
-      <span class="text-sm">This will log you out from all devices except the current one.</span>
-      <button class="text-red-500 bg-red-50 p-3 rounded-full font-semibold">Log out everywhere else</button>
-      <h3 class="text-xl text-[color:var(--text-color)] dark:text-[color:var(--text-color)">Delete account</h3>
-      <span class="">Your account will be permanently deleted. Are you sure?</span>
-      <button class="bg-red-500 text-red-100 p-3 rounded-full font-semibold">Delete Account</button>
+    <footer class="w-2/5 mt-8 py-8 border-t border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-medium text-gray-900 dark:text-gray-100">Danger zone</h2>
+      <div class="px-6 py-5 flex items-center justify-between">
+        <div class="pr-6">
+          <h3 class="text-base font-medium text-gray-900 dark:text-gray-100">Log out everywhere else</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">This will log you out from all devices except the current one.</p>
+        </div>
+        <button class="whitespace-nowrap rounded-full border border-red-500 px-5 py-2 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition">Log out</button>
+      </div>
+      <div class="px-6 py-5 flex items-center justify-between">
+        <div class="pr-6">
+          <h3 class="text-base font-medium text-gray-900 dark:text-gray-100">Delete account</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Your account will be permanently deleted. This action cannot be undone.</p>
+        </div>
+        <button class="whitespace-nowrap rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white hover:bg-red-700 transition">Delete account</button>
+      </div>
     </footer>
   </div>
 </template>
