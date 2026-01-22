@@ -1,7 +1,5 @@
 <template>
   <div class="flex justify-end gap-3 items-center">
-    
-    <theme-toggle />
     <Bell @click="toggleMail" class="h-10 w-10 cursor-pointer p-2 border-2 rounded-full text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
     <div v-if="isMail && !profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md">
       <div class="p-4">

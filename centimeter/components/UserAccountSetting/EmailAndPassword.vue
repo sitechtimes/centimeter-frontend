@@ -20,8 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDown } from "lucide-vue-next";
-const username = ref("username123");
 const email = ref("edsiaohdfos@gmail.com");
 const isVerified = ref(true);
 
