@@ -9,7 +9,7 @@
       </p>
 
 
-      <button class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary)] text-[var(--text-color-contrast)] font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
+      <button @click="goToCreatePresentation" class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary)] text-[var(--text-color-contrast)] font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
         <span>+</span>
         <span>New Menti</span>
       </button>
@@ -18,6 +18,14 @@
 </template>
 
 <script setup lang = "ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function goToCreatePresentation() {
+  const presentationId = crypto.randomUUID()
+  router.push(`/app/create/${presentationId}`)
+}
 </script>
 
 <style scoped>
