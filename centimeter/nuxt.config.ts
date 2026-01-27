@@ -24,6 +24,9 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./stores/**'],
   },
+  piniaPersistedstate: {
+    storage: 'localStorage'
+  },
   postcss: {
     plugins: {
       tailwindcss: {},

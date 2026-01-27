@@ -53,5 +53,7 @@ export const useUserStore = defineStore("userStore", () => {
 
   return { user, isAuth, theme, profilePic, logIn, signUp, logOut };
 }, {
-  persist: true,
+  persist: {
+    storage: piniaPluginPersistedstate.localStorage(),
+  }
 });
