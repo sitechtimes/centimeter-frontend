@@ -36,7 +36,7 @@
                     <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
                 </div>
             </transition>
-
+          </div>
         </div>            
 
     </div>
