@@ -1,21 +1,16 @@
 <template>
-  <main class="h-screen w-screen overflow-hidden flex flex-row">
-   <UserProfileSideBar/>
-    <UserAccountSettingContainer/>
-    <div>
-
-    </div>
+  <main class="h-screen w-screen overflow-hidden flex">
+    <UserProfileSideBar />
+    <UserAccountSettingContainer />
   </main>
 </template>
 
 <script setup lang="ts">
-import UserProfileSideBar from '~/components/UserAccountSetting/UserProfileSideBar.vue';
+import UserProfileSideBar from "~/components/UserAccountSetting/UserProfileSideBar.vue";
 definePageMeta({
-  middleware: 'auth',
+  middleware: "auth",
   requiresAuth: true
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

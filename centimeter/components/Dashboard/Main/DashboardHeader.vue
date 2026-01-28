@@ -2,6 +2,7 @@
   <header class="flex items-center justify-end px-6 py-4 border-b border-[var(--faded-bg-color)] w-full bg-[var(--bg-color)] text-[var(--text-color)]">
 
     <div class="flex items-center gap-4">
+      <ThemeToggle/> 
       <button class="relative p-2 text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors">
         <Bell :size="20" />
         <span class="absolute top-1 right-1 w-2 h-2 bg-[var(--danger)] rounded-full"></span>
@@ -11,9 +12,9 @@
         <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-9 w-9 rounded-full object-contain">            
       </div>
       <div v-if="profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md">
-        <button class="border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)]">Log Out</button>
+        <button class="border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)]">Log Out</button>
         <br>
-        <button class="border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)]" @click="goToAccSetting">Account Setting</button>
+        <button class="border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)]" @click="goToAccSetting">Account Setting</button>
       </div>
 
     </div>
