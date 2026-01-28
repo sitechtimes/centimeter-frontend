@@ -48,6 +48,7 @@ export interface Presentation {
 export interface Slide {
   id?: string;
   title?: string;
+  type?: string;
 }
 
 export interface JoinSessionResponse {
