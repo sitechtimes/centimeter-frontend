@@ -65,7 +65,7 @@ export interface SessionStatus {
   participant_count?: number;
 }
 export interface Option{
-  icon: any
+  icon: Component
   label: string
   color: string
 }
