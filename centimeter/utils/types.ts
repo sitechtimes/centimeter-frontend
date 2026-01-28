@@ -47,8 +47,8 @@ export interface Presentation {
 
 export interface Slide {
   id?: string;
-  type: string;
   title?: string;
+  type?: string;
 }
 
 export interface JoinSessionResponse {
@@ -63,4 +63,9 @@ export interface SessionStatus {
   status: string;
   is_active: boolean;
   participant_count?: number;
+}
+export interface Option{
+  icon: Component
+  label: string
+  color: string
 }
