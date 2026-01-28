@@ -4,12 +4,13 @@
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
         <EditorBar class="w-48 flex-none" @select-slide="handleSlideSelect" />
-        <PresentationCanvas class="flex-1 min-w-0" />
+        <PresentationCanvas ref="canvasRef" class="flex-1 min-w-0" />
         <EditPanel 
           v-if="showEditPanel" 
           class="w-80 flex-none" 
           :selectedSlide="currentSelectedSlide"
-          @close="showEditPanel = false" 
+          @close="showEditPanel = false"
+          @add-text="handleAddText"
         />
         <CommentsPanel
           v-if="showCommentsPanel"
@@ -46,12 +47,12 @@ import PresentationCanvas from '../components/Presentation/PresentationCanvas.vu
 import EditPanel from '../components/Presentation/EditPanel.vue'
 import type { Slide } from '../utils/types'
 
+const canvasRef = ref<InstanceType<typeof PresentationCanvas>>()
 const showEditPanel = ref(false)
 const showCommentsPanel = ref(false)
 const showInteractivityPanel = ref(false)
 const showThemesPanel = ref(false)
 const showTemplatesPanel = ref(false)
-
 
 const currentSelectedSlide = ref<Slide | undefined>(undefined)
 
@@ -62,5 +63,9 @@ function toggleEditPanel() {
 function handleSlideSelect(slideIndex: number, slide: Slide) {
   currentSelectedSlide.value = slide
   showEditPanel.value = true
+}
+
+function handleAddText() {
+  canvasRef.value?.triggerAddText()
 }
 </script>

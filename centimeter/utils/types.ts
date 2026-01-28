@@ -49,6 +49,28 @@ export interface Slide {
   id?: string;
   type: string;
   title?: string;
+  components?: SlideComponent[];
+  backgroundColor?: string;
+  backgroundImage?: string;
+}
+
+export interface SlideComponent {
+  id: string;
+  type: 'text' | 'image' | 'shape' | 'video';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  content?: string;
+  src?: string;
+  fontSize?: number;
+  color?: string;
+  backgroundColor?: string;
+  textAlign?: 'left' | 'center' | 'right';
+  fontWeight?: 'normal' | 'bold';
+  fontStyle?: 'normal' | 'italic';
+  rotation?: number; 
+  zIndex?: number;
 }
 
 export interface JoinSessionResponse {
