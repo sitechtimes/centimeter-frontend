@@ -31,7 +31,7 @@
       </div>
 
 
-      <button class="flex items-center gap-2 text-sm text-[color:var(--text-color)] hover:text-gray-900 transition-colors flex-shrink-0">
+      <button class="flex items-center gap-2 text-sm text-[color:var(--text-color)] hover:text-[color:var(--text-color)] transition-colors flex-shrink-0">
         <BarChart3 class="w-4 h-4" />
         View results
       </button>
