@@ -4,13 +4,17 @@
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
         <EditorBar class="w-48 flex-none" @select-slide="handleSlideSelect" />
-        <PresentationCanvas ref="canvasRef" class="flex-1 min-w-0" />
+        <PresentationCanvas 
+          ref="canvasRef" 
+          class="flex-1 min-w-0" 
+          :currentSlide="currentSelectedSlide"
+        />
         <EditPanel 
           v-if="showEditPanel" 
           class="w-80 flex-none" 
           :selectedSlide="currentSelectedSlide"
           @close="showEditPanel = false"
-          @add-text="handleAddText"
+          @add-component="handleAddComponent"
         />
         <CommentsPanel
           v-if="showCommentsPanel"
@@ -65,7 +69,7 @@ function handleSlideSelect(slideIndex: number, slide: Slide) {
   showEditPanel.value = true
 }
 
-function handleAddText() {
-  canvasRef.value?.triggerAddText()
+function handleAddComponent(type: 'text' | 'image' | 'shape') {
+  canvasRef.value?.addComponent(type)
 }
 </script>

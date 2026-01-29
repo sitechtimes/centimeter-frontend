@@ -14,11 +14,11 @@
       <div class="space-y-3">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Add Elements</h3>
         <button
-          @click="$emit('add-text')"
+          @click="$emit('add-component', 'text')"
           class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--primary)] hover:bg-[var(--primary-shade)] text-white rounded-lg transition-colors"
         >
           <Type class="w-5 h-5" />
-          <span class="text-sm font-medium">Add Text (T)</span>
+          <span class="text-sm font-medium">Add Text</span>
         </button>
       </div>
 
@@ -96,5 +96,8 @@
 import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
 import type { Slide } from '../../utils/types'
 defineProps<{ selectedSlide?: Slide }>()
-defineEmits<{ close: [], 'add-text': [] }>()
+defineEmits<{ 
+  close: []
+  'add-component': [type: 'text' | 'image' | 'shape'] 
+}>()
 </script>
