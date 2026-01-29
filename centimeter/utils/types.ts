@@ -56,7 +56,6 @@ export interface Option {
   icon: FunctionalComponent<LucideProps>;
   label: string;
   color: string;
-  slides: Component;
 }
 
 export interface JoinSessionResponse {

@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import type { Option } from '~/utils/types'
-import MultipleChoiceSlides from '../SlidesOptions/MultipleChoiceSlides.vue'
 import {
   BarChart3,
   Cloud,
@@ -29,7 +28,7 @@ import {
   MapPin,
 } from 'lucide-vue-next'
 const interactiveOptions = [
-  { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600', slides: MultipleChoiceSlides },
+  { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600' },
   { icon: Cloud, label: 'Word Cloud', color: 'text-red-400' },
   { icon: MessageSquare, label: 'Open Ended', color: 'text-pink-400' },
   { icon: Scale, label: 'Scales', color: 'text-indigo-600' },
@@ -50,4 +49,5 @@ function handleClick(option: Option): void {
 const emit = defineEmits<{
   'add-slide': [slideType: string]
 }>()
+
 </script>
