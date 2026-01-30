@@ -113,5 +113,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
 
 }, {
-  persist: true,
+  persist: {
+    storage: piniaPluginPersistedstate.localStorage(),
+  }
 });
