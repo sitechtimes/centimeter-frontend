@@ -45,7 +45,7 @@
         <div class="flex justify-center gap-4">
           <button
             v-if="!isPollActive"
-            @click="startPresentation"
+            @click="startPoll"
             :disabled="participants.length === 0"
             class="px-8 py-4 text-lg font-semibold text-[var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
@@ -123,7 +123,7 @@ const copyJoinCode = () => {
   });
 };
 
-const startPresentation = () => {
+const startPoll = () => {
   // Create a demo poll
   const demoPoll: Poll = {
     id: "poll-1",

@@ -82,6 +82,8 @@ export const useSessionStore = defineStore(
 
       currentSession.value = null;
       isInSession.value = false;
+      currentPoll.value = null;
+      pollResponses.value = {};
     }
     async function listParticipants(code: string) {
       const { ok, data } = await apiCall<any[]>(import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`, {

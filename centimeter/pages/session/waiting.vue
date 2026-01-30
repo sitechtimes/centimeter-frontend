@@ -37,16 +37,6 @@
           </button>
         </div>
 
-        <div v-else-if="!sessionStore.currentPoll" class="text-center space-y-6 mt-12">
-          <div class="inline-block rounded-full bg-green-100 dark:bg-green-900/30 p-4">
-            <svg class="h-16 w-16 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-          </div>
-          <h2 class="text-3xl font-bold text-[var(--text-color)]">Welcome, {{ nickname }}!</h2>
-          <p class="text-xl text-[var(--text-color)] opacity-70">Waiting for the session to start...</p>
-        </div>
-
         <div v-else-if="sessionStore.currentPoll" class="mt-12">
           <PollViewer :poll="sessionStore.currentPoll" :session-code="sessionCode" @vote-submitted="handleVoteSubmitted" />
         </div>
@@ -111,8 +101,16 @@ const joinSession = async (nicknameValue: string) => {
 };
 
 const handleVoteSubmitted = async (optionId: string) => {
+  if (!sessionStore.currentPoll?.id) {
+    toastContainer.value?.add({
+      title: "Error",
+      message: "No active poll found"
+    });
+    return;
+  }
+
   try {
-    await sessionStore.submitPollResponse(sessionCode.value, sessionStore.currentPoll?.id || "", optionId);
+    await sessionStore.submitPollResponse(sessionCode.value, sessionStore.currentPoll.id, optionId);
     toastContainer.value?.add({
       title: "Vote Submitted!",
       message: "Thank you for your response"

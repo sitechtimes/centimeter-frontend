@@ -76,10 +76,12 @@ export interface PollOption {
   votes?: number;
 }
 
+export type PollType = "Multiple Choice" | "Word Cloud" | "Open Ended" | "Scales" | "Ranking";
+
 export interface Poll {
   id: string;
   question: string;
-  type: string;
+  type: PollType;
   options: PollOption[];
 }
 
