@@ -4,8 +4,10 @@
             role="region"
             aria-label="Presentation canvas"
             class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden"
-        ></div>
-        <input v-model="yourQuestion">
+        >
+    <input v-model="yourQuestion">
+    </div>
+        
     </div>
 </template>
 

@@ -170,12 +170,14 @@ function updateSelectionAfterReorder(from: number, to: number) {
 function closeContext() {
   contextVisible.value = false
   contextIndex.value = undefined
+  slideOption.value = ""
 }
 
 function handleDelete(index?: number | null) {
   if (index == null) return closeContext()
   
   slides.value.splice(index, 1)
+  
   
   if (slides.value.length === 0) {
     selectedSlide.value = null
