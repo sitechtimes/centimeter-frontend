@@ -21,7 +21,7 @@
           </div>
         </div>
 
-        <div class="bg-[var(--faded-bg-color-light)] rounded-xl p-8 space-y-6">
+        <div v-if="!isPollActive" class="bg-[var(--faded-bg-color-light)] rounded-xl p-8 space-y-6">
           <div class="flex items-center justify-between">
             <h2 class="text-2xl font-semibold text-[var(--text-color)]">Participants</h2>
             <span class="text-lg text-[var(--faded-text-color)]">{{ participants.length }} joined</span>
@@ -46,14 +46,31 @@
           </div>
         </div>
 
+        <div v-if="isPollActive && currentPoll">
+          <PollResults 
+            :poll="currentPoll" 
+            :responses="sessionStore.pollResponses"
+            @refresh-results="handleRefreshResults"
+          />
+        </div>
+
         <div class="flex justify-center gap-4">
           <button 
+            v-if="!isPollActive"
             @click="startPresentation"
             :disabled="participants.length === 0"
             class="px-8 py-4 text-lg font-semibold text-[var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             <Play class="w-6 h-6" />
-            Start Presentation
+            Start Poll
+          </button>
+          
+          <button 
+            v-if="isPollActive"
+            @click="closePoll"
+            class="px-8 py-4 text-lg font-semibold text-[var(--text-color)] bg-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-full transition-colors"
+          >
+            Close Poll
           </button>
           
           <button 
@@ -75,6 +92,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSessionStore } from '~/stores/sessionStore'
 import { Copy, Users, Play } from 'lucide-vue-next'
 import ToastContainer from '~/components/ToastContainer.vue'
+import PollResults from '~/components/Poll/PollResults.vue'
+import type { Poll } from '~/utils/types'
 
 const route = useRoute()
 const router = useRouter()
@@ -86,6 +105,8 @@ const sessionData = ref(sessionStore.currentSession)
 const participants = ref<any[]>([])
 const loading = ref(true)
 const isEndingSession = ref(false)
+const isPollActive = ref(false)
+const currentPoll = ref<Poll | null>(null)
 
 onMounted(async () => {
   if (!joinCode.value) {
@@ -115,10 +136,52 @@ const copyJoinCode = () => {
 }
 
 const startPresentation = () => {
+  // Create a demo poll
+  const demoPoll: Poll = {
+    id: 'poll-1',
+    question: 'What is your favorite programming language?',
+    type: 'Multiple Choice',
+    options: [
+      { id: 'opt-1', text: 'JavaScript', votes: 0 },
+      { id: 'opt-2', text: 'Python', votes: 0 },
+      { id: 'opt-3', text: 'Java', votes: 0 },
+      { id: 'opt-4', text: 'C++', votes: 0 }
+    ]
+  }
+  
+  currentPoll.value = demoPoll
+  sessionStore.setCurrentPoll(demoPoll)
+  isPollActive.value = true
+  
   toastContainer.value?.add({
-    title: 'Starting...',
-    message: 'Presentation is starting'
+    title: 'Poll Started!',
+    message: 'Participants can now vote'
   })
+}
+
+const closePoll = () => {
+  isPollActive.value = false
+  currentPoll.value = null
+  sessionStore.setCurrentPoll(null)
+  
+  toastContainer.value?.add({
+    title: 'Poll Closed',
+    message: 'Results are final'
+  })
+}
+
+const handleRefreshResults = async () => {
+  if (!currentPoll.value) return
+  
+  try {
+    await sessionStore.getPollResults(joinCode.value, currentPoll.value.id)
+    toastContainer.value?.add({
+      title: 'Results Refreshed',
+      message: 'Poll results have been updated'
+    })
+  } catch (error) {
+    console.error('Failed to refresh results:', error)
+  }
 }
 
 const endSession = async () => {

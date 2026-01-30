@@ -10,11 +10,13 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 }
 
 import { defineStore } from "pinia";
-import type { JoinSessionResponse, SessionStatus } from "../utils/types";
+import type { JoinSessionResponse, SessionStatus, Poll, PollResponse } from "../utils/types";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);
   const isInSession = ref(false);
+  const currentPoll = ref<Poll | null>(null);
+  const pollResponses = ref<Record<string, number>>({});
 
   async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
     const { ok, data } = await apiCall<SessionStatus>(
@@ -108,8 +110,59 @@ export const useSessionStore = defineStore("sessionStore", () => {
   function leaveSession() {
     currentSession.value = null;
     isInSession.value = false;
+    currentPoll.value = null;
+    pollResponses.value = {};
   }
-  return { currentSession, isInSession, checkSessionStatus, joinSession, openSession, listParticipants, leaveSession, endSession };
+
+  async function submitPollResponse(sessionCode: string, pollId: string, optionId: string) {
+    const { ok, data } = await apiCall<any>(
+      import.meta.env.VITE_BACKEND_URL + `/poll/${sessionCode}/submit/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ poll_id: pollId, option_id: optionId })
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to submit poll response");
+    }
+    return data;
+  }
+
+  async function getPollResults(sessionCode: string, pollId: string) {
+    const { ok, data } = await apiCall<Record<string, number>>(
+      import.meta.env.VITE_BACKEND_URL + `/poll/${sessionCode}/${pollId}/results/`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to fetch poll results");
+    }
+    pollResponses.value = data ?? {};
+    return data ?? {};
+  }
+
+  function setCurrentPoll(poll: Poll | null) {
+    currentPoll.value = poll;
+  }
+
+  return { 
+    currentSession, 
+    isInSession, 
+    currentPoll, 
+    pollResponses, 
+    checkSessionStatus, 
+    joinSession, 
+    openSession, 
+    listParticipants, 
+    leaveSession, 
+    endSession,
+    submitPollResponse,
+    getPollResults,
+    setCurrentPoll
+  };
 
 
 }, {

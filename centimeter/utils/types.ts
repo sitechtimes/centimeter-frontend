@@ -69,3 +69,23 @@ export interface Option{
   label: string
   color: string
 }
+
+export interface PollOption {
+  id: string;
+  text: string;
+  votes?: number;
+}
+
+export interface Poll {
+  id: string;
+  question: string;
+  type: string;
+  options: PollOption[];
+}
+
+export interface PollResponse {
+  participant_id: string;
+  poll_id: string;
+  option_id: string;
+  timestamp?: string;
+}
