@@ -1,4 +1,3 @@
-import type { Component } from 'vue'
 export interface User {
   id?: string;
   email?: string;
@@ -40,9 +39,12 @@ export interface ShowButtons {
 };
 
 export interface Presentation {
-  presentation_name: string
-  host: string
-  last_interacted: string
+  id: string;
+  title: string;
+  slides: Slide[];
+  host?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Slide {
@@ -56,7 +58,7 @@ export interface Slide {
 
 export interface SlideComponent {
   id: string;
-  type: 'text' | 'image' | 'shape' | 'video';
+  type: string,
   x: number;
   y: number;
   width: number;

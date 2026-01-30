@@ -1,6 +1,5 @@
 <template>
     <div class="h-screen flex items-start justify-center bg-[#efefef] p-6 pt-12 overflow-auto">
-        <!-- Empty state when no slide is selected -->
         <div v-if="!currentSlide" class="flex flex-col items-center justify-center h-full gap-6">
             <div class="text-center space-y-4">
                 <svg class="w-32 h-32 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,7 +12,6 @@
             </div>
         </div>
 
-        <!-- Canvas when slide is selected -->
         <div v-else class="flex flex-col items-center gap-4">
             <div
                 ref="canvasRef"
