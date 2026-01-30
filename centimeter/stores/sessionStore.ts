@@ -3,7 +3,7 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
   let data: ApiResponse | undefined = undefined;
   try {
     data = await res.json();
-  } catch (e){
+  } catch (e) {
     console.log(`Response is not JSON: ${e}`);
   }
   return { ok: res.ok, data };
@@ -12,161 +12,142 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 import { defineStore } from "pinia";
 import type { JoinSessionResponse, SessionStatus, Poll, PollResponse } from "../utils/types";
 
-export const useSessionStore = defineStore("sessionStore", () => {
-  const currentSession = ref<JoinSessionResponse | null>(null);
-  const isInSession = ref(false);
-  const currentPoll = ref<Poll | null>(null);
-  const pollResponses = ref<Record<string, number>>({});
+export const useSessionStore = defineStore(
+  "sessionStore",
+  () => {
+    const currentSession = ref<JoinSessionResponse | null>(null);
+    const isInSession = ref(false);
+    const currentPoll = ref<Poll | null>(null);
+    const pollResponses = ref<Record<string, number>>({});
 
-  async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
-    const { ok, data } = await apiCall<SessionStatus>(
-      import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`,
-      {
+    async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
+      const { ok, data } = await apiCall<SessionStatus>(import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
+      });
+      if (!ok) {
+        throw new Error("Session not found");
       }
-    );
-    if (!ok) {
-      throw new Error("Session not found");
+      return (data ?? null) as SessionStatus | null;
     }
-    return (data ?? null) as SessionStatus | null;
-  }
 
-  async function joinSession(join_code: string, nickname: string) {
-    const { ok, data } = await apiCall<JoinSessionResponse>(
-      import.meta.env.VITE_BACKEND_URL + "/session/join/",
-      {
+    async function joinSession(join_code: string, nickname: string) {
+      const { ok, data } = await apiCall<JoinSessionResponse>(import.meta.env.VITE_BACKEND_URL + "/session/join/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ join_code, nickname })
+      });
+      if (!ok) {
+        throw new Error("Failed to join session");
       }
-    );
-    if (!ok) {
-      throw new Error("Failed to join session");
+      currentSession.value = data ?? null;
+      isInSession.value = true;
+      return data;
     }
-    currentSession.value = data ?? null;
-    isInSession.value = true;
-    return data;
-  }
 
-  async function openSession(title: string) {
-    const userStore = useUserStore();
-    const token = userStore.user?.access
-    const { ok, data } = await apiCall<JoinSessionResponse>(
-      import.meta.env.VITE_BACKEND_URL + "/session/open/",
-      {
+    async function openSession(title: string) {
+      const userStore = useUserStore();
+      const token = userStore.user?.access;
+      const { ok, data } = await apiCall<JoinSessionResponse>(import.meta.env.VITE_BACKEND_URL + "/session/open/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : ''
+          Authorization: token ? `Bearer ${token}` : ""
         },
         body: JSON.stringify({ title })
+      });
+      if (!ok) {
+        throw new Error("Failed to open session");
       }
-    );
-    if (!ok) {
-      throw new Error("Failed to open session");
+      currentSession.value = data ?? null;
+      isInSession.value = true;
+      return data;
     }
-    currentSession.value = data ?? null;
-    isInSession.value = true;
-    return data;
-  }
-  
-  async function endSession(sessionCode: string) {
-    const userStore = useUserStore();
-    const token = userStore.user?.access;
-    
-    const { ok } = await apiCall(
-      import.meta.env.VITE_BACKEND_URL + `/session/${sessionCode}/close/`,
-      {
+
+    async function endSession(sessionCode: string) {
+      const userStore = useUserStore();
+      const token = userStore.user?.access;
+
+      const { ok } = await apiCall(import.meta.env.VITE_BACKEND_URL + `/session/${sessionCode}/close/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : ''
+          Authorization: token ? `Bearer ${token}` : ""
         }
+      });
+
+      if (!ok) {
+        throw new Error("Failed to end session");
       }
-    );
-    
-    if (!ok) {
-      throw new Error("Failed to end session");
+
+      currentSession.value = null;
+      isInSession.value = false;
     }
-    
-    currentSession.value = null;
-    isInSession.value = false;
-  }
-  async function listParticipants(code: string) {
-    const { ok, data } = await apiCall<any[]>(
-      import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`,
-      {
+    async function listParticipants(code: string) {
+      const { ok, data } = await apiCall<any[]>(import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
+      });
+      if (!ok) {
+        throw new Error("Failed to fetch participants");
       }
-    );
-    if (!ok) {
-      throw new Error("Failed to fetch participants");
+      return data ?? [];
     }
-    return data ?? [];
-  }
 
-  function leaveSession() {
-    currentSession.value = null;
-    isInSession.value = false;
-    currentPoll.value = null;
-    pollResponses.value = {};
-  }
+    function leaveSession() {
+      currentSession.value = null;
+      isInSession.value = false;
+      currentPoll.value = null;
+      pollResponses.value = {};
+    }
 
-  async function submitPollResponse(sessionCode: string, pollId: string, optionId: string) {
-    const { ok, data } = await apiCall<any>(
-      import.meta.env.VITE_BACKEND_URL + `/poll/${sessionCode}/submit/`,
-      {
+    async function submitPollResponse(sessionCode: string, pollId: string, optionId: string) {
+      const { ok, data } = await apiCall<any>(import.meta.env.VITE_BACKEND_URL + `/poll/${sessionCode}/submit/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ poll_id: pollId, option_id: optionId })
+      });
+      if (!ok) {
+        throw new Error("Failed to submit poll response");
       }
-    );
-    if (!ok) {
-      throw new Error("Failed to submit poll response");
+      return data;
     }
-    return data;
-  }
 
-  async function getPollResults(sessionCode: string, pollId: string) {
-    const { ok, data } = await apiCall<Record<string, number>>(
-      import.meta.env.VITE_BACKEND_URL + `/poll/${sessionCode}/${pollId}/results/`,
-      {
+    async function getPollResults(sessionCode: string, pollId: string) {
+      const { ok, data } = await apiCall<Record<string, number>>(import.meta.env.VITE_BACKEND_URL + `/poll/${sessionCode}/${pollId}/results/`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
+      });
+      if (!ok) {
+        throw new Error("Failed to fetch poll results");
       }
-    );
-    if (!ok) {
-      throw new Error("Failed to fetch poll results");
+      pollResponses.value = data ?? {};
+      return data ?? {};
     }
-    pollResponses.value = data ?? {};
-    return data ?? {};
+
+    function setCurrentPoll(poll: Poll | null) {
+      currentPoll.value = poll;
+    }
+
+    return {
+      currentSession,
+      isInSession,
+      currentPoll,
+      pollResponses,
+      checkSessionStatus,
+      joinSession,
+      openSession,
+      listParticipants,
+      leaveSession,
+      endSession,
+      submitPollResponse,
+      getPollResults,
+      setCurrentPoll
+    };
+  },
+  {
+    persist: {
+      storage: piniaPluginPersistedstate.localStorage()
+    }
   }
-
-  function setCurrentPoll(poll: Poll | null) {
-    currentPoll.value = poll;
-  }
-
-  return { 
-    currentSession, 
-    isInSession, 
-    currentPoll, 
-    pollResponses, 
-    checkSessionStatus, 
-    joinSession, 
-    openSession, 
-    listParticipants, 
-    leaveSession, 
-    endSession,
-    submitPollResponse,
-    getPollResults,
-    setCurrentPoll
-  };
-
-
-}, {
-  persist: {
-    storage: piniaPluginPersistedstate.localStorage(),
-  }
-});
+);

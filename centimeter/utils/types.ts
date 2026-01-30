@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { Component } from "vue";
 export interface User {
   id?: string;
   email?: string;
@@ -10,39 +10,39 @@ export interface NavButtons {
   name: string;
   path: string;
   dropdown?: { name: string; path: string }[];
-};
+}
 export interface ToastItem {
   id: string;
   title: string;
   message?: string;
   duration?: number;
-};
+}
 export interface ToastPayload {
   title: string;
   message?: string;
   duration?: number;
-};
+}
 
 export interface SlidesDropdown {
-    dropdown: string;
-    typeOfSlide: string;
+  dropdown: string;
+  typeOfSlide: string;
 }
 
 export interface MakePresentationSideBar {
-    name: string;
-    ownComponents: string[]
+  name: string;
+  ownComponents: string[];
 }
 
 export interface ShowButtons {
   name: string;
   path: string;
-  dropdown?: { name: string;}[];
-};
+  dropdown?: { name: string }[];
+}
 
 export interface Presentation {
-  presentation_name: string
-  host: string
-  last_interacted: string
+  presentation_name: string;
+  host: string;
+  last_interacted: string;
 }
 
 export interface Slide {
@@ -64,10 +64,10 @@ export interface SessionStatus {
   is_active: boolean;
   participant_count?: number;
 }
-export interface Option{
-  icon: Component
-  label: string
-  color: string
+export interface Option {
+  icon: Component;
+  label: string;
+  color: string;
 }
 
 export interface PollOption {
