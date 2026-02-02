@@ -60,7 +60,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import type { Slide } from '../../utils/types'
 import RightClickDropDown from './RightClickDropDown.vue'
 
-const slides = ref<Slide[]>([])
 const selectedSlide = ref<number | null>(null)
 
 const contextVisible = ref(false)
@@ -170,14 +169,12 @@ function updateSelectionAfterReorder(from: number, to: number) {
 function closeContext() {
   contextVisible.value = false
   contextIndex.value = undefined
-  slideOption.value = ""
 }
 
 function handleDelete(index?: number | null) {
   if (index == null) return closeContext()
   
   slides.value.splice(index, 1)
-  
   
   if (slides.value.length === 0) {
     selectedSlide.value = null
@@ -199,6 +196,7 @@ function addSlide(slideType: string) {
 
 function selectSlide(index: number) {
   selectedSlide.value = index
+  console.log(slides.value[index].type)
   emit('select-slide', index, slides.value[index])
 }
 

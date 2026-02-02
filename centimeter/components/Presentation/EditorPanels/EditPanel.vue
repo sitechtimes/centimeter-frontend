@@ -78,11 +78,17 @@
         </button>
       </div>
     </div>
+
+    <div v-if="multipleChoiceEditPanel" class="flex-1 overflow-y-auto p-6 space-y-8">
+      <MultipleChoiceEditPanel/>
+    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
 import type { Slide } from '../../../utils/types'
+import MultipleChoiceEditPanel from './MultipleChoiceEditPanel.vue';
 defineProps<{ selectedSlide?: Slide }>()
 </script>
