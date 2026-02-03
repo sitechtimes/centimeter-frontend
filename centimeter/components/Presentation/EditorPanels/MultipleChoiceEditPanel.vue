@@ -1,11 +1,11 @@
 <template>
     <div>
         <h1>Label</h1>
-        <input type="text">
+        <input id="labelText" type="text">
     </div>
 
     <div>
-        <h1>Additional Details</h1>
+        <h2>Additional Details</h2>
         <input type="text">
     </div>
 </template>
