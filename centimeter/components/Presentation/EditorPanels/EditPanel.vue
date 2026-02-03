@@ -1,6 +1,7 @@
 <template>
   <div class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
-    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+    <div v-if="!multipleChoiceEditPanel">
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Slide</h2>
       <button
         class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]"
@@ -8,9 +9,9 @@
       >
         <X class="w-6 h-6" />
       </button>
-    </div>
+      </div>
 
-    <div class="flex-1 overflow-y-auto p-6 space-y-8">
+      <div class="flex-1 overflow-y-auto p-6 space-y-8">
       <div class="space-y-3">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Question type</h3>
         <div class="relative">
@@ -77,10 +78,23 @@
           Reset to theme defaults
         </button>
       </div>
+      </div>
+
     </div>
 
     <div v-if="multipleChoiceEditPanel" class="flex-1 overflow-y-auto p-6 space-y-8">
+
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <h2 class="text-lg font-semibold text-[var(--text-color)]">Question</h2>
+      <button
+        class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]"
+        @click="$emit('close')"
+      >
+        <X class="w-6 h-6" />
+      </button>
+    </div>
       <MultipleChoiceEditPanel/>
+
     </div>
 
   </div>
@@ -88,7 +102,6 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import type { Slide } from '../../../utils/types'
 import MultipleChoiceEditPanel from './MultipleChoiceEditPanel.vue';
 defineProps<{ selectedSlide?: Slide }>()
 </script>

@@ -50,6 +50,7 @@ export interface Slide {
   id?: string;
   title?: string;
   type?: string;
+  on_slide?: boolean;
 }
 
 export interface Option {
@@ -71,8 +72,5 @@ export interface SessionStatus {
   is_active: boolean;
   participant_count?: number;
 }
-export interface Option{
-  icon: Component
-  label: string
-  color: string
-}
+
+

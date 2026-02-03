@@ -57,7 +57,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import type { Slide } from '../../utils/types'
 import RightClickDropDown from './RightClickDropDown.vue'
 
 const selectedSlide = ref<number | null>(null)
@@ -189,14 +188,14 @@ function handleDelete(index?: number | null) {
 }
 
 function addSlide(slideType: string) {
-  slides.value.push({ type: slideType })
+  slides.value.push({ type: slideType, on_slide: true })
   selectedSlide.value = slides.value.length - 1
   emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
 }
 
 function selectSlide(index: number) {
   selectedSlide.value = index
-  console.log(slides.value[index].type)
+  console.log(...slides.value)
   emit('select-slide', index, slides.value[index])
 }
 
