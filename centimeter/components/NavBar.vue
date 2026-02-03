@@ -3,7 +3,7 @@
     <header class="transition duration-500 bg-[color:var(--bg-color)] text-[color:var(--text-color)] h-16 w-screen">
       <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] relative z-20">
         <NuxtLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
-          <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
+          <img class="h-16" src="/logo/logo.png" alt="Logo" /> Mentimeter
         </NuxtLink>
         <nav class="flex items-center justify-center gap-3">
           <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
