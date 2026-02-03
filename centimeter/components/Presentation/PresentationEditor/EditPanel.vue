@@ -94,7 +94,6 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
-import type { Slide } from '../../utils/types'
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
   close: []

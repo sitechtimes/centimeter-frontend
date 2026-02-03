@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { Edit, MessageSquare, Heart, Paintbrush, LayoutTemplate } from 'lucide-vue-next'
 
 const menuItems = [

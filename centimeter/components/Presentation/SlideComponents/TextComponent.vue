@@ -17,9 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
-import type { SlideComponent } from '../../../utils/types'
-
 const props = defineProps<{
     component: SlideComponent
     isSelected: boolean

@@ -36,9 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import type { SlideComponent, Slide } from '../../utils/types'
-import TextComponent from './SlideComponents/TextComponent.vue'
+import TextComponent from '../SlideComponents/TextComponent.vue'
 
 const props = defineProps<{ currentSlide?: Slide }>()
 

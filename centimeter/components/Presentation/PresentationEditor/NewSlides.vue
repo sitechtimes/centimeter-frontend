@@ -37,10 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import ContentSlides from './SlideTypes/ContentSlides.vue'
-import QuizCompletions from './SlideTypes/QuizCompletions.vue'
-import InteractiveOptions from './SlideTypes/InteractiveOptions.vue'
+import ContentSlides from '../SlideTypes/ContentSlides.vue'
+import QuizCompletions from '../SlideTypes/QuizCompletions.vue'
+import InteractiveOptions from '../SlideTypes/InteractiveOptions.vue'
 import {
   HelpCircle,
   X,
