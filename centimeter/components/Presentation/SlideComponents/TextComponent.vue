@@ -9,9 +9,9 @@
             @mousedown="startDrag" @dblclick="startEdit" />
         
         <div v-if="isSelected" class="absolute inset-0 pointer-events-none">
-            <div v-for="h in ['nw', 'ne', 'sw', 'se']" :key="h" :class="HANDLE_MAP[h]" :style="{ cursor: `${h}-resize` }"
+            <div v-for="(classes, direction) in HANDLE_MAP" :class="classes" :style="{ cursor: `${direction}-resize` }"
                 class="absolute w-3 h-3 bg-blue-500 border-2 border-white rounded-full pointer-events-auto hover:scale-125 transition-transform z-20"
-                @mousedown.stop="startResize($event, h)" />
+                @mousedown.stop="startResize($event, direction)" />
         </div>
     </div>
 </template>
