@@ -97,6 +97,6 @@ import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
   close: []
-  'add-component': [type: 'text' | 'image' | 'shape'] 
+  'add-component': [type: string]
 }>()
 </script>

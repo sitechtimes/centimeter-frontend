@@ -71,7 +71,7 @@ const deleteSelected = () => {
     selectedId.value = null
 }
 
-const addComponent = (type: 'text' | 'image' | 'shape') => {
+const addComponent = (type: string) => {
     const offset = componentCounter.value[type] * 1
     const newComponent: SlideComponent = {
         id: `${type}-${Date.now()}`, type,

@@ -67,7 +67,7 @@ function handleSlideSelect(slideIndex: number, slide: Slide) {
   showEditPanel.value = true
 }
 
-function handleAddComponent(type: 'text' | 'image' | 'shape') {
+function handleAddComponent(type: string) {
   canvasRef.value?.addComponent(type)
 }
 </script>
