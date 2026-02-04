@@ -43,13 +43,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import NavBar from '@/components/Presentation/PresentationEditor/CreatePresentationNavBar.vue'
 import SideBar from '@/components/Presentation/PresentationEditor/SideBar.vue'
 import EditorBar from '@/components/Presentation/PresentationEditor/EditorBar.vue'
 import PresentationCanvas from '@/components/Presentation/PresentationEditor/PresentationCanvas.vue'
 import EditPanel from '@/components/Presentation/PresentationEditor/EditPanel.vue'
-import type { Slide } from '@/utils/types'
 
 const canvasRef = ref<InstanceType<typeof PresentationCanvas>>()
 const showEditPanel = ref(false)
