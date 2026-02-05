@@ -81,6 +81,7 @@ function onContextMenu(index: number, event: MouseEvent) {
   contextY.value = event.clientY
   contextVisible.value = true
   selectSlide(index)
+  
 }
 
 function onDragStart(index: number, event: DragEvent) {
@@ -195,7 +196,11 @@ function addSlide(slideType: string) {
 
 function selectSlide(index: number) {
   selectedSlide.value = index
-  console.log(...slides.value)
+  slides.value.forEach((slide) =>{
+    slide.on_slide = false
+  })
+  console.log(slides)
+  slides.value[index].on_slide = true
   emit('select-slide', index, slides.value[index])
 }
 

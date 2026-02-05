@@ -56,7 +56,6 @@ const isPlus = ref(false)
 
 function toggleIcon() { 
   isPlus.value = !isPlus.value
-  console.log('Icon toggled')
 }
 
 const emits = defineEmits<{
