@@ -12,6 +12,17 @@
 
     <div class="flex-1 overflow-y-auto p-6 space-y-8">
       <div class="space-y-3">
+        <h3 class="text-sm font-semibold text-[var(--text-color)]">Add Elements</h3>
+        <button
+          @click="$emit('add-component', 'text')"
+          class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--primary)] hover:bg-[var(--primary-shade)] text-white rounded-lg transition-colors"
+        >
+          <Type class="w-5 h-5" />
+          <span class="text-sm font-medium">Add Text</span>
+        </button>
+      </div>
+
+      <div class="space-y-3">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Question type</h3>
         <div class="relative">
           <button
@@ -82,7 +93,10 @@
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import type { Slide } from '../../../utils/types'
+import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
 defineProps<{ selectedSlide?: Slide }>()
+defineEmits<{ 
+  close: []
+  'add-component': [type: string]
+}>()
 </script>

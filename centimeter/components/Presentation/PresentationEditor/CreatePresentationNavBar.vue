@@ -80,11 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Component } from 'vue'
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucide-vue-next'
-import { useSessionStore } from '~/stores/sessionStore'
-import { useRouter } from 'vue-router'
 
 const sessionStore = useSessionStore()
 const router = useRouter()

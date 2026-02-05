@@ -56,8 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import type { Slide } from '../../utils/types'
+import type { Slide } from '@/utils/types'
 import RightClickDropDown from './RightClickDropDown.vue'
 
 const slides = ref<Slide[]>([])
