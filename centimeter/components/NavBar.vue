@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col items-center justify-center sticky top-0">
-    <header class="transition duration-500 bg-[color:var(--bg-color)] h-16 w-screen">
-      <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] relative z-20">
+    <header class="transition duration-500 bg-[color:var(--bg-color)] text-[color:var(--text-color)] h-16 w-screen">
+      <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] relative z-20">
         <NuxtLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
-          <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
+          <img class="h-16" src="/logo/logo.png" alt="Logo" /> Mentimeter
         </NuxtLink>
         <nav class="flex items-center justify-center gap-3">
           <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
@@ -21,9 +21,9 @@
             </div>
           </div>
         </nav>
-        <div class="logins flex items-center justify-center gap-3">
+        <div class="logins flex items-center justify-center gap-3 text-[color:var(--text-color)]">
           <ThemeToggle />
-          <NuxtLink class="no-underline" to="/auth/login" v-if="!userStore.isAuth"><h3 class="font-bold m-0">Log in</h3></NuxtLink>
+          <NuxtLink class="no-underline" to="/auth/login" v-if="!userStore.isAuth"><h3 class="font-bold m-0 text-[color:var(--text-color)]">Log in</h3></NuxtLink>
           <NuxtLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/auth/signup" v-if="!userStore.isAuth"
             ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3></NuxtLink
           >
@@ -34,8 +34,8 @@
       </div>
 
       <Transition name="goToJoin">
-        <div class="w-screen flex items-center justify-center gap-3 bg-[color:var(--primary-light)] rounded-b-3xl py-3 relative bottom-0 z-10" v-show="showJoinBanner">
-          <p class="text-lg font-medium">Trying to join a live Vent?</p>
+        <div class="w-screen flex items-center justify-center gap-3 bg-[color:var(--primary-light)] text-[color:var(--text-color)] rounded-b-3xl py-3 relative bottom-0 z-10" v-show="showJoinBanner">
+          <p class="text-lg font-medium text-[color:var(--text-color)]">Trying to join a live Vent?</p>
           <NuxtLink to="/join" class="flex items-center justify-center gap-1 rounded-full bg-[color:var(--bg-color)] text-[color:var(--text-color)] font-semibold px-4 py-2"
             >Join <img class="w-5 h-5 dark:invert" src="/ui/rightArrow.svg" aria-hidden="true"
           /></NuxtLink>

@@ -93,7 +93,12 @@
 </template>
 
 <script setup lang="ts">
+<<<<<<<< HEAD:centimeter/components/Presentation/PresentationEditor/EditPanel.vue
 import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
+========
+import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
+import type { Slide } from '../../../utils/types'
+>>>>>>>> main:centimeter/components/Presentation/EditorPanels/EditPanel.vue
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
   close: []

@@ -1,6 +1,11 @@
 <template>
   <div class="relative inline-block">
-    <div @click="toggleIcon" tabindex="0" role="button" class="btn m-3 rounded-4xl bg-gray-700">
+    <div
+      @click="toggleIcon"
+      tabindex="0"
+      role="button"
+      class="m-3 inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--primary)] text-white shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+    >
       <Plus v-if="isPlus" key="'plus'" :size="20" />
       <X v-else key="'x'" :size="20" />
       <h2>New Slide</h2>

@@ -47,7 +47,7 @@ import NavBar from '@/components/Presentation/PresentationEditor/CreatePresentat
 import SideBar from '@/components/Presentation/PresentationEditor/SideBar.vue'
 import EditorBar from '@/components/Presentation/PresentationEditor/EditorBar.vue'
 import PresentationCanvas from '@/components/Presentation/PresentationEditor/PresentationCanvas.vue'
-import EditPanel from '@/components/Presentation/PresentationEditor/EditPanel.vue'
+import EditPanel from '@/components/Presentation/EditorPanels/EditPanel.vue'
 
 const canvasRef = ref<InstanceType<typeof PresentationCanvas>>()
 const showEditPanel = ref(false)

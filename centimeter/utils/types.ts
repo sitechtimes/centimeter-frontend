@@ -49,7 +49,6 @@ export interface Presentation {
 
 export interface Slide {
   id?: string;
-  type: string;
   title?: string;
   components?: SlideComponent[];
   backgroundColor?: string;
@@ -87,4 +86,9 @@ export interface SessionStatus {
   status: string;
   is_active: boolean;
   participant_count?: number;
+}
+export interface Option{
+  icon: Component
+  label: string
+  color: string
 }
