@@ -15,7 +15,7 @@
 const yourQuestion = ref("Ask your question here...")
 
 const openMultipleChoiceEditPanel = () =>{
-    multipleChoiceEditPanel.value = !multipleChoiceEditPanel.value
+    multipleChoiceEditPanel.value = true
     yourQuestion.value = ""
 }
 

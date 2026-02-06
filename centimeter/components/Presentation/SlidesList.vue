@@ -199,7 +199,8 @@ function selectSlide(index: number) {
   slides.value.forEach((slide) =>{
     slide.on_slide = false
   })
-  console.log(slides)
+  console.log(slides.value)
+  console.log(slides.value[index].type)
   slides.value[index].on_slide = true
   emit('select-slide', index, slides.value[index])
 }
