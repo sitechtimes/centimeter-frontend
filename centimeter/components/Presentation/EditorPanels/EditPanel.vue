@@ -31,7 +31,7 @@
           >
             <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
             <span class="text-sm font-medium text-[var(--faded-text-color)]"> 
-              {{ selectedSlide?.type ?? 'Multiple Choice' }}
+              {{ selectedSlide?.title ?? 'Multiple Choice' }}
             </span> 
             <span class="ml-auto">
               <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import type { Slide } from '../../../utils/types'
+import type { Slide } from '~/utils/types'
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
   close: []

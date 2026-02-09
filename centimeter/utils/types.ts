@@ -55,6 +55,7 @@ export interface Slide {
   components?: SlideComponent[];
   backgroundColor?: string;
   backgroundImage?: string;
+  on_slide:boolean
 }
 
 export interface SlideComponent {

@@ -4,8 +4,8 @@ export const multipleChoiceEditPanel = ref(false)
 
 export const openSlide = () => {
     slides.value.forEach((slide) => {
-        if (slide.on_slide = true) {
+        if (slide.on_slide) {
             return slide.type
-        }
+        } else return ""
     });
 }
