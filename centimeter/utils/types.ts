@@ -41,15 +41,39 @@ export interface ShowButtons {
 };
 
 export interface Presentation {
-  presentation_name: string
-  host: string
-  last_interacted: string
+  id: string;
+  title: string;
+  slides: Slide[];
+  host?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Slide {
   id?: string;
   title?: string;
-  type?: string;
+  components?: SlideComponent[];
+  backgroundColor?: string;
+  backgroundImage?: string;
+}
+
+export interface SlideComponent {
+  id: string;
+  type: string,
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  content?: string;
+  src?: string;
+  fontSize?: number;
+  color?: string;
+  backgroundColor?: string;
+  textAlign?: 'left' | 'center' | 'right';
+  fontWeight?: 'normal' | 'bold';
+  fontStyle?: 'normal' | 'italic';
+  rotation?: number; 
+  zIndex?: number;
   on_slide?: boolean;
 }
 

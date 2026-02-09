@@ -57,6 +57,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import type { Slide } from '@/utils/types'
 import RightClickDropDown from './RightClickDropDown.vue'
 
 const selectedSlide = ref<number | null>(null)
