@@ -13,16 +13,17 @@
     <div class="flex-1 overflow-y-auto p-6 space-y-8">
       <div class="space-y-3">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Add Elements</h3>
-        <button
-          @click="$emit('add-component', 'text')"
+        <button v-for="element in elements" :key="element.type"
+          @click="$emit('add-component', '' + element.type)"
           class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--primary)] hover:bg-[var(--primary-shade)] text-white rounded-lg transition-colors"
         >
-          <Type class="w-5 h-5" />
-          <span class="text-sm font-medium">Add Text</span>
+          <component :is="element.icon" class="w-5 h-5" />
+          <span class="text-sm font-medium">Add {{element.label}}</span>
         </button>
       </div>
 
-      <div class="space-y-3">
+      <div class="space-y-3"
+      @click="$emit('slide-type-dropdown')">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Question type</h3>
         <div class="relative">
           <button
@@ -30,7 +31,7 @@
           >
             <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
             <span class="text-sm font-medium text-[var(--faded-text-color)]"> 
-              {{ selectedSlide?.type ?? 'Multiple Choice' }}
+              {{ selectedSlide?.type}}
             </span> 
             <span class="ml-auto">
               <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
@@ -93,10 +94,18 @@
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
+import { BookPlus, X, ArrowDown, Plus, Type, Images, Shapes, Video } from 'lucide-vue-next'
+
+const elements = [
+  { type: 'text', label: 'Text', icon: Type },
+  { type: 'image', label: 'Image', icon: Images },
+  { type: 'shape', label: 'Shape', icon: Shapes },
+  { type: 'video', label: 'Video', icon: Video },
+]
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
   close: []
   'add-component': [type: string]
+  'slide-type-dropdown': []
 }>()
 </script>

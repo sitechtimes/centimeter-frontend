@@ -50,6 +50,7 @@ export interface Presentation {
 export interface Slide {
   id?: string;
   title?: string;
+  type?: string;
   components?: SlideComponent[];
   backgroundColor?: string;
   backgroundImage?: string;
