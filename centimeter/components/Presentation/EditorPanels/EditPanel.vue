@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import type { Slide } from '~/utils/types'
+import MultipleChoiceEditPanel from './MultipleChoiceEditPanel.vue';
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
   close: []

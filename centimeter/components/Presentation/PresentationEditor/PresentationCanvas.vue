@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div v-else class="flex flex-col items-center gap-4">
+        <!-- <div v-else class="flex flex-col items-center gap-4">
             <div ref="canvasRef" role="region" aria-label="Presentation canvas" :style="canvasStyle"
                 class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)]"
                 tabindex="0" @click="selectedId = null" @keydown.delete="deleteSelected" @keydown.escape="selectedId = null">
@@ -31,12 +31,17 @@
             >
                 Console slide properties
             </button>
+        </div> -->
+
+        <div v-else>
+            <MultipleChoiceSlides/>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import TextComponent from '../SlideComponents/TextComponent.vue'
+import MultipleChoiceSlides from '../SlidesOptions/MultipleChoiceSlides.vue';
 
 const props = defineProps<{ currentSlide?: Slide }>()
 

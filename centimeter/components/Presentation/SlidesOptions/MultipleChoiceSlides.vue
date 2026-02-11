@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex items-start justify-center bg-[#efefef] p-6 pt-12">
+    <div class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)]">
         <div
             role="region"
             aria-label="Presentation canvas"

@@ -55,12 +55,13 @@ export interface Slide {
   components?: SlideComponent[];
   backgroundColor?: string;
   backgroundImage?: string;
-  on_slide:boolean
+  on_slide:boolean;
+  type: string;
 }
 
 export interface SlideComponent {
   id: string;
-  type: string,
+  type: string;
   x: number;
   y: number;
   width: number;
@@ -75,7 +76,6 @@ export interface SlideComponent {
   fontStyle?: 'normal' | 'italic';
   rotation?: number; 
   zIndex?: number;
-  on_slide?: boolean;
 }
 
 export interface Option {
