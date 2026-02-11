@@ -37,11 +37,17 @@
 
 <script setup lang="ts">
 import TextComponent from '../SlideComponents/TextComponent.vue'
+import ImageComponent from '../SlideComponents/ImageComponent.vue'
+import ShapeComponent from '../SlideComponents/ShapeComponent.vue'
 
 const props = defineProps<{ currentSlide?: Slide }>()
 
 const CANVAS_WIDTH = 1200, CANVAS_HEIGHT = 800
-const COMPONENT_MAP: Record<string, typeof TextComponent> = { text: TextComponent }
+const COMPONENT_MAP: Record<string, Component> = {
+    text: TextComponent,
+    image: ImageComponent,
+    shape: ShapeComponent
+}
 
 const canvasRef = ref<HTMLDivElement>()
 const components = ref<SlideComponent[]>([])
@@ -73,16 +79,31 @@ const deleteSelected = () => {
 
 const addComponent = (type: string) => {
     const offset = componentCounter.value[type] * 1
-    const newComponent: SlideComponent = {
+    const base: SlideComponent = {
         id: `${type}-${Date.now()}`, type,
         x: Math.min(10 + offset, 70), y: Math.min(10 + offset, 70),
         width: 30, height: 10,
-        content: 'Double click to edit',
-        fontSize: 24, color: '#000', textAlign: 'left',
         zIndex: components.value.length + 1
     }
-    components.value.push(newComponent)
-    selectedId.value = newComponent.id
+
+    if (type === 'text') {
+        base.content = 'Double click to edit'
+        base.fontSize = 24
+        base.color = '#000'
+        base.textAlign = 'left'
+    } else if (type === 'image') {
+        base.width = 25
+        base.height = 25
+        base.src = ''
+    } else if (type === 'shape') {
+        base.width = 15
+        base.height = 15
+        base.content = 'rectangle'
+        base.backgroundColor = '#4F46E5'
+    }
+
+    components.value.push(base)
+    selectedId.value = base.id
     componentCounter.value[type] = (componentCounter.value[type] + 1) % 21
 }
 

@@ -94,13 +94,12 @@
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus, Type, Images, Shapes, Video } from 'lucide-vue-next'
-
+import { BookPlus, X, ArrowDown, Plus, Type, Images, Shapes } from 'lucide-vue-next'
+  
 const elements = [
   { type: 'text', label: 'Text', icon: Type },
   { type: 'image', label: 'Image', icon: Images },
   { type: 'shape', label: 'Shape', icon: Shapes },
-  { type: 'video', label: 'Video', icon: Video },
 ]
 defineProps<{ selectedSlide?: Slide }>()
 defineEmits<{ 
