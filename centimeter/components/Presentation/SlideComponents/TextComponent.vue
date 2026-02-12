@@ -1,9 +1,16 @@
 <template>
-    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="emit('select')">
-        <div ref="textRef" contenteditable :style="textStyle" class="absolute inset-0 p-2 outline-none cursor-text" 
+    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected, 'ring-2 ring-purple-400 ring-opacity-60': isHighlighted && !isSelected }]" @click.stop="emit('select')">
+        <div 
+            ref="textRef" 
+            contenteditable 
+            :style="textStyle" 
+            class="absolute inset-0 p-2 outline-none cursor-text" 
             @focus="isEditing = true" 
             @blur="isEditing = false; emit('update', ($event.target as HTMLElement).textContent || '')"
-            @keydown.delete.stop @keydown.backspace.stop v-text="component.content" />
+            @keydown.delete.stop 
+            @keydown.backspace.stop 
+            v-text="component.content" 
+        />
         
         <div v-show="!isEditing" :class="['absolute inset-0 cursor-move z-10', { 'bg-blue-50 bg-opacity-10': isSelected }]" 
             @mousedown="startDrag" @dblclick="startEdit" />
@@ -17,19 +24,28 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, watch, nextTick } from 'vue'
+import type { SlideComponent } from '@/utils/types'
+
 const props = defineProps<{
     component: SlideComponent
     isSelected: boolean
+    isHighlighted?: boolean
     canvasWidth: number
     canvasHeight: number
 }>()
 
 const emit = defineEmits<{
-    select: [], update: [content: string], move: [dx: number, dy: number], resize: [width: number, height: number]
+    select: [], 
+    update: [content: string], 
+    move: [dx: number, dy: number], 
+    resize: [width: number, height: number],
+    'update-property': [key: string, value: any]
 }>()
 
 const HANDLE_MAP: Record<string, string> = {
     nw: 'top-0 left-0 -translate-x-1/2 -translate-y-1/2',
+    n: 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2',
     ne: 'top-0 right-0 translate-x-1/2 -translate-y-1/2',
     sw: 'bottom-0 left-0 -translate-x-1/2 translate-y-1/2',
     se: 'bottom-0 right-0 translate-x-1/2 translate-y-1/2'
@@ -39,18 +55,27 @@ const textRef = ref<HTMLDivElement>()
 const isEditing = ref(false)
 
 const componentStyle = computed(() => ({
-    left: `${props.component.x}%`, top: `${props.component.y}%`,
-    width: `${props.component.width}%`, height: `${props.component.height}%`,
+    left: `${props.component.x}%`, 
+    top: `${props.component.y}%`,
+    width: `${props.component.width}%`, 
+    height: `${props.component.height}%`,
     zIndex: props.component.zIndex
 }))
 
 const textStyle = computed(() => ({
     fontSize: `${props.component.fontSize}px`,
     color: props.component.color,
-    textAlign: props.component.textAlign
+    backgroundColor: props.component.backgroundColor,
+    textAlign: props.component.textAlign,
+    fontWeight: props.component.fontWeight,
+    fontStyle: props.component.fontStyle
 }))
 
-watch(() => props.isSelected, (sel) => !sel && (isEditing.value = false))
+watch(() => props.isSelected, (sel) => {
+    if (!sel) {
+        isEditing.value = false
+    }
+})
 
 const startEdit = () => {
     isEditing.value = true
