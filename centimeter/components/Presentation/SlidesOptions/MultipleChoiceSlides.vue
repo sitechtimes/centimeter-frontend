@@ -6,6 +6,13 @@
             class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden"
         >
     <input id="MultipleChoiceQuestion" type="text" @click="openMultipleChoiceEditPanel" v-model="yourQuestion">
+    <div> 
+        <div v-for="choice in placeHolderOptions">
+            <ol>{{ choice.amount_chosen }} {{ choice.option }}</ol>
+        </div>
+
+        <button @click="addOption">add option</button>
+    </div>
     </div>
         
     </div>
@@ -14,9 +21,41 @@
 <script setup lang="ts">
 const yourQuestion = ref("Ask your question here...")
 
+
 const openMultipleChoiceEditPanel = () =>{
     multipleChoiceEditPanel.value = true
     yourQuestion.value = ""
+}
+
+const placeHolderOptions = ref<MultipleChoiceOption[]>([
+    {
+        color: "blue" /* supposed to be rgb */,
+        option: "option 1",
+        amount_chosen: 0   
+    },
+    {
+        color: "orange" /* supposed to be rgb */,
+        option: "option 2",
+        amount_chosen: 0   
+    },
+    {
+        color: "black" /* supposed to be rgb */,
+        option: "option 3",
+        amount_chosen: 0   
+    }
+])
+
+const defaultOptionName = computed(()=>(
+    {
+        color: "black",
+        option: "option " + (placeHolderOptions.value.length + 1),
+        amount_chosen: 0,
+    }
+)
+)
+
+const addOption = () =>{
+    placeHolderOptions.value.push(defaultOptionName.value)
 }
 
 </script>

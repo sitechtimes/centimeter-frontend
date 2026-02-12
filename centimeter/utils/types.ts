@@ -98,4 +98,10 @@ export interface SessionStatus {
   participant_count?: number;
 }
 
+export interface MultipleChoiceOption {
+  image?: string;
+  color: string;
+  option: string;
+  amount_chosen: number;
+}
 
