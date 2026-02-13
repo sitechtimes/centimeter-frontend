@@ -1,18 +1,18 @@
 <template>
-    <div class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)]">
+    <div class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)] hover:border-slate-800 transition-colors duration-200">
         <div
             role="region"
             aria-label="Presentation canvas"
-            class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden"
+            class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden p-10"
         >
-    <input id="MultipleChoiceQuestion" type="text" @click="openMultipleChoiceEditPanel" v-model="yourQuestion">
-    <div> 
-        <div v-for="choice in placeHolderOptions">
-            <ol>{{ choice.amount_chosen }} {{ choice.option }}</ol>
-        </div>
+            <input id="MultipleChoiceQuestion" type="text" @click="openMultipleChoiceEditPanel" v-model="yourQuestion" class="h-[15%]">
+        <div class="flex flex-wrap gap-4 h-[60%] p-10 border-2 border-transparent hover:border-slate-800 transition-colors duration-200"> 
+            <div v-for="choice in placeHolderOptions">
+                <ol>{{ choice.amount_chosen }} {{ choice.option }}</ol>
+            </div>
 
-        <button @click="addOption">add option</button>
-    </div>
+            <button @click="addOption">add option</button>
+        </div>
     </div>
         
     </div>
