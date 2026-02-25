@@ -48,14 +48,17 @@
           </p>
         </div>
         <div
-          class="border-2 border-dashed border-[var(--faded-bg-color-dark)] rounded-lg p-8 text-center hover:border-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-light)] transition-colors cursor-pointer"
-        >
+          :class="['border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer',
+            isDragging ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-[var(--faded-bg-color-dark)] hover:border-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-light)]']"
+          @click="openFilePicker" @dragover.prevent @dragenter.prevent="isDragging = true" @dragleave="isDragging = false" @drop="dropHandler">
           <p class="text-sm text-[var(--faded-text-color)]">
             Drag and drop or
-            <button class="text-[var(--primary)] hover:text-[var(--primary-shade)] font-medium">
+            <button class="text-[var(--primary)] hover:text-[var(--primary-shade)] font-medium"
+            @click="openFilePicker">
               Click to add image
             </button>
           </p>
+          <input ref="fileInput" type="file" accept="image/png,image/gif,image/jpeg,image/jpg,image/svg+xml" class="hidden" @change="onFileSelected" />
         </div>
       </div>
 
@@ -98,13 +101,39 @@ import { BookPlus, X, ArrowDown, Plus, Type, Images, Shapes } from 'lucide-vue-n
   
 const elements = [
   { type: 'text', label: 'Text', icon: Type },
-  { type: 'image', label: 'Image', icon: Images },
   { type: 'shape', label: 'Shape', icon: Shapes },
 ]
 defineProps<{ selectedSlide?: Slide }>()
-defineEmits<{ 
+const emit = defineEmits<{ 
   close: []
-  'add-component': [type: string]
+  'add-component': [type: string, src?: string]
   'slide-type-dropdown': []
 }>()
+
+const fileInput = ref<HTMLInputElement>()
+const isDragging = ref(false)
+
+const openFilePicker = () => fileInput.value?.click()
+
+const onFileSelected = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => emit('add-component', 'image', reader.result as string)
+  reader.readAsDataURL(file)
+  ;(e.target as HTMLInputElement).value = ''
+}
+
+const isImageFile = (file: File) =>
+  ['image/png', 'image/gif', 'image/jpeg', 'image/jpg', 'image/svg+xml'].includes(file.type)
+
+const dropHandler = (e: DragEvent) => {
+  e.preventDefault()
+  isDragging.value = false
+  const file = e.dataTransfer?.files?.[0]
+  if (!file || !isImageFile(file)) return
+  const reader = new FileReader()
+  reader.onload = () => emit('add-component', 'image', reader.result as string)
+  reader.readAsDataURL(file)
+}
 </script>

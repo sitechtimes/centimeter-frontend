@@ -14,8 +14,10 @@
 
         <div v-else class="flex flex-col items-center gap-4">
             <div ref="canvasRef" role="region" aria-label="Presentation canvas" :style="canvasStyle"
-                class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)]"
-                tabindex="0" @click="selectedId = null" @keydown.delete="deleteSelected" @keydown.escape="selectedId = null">
+                :class="['relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border transition-colors',
+                    isCanvasDragging ? 'border-[var(--primary)] border-2' : 'border-[var(--faded-bg-color)]']"
+                tabindex="0" @click="selectedId = null" @keydown.delete="deleteSelected" @keydown.escape="selectedId = null"
+                @dragover.prevent @dragenter.prevent="isCanvasDragging = true" @dragleave="isCanvasDragging = false" @drop="onCanvasDrop">
                 <component 
                     v-for="comp in components" :key="comp.id"
                     :is="COMPONENT_MAP[comp.type]"
@@ -37,22 +39,23 @@
 
 <script setup lang="ts">
 import TextComponent from '../SlideComponents/TextComponent.vue'
-import ImageComponent from '../SlideComponents/ImageComponent.vue'
 import ShapeComponent from '../SlideComponents/ShapeComponent.vue'
+import ImageComponent from '../SlideComponents/ImageComponent.vue'
 
 const props = defineProps<{ currentSlide?: Slide }>()
 
 const CANVAS_WIDTH = 1200, CANVAS_HEIGHT = 800
 const COMPONENT_MAP: Record<string, Component> = {
     text: TextComponent,
-    image: ImageComponent,
-    shape: ShapeComponent
+    shape: ShapeComponent,
+    image: ImageComponent
 }
 
 const canvasRef = ref<HTMLDivElement>()
 const components = ref<SlideComponent[]>([])
 const selectedId = ref<string | null>(null)
 const componentCounter = ref<Record<string, number>>({ text: 0, image: 0, shape: 0 })
+const isCanvasDragging = ref(false)
 
 const canvasStyle = computed(() => ({ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }))
 
@@ -77,7 +80,7 @@ const deleteSelected = () => {
     selectedId.value = null
 }
 
-const addComponent = (type: string) => {
+const addComponent = (type: string, src?: string) => {
     const offset = componentCounter.value[type] * 1
     const base: SlideComponent = {
         id: `${type}-${Date.now()}`, type,
@@ -94,7 +97,7 @@ const addComponent = (type: string) => {
     } else if (type === 'image') {
         base.width = 25
         base.height = 25
-        base.src = ''
+        base.src = src || ''
     } else if (type === 'shape') {
         base.width = 15
         base.height = 15
@@ -105,6 +108,19 @@ const addComponent = (type: string) => {
     components.value.push(base)
     selectedId.value = base.id
     componentCounter.value[type] = (componentCounter.value[type] + 1) % 21
+}
+
+const isImageFile = (file: File) =>
+    ['image/png', 'image/gif', 'image/jpeg', 'image/jpg', 'image/svg+xml'].includes(file.type)
+
+const onCanvasDrop = (e: DragEvent) => {
+    e.preventDefault()
+    isCanvasDragging.value = false
+    const file = e.dataTransfer?.files?.[0]
+    if (!file || !isImageFile(file)) return
+    const reader = new FileReader()
+    reader.onload = () => addComponent('image', reader.result as string)
+    reader.readAsDataURL(file)
 }
 
 defineExpose({ addComponent })

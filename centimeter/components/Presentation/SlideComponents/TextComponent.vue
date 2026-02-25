@@ -1,6 +1,6 @@
 <template>
-    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="emit('select')">
-        <div ref="textRef" contenteditable :style="textStyle" class="absolute inset-0 p-2 outline-none cursor-text" 
+    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" style="container-type: inline-size" @click.stop="emit('select')">
+        <div ref="textRef" contenteditable :style="textStyle" class="absolute inset-0 p-[1cqi] outline-none cursor-text" 
             @focus="isEditing = true" 
             @blur="isEditing = false; emit('update', ($event.target as HTMLElement).textContent || '')"
             @keydown.delete.stop @keydown.backspace.stop v-text="component.content" />
@@ -44,8 +44,10 @@ const componentStyle = computed(() => ({
     zIndex: props.component.zIndex
 }))
 
+const baseFontCqi = computed(() => (props.component.fontSize / 16) * 5)
+
 const textStyle = computed(() => ({
-    fontSize: `${props.component.fontSize}px`,
+    fontSize: `clamp(0.5rem, ${baseFontCqi.value}cqi, ${props.component.fontSize}px)`,
     color: props.component.color,
     textAlign: props.component.textAlign
 }))
@@ -81,29 +83,29 @@ const startDrag = (e: MouseEvent) => {
     document.addEventListener('mouseup', onUp)
 }
 
-const startResize = (e: MouseEvent, handle: string) => {
-    e.preventDefault()
-    const startX = e.clientX, startY = e.clientY, init = { ...props.component }
+// const startResize = (e: MouseEvent, handle: string) => {
+//     e.preventDefault()
+//     const startX = e.clientX, startY = e.clientY, init = { ...props.component }
     
-    const onMove = (me: MouseEvent) => {
-        const dx = ((me.clientX - startX) / props.canvasWidth) * 100
-        const dy = ((me.clientY - startY) / props.canvasHeight) * 100
-        let w = init.width, ht = init.height, x = init.x, y = init.y
+//     const onMove = (me: MouseEvent) => {
+//         const dx = ((me.clientX - startX) / props.canvasWidth) * 100
+//         const dy = ((me.clientY - startY) / props.canvasHeight) * 100
+//         let w = init.width, ht = init.height, x = init.x, y = init.y
         
-        if (handle.includes('e')) w = Math.max(5, init.width + dx)
-        if (handle.includes('w')) { w = Math.max(5, init.width - dx); x = init.x + (init.width - w) }
-        if (handle.includes('s')) ht = Math.max(5, init.height + dy)
-        if (handle.includes('n')) { ht = Math.max(5, init.height - dy); y = init.y + (init.height - ht) }
+//         if (handle.includes('e')) w = Math.max(5, init.width + dx)
+//         if (handle.includes('w')) { w = Math.max(5, init.width - dx); x = init.x + (init.width - w) }
+//         if (handle.includes('s')) ht = Math.max(5, init.height + dy)
+//         if (handle.includes('n')) { ht = Math.max(5, init.height - dy); y = init.y + (init.height - ht) }
         
-        const dx2 = x - props.component.x, dy2 = y - props.component.y
-        if (dx2 || dy2) emit('move', dx2, dy2)
-        emit('resize', w, ht)
-    }
-    const onUp = () => {
-        document.removeEventListener('mousemove', onMove)
-        document.removeEventListener('mouseup', onUp)
-    }
-    document.addEventListener('mousemove', onMove)
-    document.addEventListener('mouseup', onUp)
-}
+//         const dx2 = x - props.component.x, dy2 = y - props.component.y
+//         if (dx2 || dy2) emit('move', dx2, dy2)
+//         emit('resize', w, ht)
+//     }
+//     const onUp = () => {
+//         document.removeEventListener('mousemove', onMove)
+//         document.removeEventListener('mouseup', onUp)
+//     }
+//     document.addEventListener('mousemove', onMove)
+//     document.addEventListener('mouseup', onUp)
+// }
 </script>
