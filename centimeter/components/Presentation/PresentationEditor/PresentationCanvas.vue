@@ -20,6 +20,14 @@
                 @keydown.ctrl.v="pasteComponent" @keydown.meta.v="pasteComponent"
                 @keydown.ctrl.d="duplicateComponent" @keydown.meta.d="duplicateComponent">
                 
+                <!-- Element Toolbar -->
+                <ElementToolbar 
+                    :component="selectedComponent"
+                    :canvasWidth="CANVAS_WIDTH"
+                    :canvasHeight="CANVAS_HEIGHT"
+                    @update-property="(key: string, value: any) => selectedComponent && updateComponentProperty(selectedComponent, key, value)"
+                />
+                
                 <svg class="absolute inset-0 pointer-events-none" :width="CANVAS_WIDTH" :height="CANVAS_HEIGHT">
                     <line
                         v-for="(guide, index) in alignmentGuides"
@@ -58,6 +66,7 @@
 
 <script setup lang="ts">
 import TextComponent from '../SlideComponents/TextComponent.vue'
+import ElementToolbar from './ElementToolbar.vue'
 import { findSnapPositions, type SnapGuide } from '@/utils/alignment.ts'
 
 const props = defineProps<{ currentSlide?: Slide }>()
@@ -75,6 +84,10 @@ const highlightedComponents = ref<string[]>([])
 const showGuides = ref(false)
 
 const canvasStyle = computed(() => ({ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }))
+
+const selectedComponent = computed(() => 
+    components.value.find(c => c.id === selectedId.value) || null
+)
 
 watch(() => props.currentSlide, (slide) => {
     components.value = slide?.components ? [...slide.components] : []

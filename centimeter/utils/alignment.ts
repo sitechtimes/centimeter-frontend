@@ -11,7 +11,7 @@ export interface SnapResult {
   highlightedComponentIds: string[]
 }
 
-const SNAP_THRESHOLD = 1 
+const SNAP_THRESHOLD =  .25
 export function findSnapPositions(
   movingComponent: { x: number; y: number; width: number; height: number },
   otherComponents: Array<{ id: string; x: number; y: number; width: number; height: number }>,
