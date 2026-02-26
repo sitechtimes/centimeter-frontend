@@ -13,30 +13,89 @@
     <div class="flex-1 overflow-y-auto p-6 space-y-8">
       <div class="space-y-3">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Add Elements</h3>
-        <button v-for="element in elements" :key="element.type"
-          @click="$emit('add-component', '' + element.type)"
+        <button
+          @click="$emit('add-component', 'text')"
           class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--primary)] hover:bg-[var(--primary-shade)] text-white rounded-lg transition-colors"
         >
-          <component :is="element.icon" class="w-5 h-5" />
-          <span class="text-sm font-medium">Add {{element.label}}</span>
+          <Type class="w-5 h-5" />
+          <span class="text-sm font-medium">Add Text</span>
         </button>
+
+        <div class="relative">
+          <button
+            @click.stop="showShapeDropdown = !showShapeDropdown"
+            class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--primary)] hover:bg-[var(--primary-shade)] text-white rounded-lg transition-colors"
+          >
+            <Shapes class="w-5 h-5" />
+            <span class="text-sm font-medium">Add Shape</span>
+            <ChevronDown :class="['w-4 h-4 ml-auto transition-transform', showShapeDropdown ? 'rotate-180' : '']" />
+          </button>
+          <div v-if="showShapeDropdown" class="absolute z-50 mt-1 w-full bg-[var(--bg-color)] border border-[var(--faded-bg-color-dark)] rounded-lg shadow-lg overflow-hidden">
+            <button v-for="shape in shapeOptions" :key="shape.value"
+              @click="addShape(shape.value)"
+              class="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-[var(--faded-bg-color-light)] transition-colors"
+            >
+              <div :style="shape.preview" class="w-5 h-5 flex-shrink-0" />
+              <span class="text-sm text-[var(--text-color)]">{{ shape.label }}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="space-y-3"
-      @click="$emit('slide-type-dropdown')">
+      <div class="space-y-3 relative">
         <h3 class="text-sm font-semibold text-[var(--text-color)]">Question type</h3>
         <div class="relative">
           <button
+            @click.stop="showTypeDropdown = !showTypeDropdown"
             class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--faded-bg-color-light)] hover:bg-[var(--faded-bg-color)] rounded-lg border border-[var(--faded-bg-color-dark)] transition-colors"
           >
-            <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
-            <span class="text-sm font-medium text-[var(--faded-text-color)]"> 
-              {{ selectedSlide?.type}}
+            <component :is="currentTypeIcon" class="w-5 h-5" :class="currentTypeColor" />
+            <span class="text-sm font-medium text-[var(--text-color)]"> 
+              {{ selectedSlide?.type || 'Select type' }}
             </span> 
             <span class="ml-auto">
-              <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
+              <ChevronDown :class="['w-5 h-5 text-[var(--faded-text-color)] transition-transform', showTypeDropdown ? 'rotate-180' : '']" />
             </span>
           </button>
+
+          <div v-if="showTypeDropdown" class="absolute z-50 mt-1 w-full bg-[var(--bg-color)] border border-[var(--faded-bg-color-dark)] rounded-lg shadow-lg max-h-72 overflow-y-auto">
+            <div class="px-3 py-2 text-xs font-semibold text-[var(--faded-text-color)] uppercase tracking-wider">Interactive</div>
+            <button v-for="opt in interactiveTypes" :key="opt.label"
+              @click="selectSlideType(opt.label)"
+              :class="['w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-[var(--faded-bg-color-light)] transition-colors',
+                selectedSlide?.type === opt.label ? 'bg-[var(--faded-bg-color-light)]' : '']"
+            >
+              <component :is="opt.icon" class="w-4 h-4" :class="opt.color" />
+              <span class="text-sm text-[var(--text-color)]">{{ opt.label }}</span>
+              <CheckIcon v-if="selectedSlide?.type === opt.label" class="w-4 h-4 ml-auto text-[var(--primary)]" />
+            </button>
+
+            <div class="border-t border-[var(--faded-bg-color)] mx-2 my-1" />
+
+            <div class="px-3 py-2 text-xs font-semibold text-[var(--faded-text-color)] uppercase tracking-wider">Content</div>
+            <button v-for="opt in contentTypes" :key="opt.label"
+              @click="selectSlideType(opt.label)"
+              :class="['w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-[var(--faded-bg-color-light)] transition-colors',
+                selectedSlide?.type === opt.label ? 'bg-[var(--faded-bg-color-light)]' : '']"
+            >
+              <component :is="opt.icon" class="w-4 h-4" :class="opt.color" />
+              <span class="text-sm text-[var(--text-color)]">{{ opt.label }}</span>
+              <CheckIcon v-if="selectedSlide?.type === opt.label" class="w-4 h-4 ml-auto text-[var(--primary)]" />
+            </button>
+
+            <div class="border-t border-[var(--faded-bg-color)] mx-2 my-1" />
+
+            <div class="px-3 py-2 text-xs font-semibold text-[var(--faded-text-color)] uppercase tracking-wider">Quiz</div>
+            <button v-for="opt in quizTypes" :key="opt.label"
+              @click="selectSlideType(opt.label)"
+              :class="['w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-[var(--faded-bg-color-light)] transition-colors',
+                selectedSlide?.type === opt.label ? 'bg-[var(--faded-bg-color-light)]' : '']"
+            >
+              <component :is="opt.icon" class="w-4 h-4" :class="opt.color" />
+              <span class="text-sm text-[var(--text-color)]">{{ opt.label }}</span>
+              <CheckIcon v-if="selectedSlide?.type === opt.label" class="w-4 h-4 ml-auto text-[var(--primary)]" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -97,21 +156,83 @@
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus, Type, Images, Shapes } from 'lucide-vue-next'
-  
-const elements = [
-  { type: 'text', label: 'Text', icon: Type },
-  { type: 'shape', label: 'Shape', icon: Shapes },
+import { BookPlus, X, ArrowDown, Plus, Type, Shapes, ChevronDown, Check as CheckIcon, BarChart3, Cloud, MessageSquare, Scale, List, Users, HelpCircle, Award, Grid2x2, Edit3, MapPin, Image, Play, LayoutGrid } from 'lucide-vue-next'
+
+const interactiveTypes = [
+  { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600' },
+  { icon: Cloud, label: 'Word Cloud', color: 'text-red-400' },
+  { icon: MessageSquare, label: 'Open Ended', color: 'text-pink-400' },
+  { icon: Scale, label: 'Scales', color: 'text-indigo-600' },
+  { icon: List, label: 'Ranking', color: 'text-green-600' },
+  { icon: Users, label: 'Q&A', color: 'text-pink-400' },
+  { icon: HelpCircle, label: 'Guess the Number', color: 'text-yellow-600' },
+  { icon: Award, label: '100 points', color: 'text-blue-600' },
+  { icon: Grid2x2, label: '2 x 2 Grid', color: 'text-red-500' },
+  { icon: Edit3, label: 'Quick Form', color: 'text-yellow-600' },
+  { icon: MapPin, label: 'Pin on Image', color: 'text-purple-600' },
 ]
-defineProps<{ selectedSlide?: Slide }>()
+
+const contentTypes = [
+  { icon: Type, label: 'Text', color: 'text-blue-600' },
+  { icon: Image, label: 'Image', color: 'text-blue-500' },
+  { icon: Play, label: 'Video', color: 'text-purple-600' },
+  { icon: LayoutGrid, label: 'Instructions', color: 'text-gray-600' },
+]
+
+const quizTypes = [
+  { icon: Award, label: 'Select Answer', color: 'text-blue-600' },
+  { icon: Type, label: 'Type Answer', color: 'text-purple-600' },
+]
+
+const allTypes = [...interactiveTypes, ...contentTypes, ...quizTypes]
+
+const props = defineProps<{ selectedSlide?: Slide }>()
 const emit = defineEmits<{ 
   close: []
   'add-component': [type: string, src?: string]
-  'slide-type-dropdown': []
+  'change-slide-type': [type: string]
 }>()
 
 const fileInput = ref<HTMLInputElement>()
 const isDragging = ref(false)
+const showTypeDropdown = ref(false)
+const showShapeDropdown = ref(false)
+
+const shapeOptions = [
+  { value: 'rectangle', label: 'Rectangle', preview: { backgroundColor: '#4F46E5' } },
+  { value: 'rounded', label: 'Rounded', preview: { backgroundColor: '#4F46E5', borderRadius: '6px' } },
+  { value: 'circle', label: 'Circle', preview: { backgroundColor: '#4F46E5', borderRadius: '50%' } },
+  { value: 'triangle', label: 'Triangle', preview: { backgroundColor: 'transparent', width: '0', height: '0', borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: '20px solid #4F46E5' } },
+]
+
+const addShape = (shapeType: string) => {
+  emit('add-component', 'shape', shapeType)
+  showShapeDropdown.value = false
+}
+
+const currentTypeIcon = computed(() => {
+  const match = allTypes.find(t => t.label === props.selectedSlide?.type)
+  return match?.icon || BookPlus
+})
+
+const currentTypeColor = computed(() => {
+  const match = allTypes.find(t => t.label === props.selectedSlide?.type)
+  return match?.color || 'text-[var(--faded-text-color)]'
+})
+
+const selectSlideType = (type: string) => {
+  if (props.selectedSlide) {
+    props.selectedSlide.type = type
+  }
+  showTypeDropdown.value = false
+}
+
+const onClickOutside = (e: MouseEvent) => {
+  if (showTypeDropdown.value) showTypeDropdown.value = false
+  if (showShapeDropdown.value) showShapeDropdown.value = false
+}
+onMounted(() => document.addEventListener('click', onClickOutside))
+onUnmounted(() => document.removeEventListener('click', onClickOutside))
 
 const openFilePicker = () => fileInput.value?.click()
 

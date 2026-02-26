@@ -94,20 +94,48 @@ const addComponent = (type: string, src?: string) => {
         base.fontSize = 24
         base.color = '#000'
         base.textAlign = 'left'
+        pushComponent(base)
     } else if (type === 'image') {
-        base.width = 25
-        base.height = 25
         base.src = src || ''
+        if (src) {
+            const img = new window.Image()
+            img.onload = () => {
+                let widthPct = (img.naturalWidth / CANVAS_WIDTH) * 100
+                let heightPct = (img.naturalHeight / CANVAS_HEIGHT) * 100
+                const maxPct = 80
+                if (widthPct > maxPct || heightPct > maxPct) {
+                    const scale = Math.min(maxPct / widthPct, maxPct / heightPct)
+                    widthPct *= scale
+                    heightPct *= scale
+                }
+                base.width = Math.max(5, widthPct)
+                base.height = Math.max(5, heightPct)
+                pushComponent(base)
+            }
+            img.onerror = () => {
+                base.width = 25
+                base.height = 25
+                pushComponent(base)
+            }
+            img.src = src
+        } else {
+            base.width = 25
+            base.height = 25
+            pushComponent(base)
+        }
     } else if (type === 'shape') {
         base.width = 15
         base.height = 15
-        base.content = 'rectangle'
+        base.content = src || 'rectangle'
         base.backgroundColor = '#4F46E5'
+        pushComponent(base)
     }
+}
 
+const pushComponent = (base: SlideComponent) => {
     components.value.push(base)
     selectedId.value = base.id
-    componentCounter.value[type] = (componentCounter.value[type] + 1) % 21
+    componentCounter.value[base.type] = (componentCounter.value[base.type] + 1) % 21
 }
 
 const isImageFile = (file: File) =>
