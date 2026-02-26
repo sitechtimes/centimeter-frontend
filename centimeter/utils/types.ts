@@ -40,11 +40,12 @@ export interface ShowButtons {
 
 export interface Presentation {
   id: string;
-  title: string;
+  presentation_name: string;
   slides: Slide[];
-  host?: string;
+  host: string;
   created_at?: string;
   updated_at?: string;
+  last_interacted?: string;
 }
 
 export interface Slide {
