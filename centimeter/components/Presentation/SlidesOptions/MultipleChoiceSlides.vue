@@ -5,8 +5,8 @@
             aria-label="Presentation canvas"
             class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden p-10"
         >
-            <input id="MultipleChoiceQuestion" type="text" @click="openMultipleChoiceEditPanel" v-model="yourQuestion" class="h-[15%]">
-        <div class="flex flex-wrap gap-4 h-[60%] p-10 border-2 border-transparent hover:border-slate-800 transition-colors duration-200"> 
+            <input id="MultipleChoiceQuestion" type="text" @click="openTextEditPanel" v-model="yourQuestion" class="h-[15%] p-5">
+        <div @click="openOptionEditPanel" class="flex flex-wrap gap-4 h-[60%] p-10 border-2 border-transparent hover:border-slate-800 transition-colors duration-200"> 
             <div v-for="choice in placeHolderOptions">
                 <ol>{{ choice.amount_chosen }} {{ choice.option }}</ol>
             </div>
@@ -22,10 +22,22 @@
 const yourQuestion = ref("Ask your question here...")
 
 
-const openMultipleChoiceEditPanel = () =>{
-    multipleChoiceEditPanel.value = true
+const openTextEditPanel = () =>{
+    textEditPanel.value = true
     yourQuestion.value = ""
 }
+
+const openOptionEditPanel = () => {
+    optionsEditPanel.value = true
+}
+
+const emit = defineEmits({
+
+    open: (component: string) => {
+        if ()
+    }
+
+})
 
 const placeHolderOptions = ref<MultipleChoiceOption[]>([
     {

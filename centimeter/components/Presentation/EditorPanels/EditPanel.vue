@@ -93,7 +93,7 @@
 
     </div>
 
-    <div v-if="multipleChoiceEditPanel" class="flex-1 overflow-y-auto p-6 space-y-8">
+    <div v-if="textEditPanel" class="flex-1 overflow-y-auto p-6 space-y-8">
 
       <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Question</h2>
