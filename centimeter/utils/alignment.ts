@@ -1,17 +1,7 @@
-export interface SnapGuide {
-  position: number
-  orientation: 'horizontal' | 'vertical'
-  type: 'edge' | 'center'
-}
 
-export interface SnapResult {
-  x: number
-  y: number
-  guides: SnapGuide[]
-  highlightedComponentIds: string[]
-}
 
-const SNAP_THRESHOLD =  .25
+const SNAP_THRESHOLD =  1
+
 export function findSnapPositions(
   movingComponent: { x: number; y: number; width: number; height: number },
   otherComponents: Array<{ id: string; x: number; y: number; width: number; height: number }>,
