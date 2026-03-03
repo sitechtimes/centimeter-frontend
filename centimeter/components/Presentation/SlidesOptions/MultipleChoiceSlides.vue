@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+import type { EditPanel } from '~/utils/types'
+
 const yourQuestion = ref("Ask your question here...")
 
 
@@ -33,11 +35,18 @@ const openOptionEditPanel = () => {
 
 const emit = defineEmits({
 
-    open: (component: string) => {
-        if ()
+    open: (editPanel: EditPanel) => {
+        if (!editPanel.open){
+            editPanel.open = true
+            return editPanel.open
+        }
     }
 
 })
+
+const openEditPanel = (editPanel: EditPanel) => {
+    emit('open', {editPanel})
+}
 
 const placeHolderOptions = ref<MultipleChoiceOption[]>([
     {
