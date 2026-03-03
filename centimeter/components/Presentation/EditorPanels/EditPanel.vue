@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
+  <div class="w-full max-w-xs bg-[var(--faded-bg-color-light)] rounded-lg shadow-sm h-full flex flex-col">
     <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Slide</h2>
       <button
@@ -21,25 +21,6 @@
           <span class="text-sm font-medium">Add Text</span>
         </button>
 
-        <div class="relative">
-          <button
-            @click.stop="showShapeDropdown = !showShapeDropdown"
-            class="w-full flex items-center gap-3 px-4 py-3 bg-[var(--primary)] hover:bg-[var(--primary-shade)] text-white rounded-lg transition-colors"
-          >
-            <Shapes class="w-5 h-5" />
-            <span class="text-sm font-medium">Add Shape</span>
-            <ChevronDown :class="['w-4 h-4 ml-auto transition-transform', showShapeDropdown ? 'rotate-180' : '']" />
-          </button>
-          <div v-if="showShapeDropdown" class="absolute z-50 mt-1 w-full bg-[var(--bg-color)] border border-[var(--faded-bg-color-dark)] rounded-lg shadow-lg overflow-hidden">
-            <button v-for="shape in shapeOptions" :key="shape.value"
-              @click="addShape(shape.value)"
-              class="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-[var(--faded-bg-color-light)] transition-colors"
-            >
-              <div :style="shape.preview" class="w-5 h-5 flex-shrink-0" />
-              <span class="text-sm text-[var(--text-color)]">{{ shape.label }}</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       <div class="space-y-3 relative">
@@ -196,19 +177,10 @@ const emit = defineEmits<{
 const fileInput = ref<HTMLInputElement>()
 const isDragging = ref(false)
 const showTypeDropdown = ref(false)
-const showShapeDropdown = ref(false)
 
-const shapeOptions = [
-  { value: 'rectangle', label: 'Rectangle', preview: { backgroundColor: '#4F46E5' } },
-  { value: 'rounded', label: 'Rounded', preview: { backgroundColor: '#4F46E5', borderRadius: '6px' } },
-  { value: 'circle', label: 'Circle', preview: { backgroundColor: '#4F46E5', borderRadius: '50%' } },
-  { value: 'triangle', label: 'Triangle', preview: { backgroundColor: 'transparent', width: '0', height: '0', borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: '20px solid #4F46E5' } },
-]
 
-const addShape = (shapeType: string) => {
-  emit('add-component', 'shape', shapeType)
-  showShapeDropdown.value = false
-}
+
+
 
 const currentTypeIcon = computed(() => {
   const match = allTypes.find(t => t.label === props.selectedSlide?.type)
@@ -229,7 +201,6 @@ const selectSlideType = (type: string) => {
 
 const onClickOutside = (e: MouseEvent) => {
   if (showTypeDropdown.value) showTypeDropdown.value = false
-  if (showShapeDropdown.value) showShapeDropdown.value = false
 }
 onMounted(() => document.addEventListener('click', onClickOutside))
 onUnmounted(() => document.removeEventListener('click', onClickOutside))
