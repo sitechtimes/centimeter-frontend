@@ -39,7 +39,6 @@
 
 <script setup lang="ts">
 import TextComponent from '../SlideComponents/TextComponent.vue'
-import ShapeComponent from '../SlideComponents/ShapeComponent.vue'
 import ImageComponent from '../SlideComponents/ImageComponent.vue'
 
 const props = defineProps<{ currentSlide?: Slide }>()
@@ -47,7 +46,6 @@ const props = defineProps<{ currentSlide?: Slide }>()
 const CANVAS_WIDTH = 1200, CANVAS_HEIGHT = 800
 const COMPONENT_MAP: Record<string, Component> = {
     text: TextComponent,
-    shape: ShapeComponent,
     image: ImageComponent
 }
 
