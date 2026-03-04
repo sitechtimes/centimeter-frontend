@@ -107,5 +107,5 @@ export interface MultipleChoiceOption {
 
 export interface EditPanel{
   component: string;
-  open: boolean;
+  open: boolean
 }

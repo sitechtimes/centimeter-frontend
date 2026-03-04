@@ -40,12 +40,16 @@ const emit = defineEmits({
             editPanel.open = true
             return editPanel.open
         }
+    },
+
+    text: (text:string, originalText: boolean) => {
+
     }
 
 })
 
 const openEditPanel = (editPanel: EditPanel) => {
-    emit('open', {editPanel})
+    emit('open', editPanel)
 }
 
 const placeHolderOptions = ref<MultipleChoiceOption[]>([

@@ -12,11 +12,11 @@ export const MultipleChoiceEditPanel = computed(() => <EditPanel[]>([
     },
     {
         component: "Text",
-        open: true,
+        open: false,
     },
     {
         component: "Option",
-        open: true,
+        open: false,
     }
 ]))
 
