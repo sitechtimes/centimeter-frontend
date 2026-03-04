@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <div class="space-y-3">
+      <div class="space-y-3" v-if="!imageOnSlide">
         <div>
           <h3 class="text-sm font-semibold text-[var(--text-color)] mb-1">Image</h3>
           <p class="text-sm text-[var(--faded-text-color)]">
@@ -99,6 +99,19 @@
             </button>
           </p>
           <input ref="fileInput" type="file" accept="image/png,image/gif,image/jpeg,image/jpg,image/svg+xml" class="hidden" @change="onFileSelected" />
+        </div>
+      </div>
+      <div class="space-y-3" v-if="imageOnSlide">
+        <div>
+          <h3 class="text-sm font-semibold text-[var(--text-color)] mb-1">Image</h3>
+          <p class="text-sm text-[var(--faded-text-color)]">
+            We support png, gif, jpg, jpeg, svg, webp, avif, heic and heif.
+          </p>
+          <div class="mt-4 flex items-center gap-4 bg-[var(--gray)] p-4 rounded-lg">
+            <img src="" alt="">
+            <button @click="openImageEditor">Update image</button>
+            <Trash/>
+          </div>
         </div>
       </div>
 
@@ -137,8 +150,8 @@
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus, Type, Shapes, ChevronDown, Check as CheckIcon, BarChart3, Cloud, MessageSquare, Scale, List, Users, HelpCircle, Award, Grid2x2, Edit3, MapPin, Image, Play, LayoutGrid } from 'lucide-vue-next'
-
+import { BookPlus, X, ArrowDown, Plus, Type, Trash, ChevronDown, Check as CheckIcon, BarChart3, Cloud, MessageSquare, Scale, List, Users, HelpCircle, Award, Grid2x2, Edit3, MapPin, Image, Play, LayoutGrid } from 'lucide-vue-next'
+import ImageResizer from '../ImageComponents/ImageResizer.vue'
 const interactiveTypes = [
   { icon: BarChart3, label: 'Multiple Choice', color: 'text-blue-600' },
   { icon: Cloud, label: 'Word Cloud', color: 'text-red-400' },
@@ -228,4 +241,13 @@ const dropHandler = (e: DragEvent) => {
   reader.onload = () => emit('add-component', 'image', reader.result as string)
   reader.readAsDataURL(file)
 }
+const imageOnSlide = true
+const openImageEditor = () => {
+  if (imageOnSlide) {
+
+  } else {
+    console.log('No image on slide to edit')
+  }
+}
+
 </script>
