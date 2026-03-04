@@ -8,9 +8,10 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
   }
   return { ok: res.ok, data };
 }
+
+
 import { defineStore } from "pinia";
 import type { User } from "../utils/types";
-
 
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
@@ -50,7 +51,33 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = null;
     isAuth.value = false;
   }
+/*   
+  async function savePresentation(presentationData: Partial<Presentation>) {
+    const token = user.value?.access
+    
+    if (!token) {
+      throw new Error('Not authenticated')
+    }
 
+    const { ok, data } = await apiCall<Presentation>(
+      import.meta.env.VITE_BACKEND_URL + "/presentations/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(presentationData)
+      }
+    )
+
+    if (ok && data) {
+      presentations.value.push(data)
+      return data
+    }
+    
+    throw new Error('Failed to save presentation')
+  } */
   return { user, isAuth, theme, profilePic, logIn, signUp, logOut };
 }, {
   persist: {

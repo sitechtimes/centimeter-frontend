@@ -11,6 +11,4 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 const empty = ref(false)
-const userStore = useUserStore();
-console.log(userStore.user)
 </script>
