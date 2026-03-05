@@ -5,7 +5,7 @@
       <div class="flex flex-1">
         <EditorBar class="w-48 flex-none" @select-slide="handleSlideSelect" />
         <PresentationCanvas ref="canvasRef" class="flex-1 min-w-0 m-4" :currentSlide="currentSelectedSlide" />
-        <EditPanel v-if="showEditPanel" class="w-80 flex-none" :selectedSlide="currentSelectedSlide" @close="showEditPanel = false" @add-component="handleAddComponent" />
+        <EditPanel v-if="showEditPanel" class="w-80 flex-none" :selectedSlide="currentSelectedSlide" @close="showEditPanel = false" @add-component="handleAddComponent" @remove-image="handleRemoveImage" />
         <CommentsPanel v-if="showCommentsPanel" class="w-80 flex-none" @close="showCommentsPanel = false" />
         <InteractivityPanel v-if="showInteractivityPanel" class="w-80 flex-none" @close="showInteractivityPanel = false" />
         <ThemesPanel v-if="showThemesPanel" class="w-80 flex-none" @close="showThemesPanel = false" />
@@ -43,5 +43,9 @@ function handleSlideSelect(slideIndex: number, slide: Slide) {
 
 function handleAddComponent(type: string, src?: string) {
   canvasRef.value?.addComponent(type, src);
+}
+
+function handleRemoveImage() {
+  canvasRef.value?.removeComponentsByType('image');
 }
 </script>

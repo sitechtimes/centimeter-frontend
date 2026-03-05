@@ -1,7 +1,7 @@
 <template>
     <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="emit('select')">
         <div v-if="component.src" class="absolute inset-0 overflow-hidden rounded">
-            <img :src="component.src" alt="" class="w-full h-full object-fill pointer-events-none" draggable="false" />
+            <img :src="component.src" alt="" class="w-full h-full object-contain pointer-events-none" draggable="false" />
         </div>
 
         <div v-else class="absolute inset-0 flex flex-col items-center justify-center bg-[var(--faded-bg-color-light)] border-2 border-dashed border-[var(--faded-bg-color-dark)] rounded">
