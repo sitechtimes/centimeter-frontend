@@ -42,8 +42,14 @@ const emit = defineEmits({
         }
     },
 
-    text: (text:string, originalText: boolean) => {
-
+    text: (text: string, originalText: string, isOpen: boolean) => {
+        if ((text !== originalText) && isOpen){
+            text = ""
+            return text
+        } else if (!isOpen) {
+            text = originalText
+            return text
+        }
     }
 
 })
