@@ -73,10 +73,10 @@ const startResize = (e: MouseEvent, handle: string) => {
         const dy = ((me.clientY - startY) / props.canvasHeight) * 100
         let w = init.width, ht = init.height, x = init.x, y = init.y
 
-        if (handle.includes('e')) w = Math.max(5, init.width + dx)
-        if (handle.includes('w')) { w = Math.max(5, init.width - dx); x = init.x + (init.width - w) }
-        if (handle.includes('s')) ht = Math.max(5, init.height + dy)
-        if (handle.includes('n')) { ht = Math.max(5, init.height - dy); y = init.y + (init.height - ht) }
+        if (handle.includes('e')) w = Math.max(5, Math.min(100 - x, init.width + dx))
+        if (handle.includes('w')) { w = Math.max(5, init.width - dx); w = Math.min(w, init.x + init.width); x = init.x + (init.width - w); if (x < 0) { w += x; x = 0 } }
+        if (handle.includes('s')) ht = Math.max(5, Math.min(100 - y, init.height + dy))
+        if (handle.includes('n')) { ht = Math.max(5, init.height - dy); ht = Math.min(ht, init.y + init.height); y = init.y + (init.height - ht); if (y < 0) { ht += y; y = 0 } }
 
         const dx2 = x - props.component.x, dy2 = y - props.component.y
         if (dx2 || dy2) emit('move', dx2, dy2)
