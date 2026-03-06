@@ -5,7 +5,7 @@ export const slides = ref<Slide[]>([])
 export const textEditPanel = ref(false)
 export const optionsEditPanel = ref(false)
 
-export const MultipleChoiceEditPanel = computed(() => <EditPanel[]>([
+export const multipleChoiceEditPanel = computed(() => <EditPanel[]>([
     {
         component: "Slide",
         open: true,
