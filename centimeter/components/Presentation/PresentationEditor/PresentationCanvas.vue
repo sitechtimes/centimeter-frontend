@@ -62,6 +62,12 @@ watch(() => props.currentSlide, (slide) => {
     selectedId.value = null
 }, { immediate: true })
 
+watch(components, (newComps) => {
+    if (props.currentSlide) {
+        props.currentSlide.components = [...newComps]
+    }
+}, { deep: true })
+
 const moveComponent = (comp: SlideComponent, dx: number, dy: number) => {
     comp.x = Math.max(0, Math.min(100 - comp.width, comp.x + dx))
     comp.y = Math.max(0, Math.min(100 - comp.height, comp.y + dy))
@@ -149,6 +155,10 @@ const onCanvasDrop = (e: DragEvent) => {
     reader.readAsDataURL(file)
 }
 
-defineExpose({ addComponent })
+const removeComponentsByType = (type: string) => {
+    components.value = components.value.filter(c => c.type !== type)
+}
+
+defineExpose({ addComponent, removeComponentsByType })
 onMounted(() => canvasRef.value?.focus())
 </script>
