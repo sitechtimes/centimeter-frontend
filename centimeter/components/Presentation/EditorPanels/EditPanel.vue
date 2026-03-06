@@ -1,6 +1,7 @@
 <template>
-  <div class="w-full max-w-xs bg-[var(--faded-bg-color-light)] rounded-lg shadow-sm h-full flex flex-col">
-    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+  <div class="relative w-full max-w-xs bg-[var(--faded-bg-color-light)] rounded-lg shadow-sm h-full flex flex-col">
+    <div :class="[props.noSlides ? 'pointer-events-none opacity-50 select-none' : '']" class="h-full flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Slide</h2>
       <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]" @click="$emit('close')">
         <X class="w-6 h-6" />
@@ -151,7 +152,10 @@
       </div>
     </div>
 
-    <ImageResizer v-if="showCropper" :imageSrc="pendingImageSrc" @crop="onCropConfirm" @cancel="onCropCancel" @back="onCropCancel" />
+      <ImageResizer v-if="showCropper" :imageSrc="pendingImageSrc" @crop="onCropConfirm" @cancel="onCropCancel" @back="onCropCancel" />
+    </div>
+
+    <div v-if="props.noSlides" class="absolute inset-0 z-20 rounded-lg bg-neutral-300/40 cursor-not-allowed" />
   </div>
 </template>
 
@@ -217,7 +221,9 @@ const quizTypes = [
 
 const allTypes = [...interactiveTypes, ...contentTypes, ...quizTypes];
 
-const props = defineProps<{ selectedSlide?: Slide }>();
+const props = withDefaults(defineProps<{ selectedSlide?: Slide; noSlides?: boolean }>(), {
+  noSlides: false
+});
 const emit = defineEmits<{
   close: [];
   "add-component": [type: string, src?: string];

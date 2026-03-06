@@ -3,9 +3,9 @@
     <NavBar />
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
-        <EditorBar class="w-48 flex-none" @select-slide="handleSlideSelect" />
+        <EditorBar class="w-48 flex-none" @select-slide="handleSlideSelect" @slide-count-changed="handleSlideCountChange" />
         <PresentationCanvas ref="canvasRef" class="flex-1 min-w-0 m-4" :currentSlide="currentSelectedSlide" />
-        <EditPanel v-if="showEditPanel" class="w-80 flex-none" :selectedSlide="currentSelectedSlide" @close="showEditPanel = false" @add-component="handleAddComponent" @remove-image="handleRemoveImage" />
+        <EditPanel v-if="showEditPanel" class="w-80 flex-none" :selectedSlide="currentSelectedSlide" :noSlides="slideCount === 0" @close="showEditPanel = false" @add-component="handleAddComponent" @remove-image="handleRemoveImage" />
         <CommentsPanel v-if="showCommentsPanel" class="w-80 flex-none" @close="showCommentsPanel = false" />
         <InteractivityPanel v-if="showInteractivityPanel" class="w-80 flex-none" @close="showInteractivityPanel = false" />
         <ThemesPanel v-if="showThemesPanel" class="w-80 flex-none" @close="showThemesPanel = false" />
@@ -29,6 +29,7 @@ const showCommentsPanel = ref(false);
 const showInteractivityPanel = ref(false);
 const showThemesPanel = ref(false);
 const showTemplatesPanel = ref(false);
+const slideCount = ref(0);
 
 const currentSelectedSlide = ref<Slide | undefined>(undefined);
 
@@ -36,9 +37,13 @@ function toggleEditPanel() {
   showEditPanel.value = !showEditPanel.value;
 }
 
-function handleSlideSelect(slideIndex: number, slide: Slide) {
+function handleSlideSelect(slideIndex: number, slide: Slide | undefined) {
   currentSelectedSlide.value = slide;
   showEditPanel.value = true;
+}
+
+function handleSlideCountChange(count: number) {
+  slideCount.value = count;
 }
 
 function handleAddComponent(type: string, src?: string) {

@@ -71,8 +71,13 @@ const dragOverIndex = ref<number | null>(null)
 const dragging = ref(false)
 
 const emit = defineEmits<{
-  'select-slide': [slideIndex: number, slide: Slide]
+  'select-slide': [slideIndex: number, slide: Slide | undefined]
+  'slide-count-changed': [count: number]
 }>()
+
+function emitSlideCount() {
+  emit('slide-count-changed', slides.value.length)
+}
 
 function onContextMenu(index: number, event: MouseEvent) {
   if (dragging.value) return
@@ -175,10 +180,11 @@ function handleDelete(index?: number | null) {
   if (index == null) return closeContext()
   
   slides.value.splice(index, 1)
+  emitSlideCount()
   
   if (slides.value.length === 0) {
     selectedSlide.value = null
-    emit('select-slide', -1, undefined as any)
+    emit('select-slide', -1, undefined)
   } else {
     const newIndex = Math.max(0, Math.min(index, slides.value.length - 1))
     selectedSlide.value = newIndex
@@ -190,6 +196,7 @@ function handleDelete(index?: number | null) {
 
 function addSlide(slideType: string) {
   slides.value.push({ type: slideType })
+  emitSlideCount()
   selectedSlide.value = slides.value.length - 1
   emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
 }
@@ -200,6 +207,7 @@ function selectSlide(index: number) {
 }
 
 onMounted(() => {
+  emitSlideCount()
   window.addEventListener('click', closeContext)
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeContext()
