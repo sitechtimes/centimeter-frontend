@@ -85,29 +85,39 @@ import type {Presentation} from '../../../utils/types.ts'
 
 const presentations: Presentation[] = [
   {
+    id: 'demo-1',
     presentation_name: "AI in Modern Healthcare",
     host: "Dr. Sarah Thompson",
-    last_interacted: "2025-02-14T10:32:00Z"
+    last_interacted: "2025-02-14T10:32:00Z",
+    slides: []
   },
   {
+    id: 'demo-2',
     presentation_name: "Sustainable Architecture Trends",
     host: "Michael Reyes",
-    last_interacted: "2025-01-29T16:45:12Z"
+    last_interacted: "2025-01-29T16:45:12Z",
+    slides: []
   },
   {
+    id: 'demo-3',
     presentation_name: "Quantum Computing 101",
     host: "Prof. Emily Zhang",
-    last_interacted: "2024-12-08T09:15:47Z"
+    last_interacted: "2024-12-08T09:15:47Z",
+    slides: []
   },
   {
+    id: 'demo-4',
     presentation_name: "Building Scalable Web Apps",
     host: "Carlos Méndez",
-    last_interacted: "2025-02-01T21:03:00Z"
+    last_interacted: "2025-02-01T21:03:00Z",
+    slides: []
   },
   {
+    id: 'demo-5',
     presentation_name: "Marketing Psychology Deep Dive",
     host: "Aisha Karim",
-    last_interacted: "2025-02-10T14:20:30Z"
+    last_interacted: "2025-02-10T14:20:30Z",
+    slides: []
   }
 ]
 

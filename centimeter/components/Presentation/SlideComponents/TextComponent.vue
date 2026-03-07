@@ -1,6 +1,6 @@
 <template>
-    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="emit('select')">
-        <div ref="textRef" contenteditable :style="textStyle" class="absolute inset-0 p-2 outline-none cursor-text" 
+    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" style="container-type: inline-size" @click.stop="emit('select')">
+        <div ref="textRef" contenteditable :style="textStyle" class="w-full p-[1cqi] outline-none cursor-text min-h-[1.5em] break-words whitespace-pre-wrap text-[var(--text-color)]" 
             @focus="isEditing = true" 
             @blur="isEditing = false; emit('update', ($event.target as HTMLElement).textContent || '')"
             @keydown.delete.stop @keydown.backspace.stop v-text="component.content" />
@@ -29,10 +29,8 @@ const emit = defineEmits<{
 }>()
 
 const HANDLE_MAP: Record<string, string> = {
-    nw: 'top-0 left-0 -translate-x-1/2 -translate-y-1/2',
-    ne: 'top-0 right-0 translate-x-1/2 -translate-y-1/2',
-    sw: 'bottom-0 left-0 -translate-x-1/2 translate-y-1/2',
-    se: 'bottom-0 right-0 translate-x-1/2 translate-y-1/2'
+    e: 'top-1/2 right-0 translate-x-1/2 -translate-y-1/2',
+    w: 'top-1/2 left-0 -translate-x-1/2 -translate-y-1/2'
 }
 
 const textRef = ref<HTMLDivElement>()
@@ -40,13 +38,14 @@ const isEditing = ref(false)
 
 const componentStyle = computed(() => ({
     left: `${props.component.x}%`, top: `${props.component.y}%`,
-    width: `${props.component.width}%`, height: `${props.component.height}%`,
+    width: `${props.component.width}%`,
     zIndex: props.component.zIndex
 }))
 
+const baseFontCqi = computed(() => ((props.component.fontSize ?? 16) / 16) * 5)
+
 const textStyle = computed(() => ({
-    fontSize: `${props.component.fontSize}px`,
-    color: props.component.color,
+    fontSize: `clamp(0.5rem, ${baseFontCqi.value}cqi, ${props.component.fontSize}px)`,
     textAlign: props.component.textAlign
 }))
 
@@ -83,21 +82,18 @@ const startDrag = (e: MouseEvent) => {
 
 const startResize = (e: MouseEvent, handle: string) => {
     e.preventDefault()
-    const startX = e.clientX, startY = e.clientY, init = { ...props.component }
-    
+    const startX = e.clientX, initWidth = props.component.width, initX = props.component.x
+
     const onMove = (me: MouseEvent) => {
         const dx = ((me.clientX - startX) / props.canvasWidth) * 100
-        const dy = ((me.clientY - startY) / props.canvasHeight) * 100
-        let w = init.width, ht = init.height, x = init.x, y = init.y
-        
-        if (handle.includes('e')) w = Math.max(5, init.width + dx)
-        if (handle.includes('w')) { w = Math.max(5, init.width - dx); x = init.x + (init.width - w) }
-        if (handle.includes('s')) ht = Math.max(5, init.height + dy)
-        if (handle.includes('n')) { ht = Math.max(5, init.height - dy); y = init.y + (init.height - ht) }
-        
-        const dx2 = x - props.component.x, dy2 = y - props.component.y
-        if (dx2 || dy2) emit('move', dx2, dy2)
-        emit('resize', w, ht)
+        let w = initWidth, x = initX
+
+        if (handle === 'e') w = Math.max(5, initWidth + dx)
+        if (handle === 'w') { w = Math.max(5, initWidth - dx); x = initX + (initWidth - w) }
+
+        const dxMove = x - props.component.x
+        if (dxMove) emit('move', dxMove, 0)
+        emit('resize', w, props.component.height)
     }
     const onUp = () => {
         document.removeEventListener('mousemove', onMove)
