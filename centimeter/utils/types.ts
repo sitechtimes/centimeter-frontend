@@ -109,3 +109,10 @@ export interface EditPanel{
   component: string;
   open: boolean
 }
+
+export interface OpenPollsResponse{
+  session_id: string;
+  question?: string;
+  option_text?: string;
+  
+}
