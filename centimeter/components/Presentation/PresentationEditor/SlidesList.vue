@@ -211,7 +211,8 @@ onUnmounted(() => {
 })
 
 defineExpose({
-  addSlide
+  addSlide,
+  slides
 })
 </script>
 

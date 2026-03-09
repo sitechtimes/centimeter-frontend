@@ -25,12 +25,6 @@
                     @move="(dx: number, dy: number) => moveComponent(comp, dx, dy)"
                     @resize="(w: number, h: number) => resizeComponent(comp, w, h)" />
             </div>
-            <button 
-                @click="console.log({type: 'slide', components, canvasSize: {w: CANVAS_WIDTH, h: CANVAS_HEIGHT}})"
-                class="px-4 py-2 bg-[var(--faded-bg-color)] text-[var(--text-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-lg transition-colors text-sm font-medium"
-            >
-                Console slide properties
-            </button>
         </div>
     </div>
 </template>
@@ -49,11 +43,17 @@ const selectedId = ref<string | null>(null)
 const componentCounter = ref<Record<string, number>>({ text: 0, image: 0, shape: 0 })
 
 const canvasStyle = computed(() => ({ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }))
-
+// since when did vue allow two diifferent watchers
 watch(() => props.currentSlide, (slide) => {
     components.value = slide?.components ? [...slide.components] : []
     selectedId.value = null
 }, { immediate: true })
+
+watch(components, (newComponents) => {
+    if (props.currentSlide) {
+        props.currentSlide.components = newComponents
+    }
+}, { deep: true })
 
 const moveComponent = (comp: SlideComponent, dx: number, dy: number) => {
     comp.x = Math.max(0, Math.min(100 - comp.width, comp.x + dx))

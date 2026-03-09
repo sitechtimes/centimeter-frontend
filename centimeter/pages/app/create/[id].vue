@@ -1,9 +1,13 @@
 <template>
   <main class="h-screen w-screen overflow-hidden">
-    <NavBar />
+    <NavBar :slides="allSlides" />
     <div class="flex flex-col gap-8 bg-[var(--bg-color)] h-full overflow-hidden">
       <div class="flex flex-1">
-        <EditorBar class="w-48 flex-none" @select-slide="handleSlideSelect" />
+        <EditorBar 
+          ref="editorBarRef" 
+          class="w-48 flex-none" 
+          @select-slide="handleSlideSelect" 
+        />
         <PresentationCanvas 
           ref="canvasRef" 
           class="flex-1 min-w-0" 
@@ -50,6 +54,7 @@ import PresentationCanvas from '@/components/Presentation/PresentationEditor/Pre
 import EditPanel from '@/components/Presentation/EditorPanels/EditPanel.vue'
 
 const canvasRef = ref<InstanceType<typeof PresentationCanvas>>()
+const editorBarRef = ref<InstanceType<typeof EditorBar>>()
 const showEditPanel = ref(false)
 const showCommentsPanel = ref(false)
 const showInteractivityPanel = ref(false)
@@ -57,6 +62,9 @@ const showThemesPanel = ref(false)
 const showTemplatesPanel = ref(false)
 
 const currentSelectedSlide = ref<Slide | undefined>(undefined)
+const allSlides = computed(() => {
+  return editorBarRef.value?.getSlides() || []
+})
 
 function toggleEditPanel() {
   showEditPanel.value = !showEditPanel.value

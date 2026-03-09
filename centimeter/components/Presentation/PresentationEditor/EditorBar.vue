@@ -25,4 +25,10 @@ function handleAddSlide(slideType: string) {
 function forwardSelect(index: number, slide: any) {
   emit('select-slide', index, slide)
 }
+
+function getSlides() {
+  return slidesListRef.value?.slides || []
+}
+
+defineExpose({ getSlides })
 </script>

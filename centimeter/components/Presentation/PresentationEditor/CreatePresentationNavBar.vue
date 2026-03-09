@@ -51,7 +51,11 @@
 
 
       <div class="flex items-center gap-1 ml-4">
-        <button class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1">
+        <button 
+          @click="logPresentationData"
+          class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1"
+          title="Log presentation data"
+        >
           <Plus class="w-5 h-5 text-[var(--text-color)]" />
         </button>
 
@@ -81,6 +85,11 @@
 
 <script setup lang="ts">
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucide-vue-next'
+import type { Slide } from '@/utils/types'
+
+const props = defineProps<{
+  slides?: Slide[]
+}>()
 
 const sessionStore = useSessionStore()
 const router = useRouter()
@@ -91,6 +100,39 @@ const presentationName = ref('Untitled Presentation')
 const activeTab = ref<"create" | "results">("create");
 const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
+
+function logPresentationData() {
+  const presentationData = {
+    title: presentationName.value,
+    activeTab: activeTab.value,
+    workspace: currentWorkspaceName.value,
+    totalSlides: props.slides?.length || 0,
+    slides: props.slides?.map((slide, index) => ({
+      slideNumber: index + 1,
+      id: slide.id,
+      type: slide.type || 'unknown',
+      title: slide.title,
+      backgroundColor: slide.backgroundColor,
+      backgroundImage: slide.backgroundImage,
+      totalComponents: slide.components?.length || 0,
+      components: slide.components?.map(comp => ({
+        id: comp.id,
+        type: comp.type,
+        position: { x: comp.x, y: comp.y },
+        size: { width: comp.width, height: comp.height },
+        content: comp.content,
+        fontSize: comp.fontSize,
+        color: comp.color,
+        backgroundColor: comp.backgroundColor,
+        textAlign: comp.textAlign,
+        fontWeight: comp.fontWeight,
+        fontStyle: comp.fontStyle,
+        zIndex: comp.zIndex
+      }))
+    }))
+  }
+  console.log(presentationData)
+}
 
 const handlePresent = async () => {
   try {
