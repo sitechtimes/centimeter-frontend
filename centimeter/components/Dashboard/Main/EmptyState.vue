@@ -19,11 +19,12 @@
 
 <script setup lang = "ts">
 import { useRouter } from 'vue-router'
+import { generatePresentationCode } from '@/utils/presentation'
 
 const router = useRouter()
 
 function goToCreatePresentation() {
-  const presentationId = crypto.randomUUID()
+  const presentationId = generatePresentationCode(11)
   router.push(`/app/create/${presentationId}`)
 }
 </script>

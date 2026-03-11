@@ -52,6 +52,15 @@
 
       <div class="flex items-center gap-1 ml-4">
         <button 
+          @click="handleSave"
+          :disabled="isSaving"
+          class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1 disabled:opacity-50"
+          title="Save presentation"
+        >
+          <Save class="w-5 h-5 text-[var(--text-color)]" />
+        </button>
+
+        <button 
           @click="logPresentationData"
           class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1"
           title="Log presentation data"
@@ -84,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucide-vue-next'
+import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play, Save } from 'lucide-vue-next'
 import type { Slide } from '@/utils/types'
 
 const props = defineProps<{
@@ -92,7 +101,9 @@ const props = defineProps<{
 }>()
 
 const sessionStore = useSessionStore()
+const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 
 const WorkspaceIcon: Component | null = null
 
@@ -100,6 +111,12 @@ const presentationName = ref('Untitled Presentation')
 const activeTab = ref<"create" | "results">("create");
 const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
+const isSaving = ref(false)
+
+// Get presentation code from route
+const presentationCode = computed(() => {
+  return route.params.id as string
+})
 
 function logPresentationData() {
   const presentationData = {
@@ -110,7 +127,6 @@ function logPresentationData() {
     slides: props.slides?.map((slide, index) => ({
       slideNumber: index + 1,
       id: slide.id,
-      type: slide.type || 'unknown',
       title: slide.title,
       backgroundColor: slide.backgroundColor,
       backgroundImage: slide.backgroundImage,
@@ -132,6 +148,26 @@ function logPresentationData() {
     }))
   }
   console.log(presentationData)
+}
+
+const handleSave = async () => {
+  isSaving.value = true
+  try {
+    const presentationData = {
+      id: presentationCode.value,
+      title: presentationName.value,
+      slides: props.slides || [],
+      updated_at: new Date().toISOString()
+    }
+    
+    const savedPresentation = await userStore.savePresentation(presentationData)
+    
+    console.log('Presentation saved successfully:', savedPresentation)
+  } catch (error) {
+    console.error('Failed to save presentation:', error)
+  } finally {
+    isSaving.value = false
+  }
 }
 
 const handlePresent = async () => {

@@ -40,6 +40,7 @@ export interface ShowButtons {
 
 export interface Presentation {
   id: string;
+  presentation_code?: string;
   title: string;
   slides: Slide[];
   host?: string;

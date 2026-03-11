@@ -11,7 +11,7 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 
 
 import { defineStore } from "pinia";
-import type { User } from "../utils/types";
+import type { User, Presentation } from "../utils/types";
 
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
@@ -20,6 +20,7 @@ export const useUserStore = defineStore("userStore", () => {
   const theme = ref<"light" | "dark">("light");
 
   const profilePic = ref<string>("")
+  const presentations = ref<Presentation[]>([])
 
   async function logIn(email: string, password: string) {
     const { ok, data } = await apiCall<User>(
@@ -30,6 +31,7 @@ export const useUserStore = defineStore("userStore", () => {
         body: JSON.stringify({ email, password })
       }
     );
+    console.log( { ok, data });
     isAuth.value = ok;
     user.value = ok ? data ?? null : null;
   }
@@ -47,38 +49,42 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = ok ? data ?? null : null;
   }
 
-  function logOut() {
+  async function logOut() {
     user.value = null;
     isAuth.value = false;
   }
-/*   
   async function savePresentation(presentationData: Partial<Presentation>) {
     const token = user.value?.access
-    
-    if (!token) {
-      throw new Error('Not authenticated')
-    }
+    const code = presentationData.id
 
     const { ok, data } = await apiCall<Presentation>(
-      import.meta.env.VITE_BACKEND_URL + "/presentations/",
+      import.meta.env.VITE_BACKEND_URL + `/presentations/${code}/save/`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(presentationData)
+        body: JSON.stringify({
+          ...presentationData,
+          presentation_code: code
+        })
       }
     )
 
     if (ok && data) {
-      presentations.value.push(data)
+      const existingIndex = presentations.value.findIndex(p => p.id === code || p.presentation_code === code)
+      if (existingIndex >= 0) {
+        presentations.value[existingIndex] = data
+      } else {
+        presentations.value.push(data)
+      }
       return data
     }
     
     throw new Error('Failed to save presentation')
-  } */
-  return { user, isAuth, theme, profilePic, logIn, signUp, logOut };
+  }
+  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation };
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),
