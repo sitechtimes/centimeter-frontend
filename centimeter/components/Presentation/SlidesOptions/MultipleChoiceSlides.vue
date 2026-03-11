@@ -8,7 +8,7 @@
             <input id="MultipleChoiceQuestion" type="text" @click="changeText(yourQuestion, 'Ask your question here...', textEditPanel)" v-model="yourQuestion" class="h-[15%] p-5">
         <div @click="openOptionEditPanel" class="flex flex-wrap gap-4 h-[60%] p-10 border-2 border-transparent hover:border-slate-800 transition-colors duration-200"> 
             <div v-for="choice in placeHolderOptions">
-                <ol>{{ choice.amount_chosen }} {{ choice.option }}</ol>
+                <ol>{{ choice.position }} + {{ choice.option }}</ol>
             </div>
 
             <button @click="addOption">add option</button>
@@ -59,21 +59,21 @@ const changeText = (text: string, originalText: string, isOpen: boolean) => {
     emit('text', text, originalText, isOpen)
 }
 
-const placeHolderOptions = ref<MultipleChoiceOption[]>([
+const placeHolderOptions = ref<PollsOption[]>([
     {
         color: "blue" /* supposed to be rgb */,
         option: "option 1",
-        amount_chosen: 0   
+        position: 1   
     },
     {
         color: "orange" /* supposed to be rgb */,
         option: "option 2",
-        amount_chosen: 0   
+        position: 2
     },
     {
         color: "black" /* supposed to be rgb */,
         option: "option 3",
-        amount_chosen: 0   
+        position: 3
     }
 ])
 
@@ -81,7 +81,7 @@ const defaultOptionName = computed(()=>(
     {
         color: "black",
         option: "option " + (placeHolderOptions.value.length + 1),
-        amount_chosen: 0,
+        position: 1,
     }
 )
 )

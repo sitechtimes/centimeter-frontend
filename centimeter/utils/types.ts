@@ -98,11 +98,13 @@ export interface SessionStatus {
   participant_count?: number;
 }
 
-export interface MultipleChoiceOption {
+export interface PollsOption {
   image?: string;
   color: string;
-  option: string;
-  amount_chosen: number;
+  option_text: string;
+  position?: number;
+  amount_chosen?: number;
+  is_correct?: boolean;
 }
 
 export interface EditPanel{
@@ -113,6 +115,8 @@ export interface EditPanel{
 export interface OpenPollsResponse{
   session_id: string;
   question?: string;
-  option_text?: string;
-  
+  is_quiz?: boolean;
+  show_results?: boolean;
+  created_at?: string;
+  options: PollsOption[];
 }
