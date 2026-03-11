@@ -5,9 +5,7 @@
       <div class="flex items-center justify-between gap-4">
         <div class="w-8 flex-shrink-0"></div>
         <div class="flex items-center gap-4 flex-1 justify-center">
-          <span class="text-[var(--text-color)] font-semibold whitespace-nowrap">
-            Enter code to join a live Menti
-          </span>
+          <span class="text-[var(--text-color)] font-semibold whitespace-nowrap"> Enter code to join a live Menti </span>
           <div class="flex items-center gap-2">
             <input
               v-model="sessionCode"
@@ -17,7 +15,7 @@
               inputmode="numeric"
               maxlength="6"
               @keyup.enter="handleJoin"
-              />
+            />
             <button
               @click="handleJoin"
               :disabled="!sessionCode.trim() || checking"
@@ -36,52 +34,52 @@
 </template>
 
 <script setup lang="ts">
-import ToastContainer from './ToastContainer.vue';
-import { ref } from 'vue'
-import { useSessionStore } from '~/stores/sessionStore'
-import type { SessionStatus } from '~/utils/types'
+import ToastContainer from "../ToastContainer.vue";
+import { ref } from "vue";
+import { useSessionStore } from "~/stores/sessionStore";
+import type { SessionStatus } from "~/utils/types";
 
-const router = useRouter()
-const sessionStore = useSessionStore()
-const showBar = ref(true)
-const sessionCode = ref('')
-const checking = ref(false)
-const error = ref('')
+const router = useRouter();
+const sessionStore = useSessionStore();
+const showBar = ref(true);
+const sessionCode = ref("");
+const checking = ref(false);
+const error = ref("");
 const toastContainer = ref<InstanceType<typeof ToastContainer>>();
 
 function closeBar() {
-  showBar.value = false
+  showBar.value = false;
 }
 
 async function handleJoin() {
-  checking.value = true
-  error.value = ''
+  checking.value = true;
+  error.value = "";
   try {
-    const data: SessionStatus | null = await sessionStore.checkSessionStatus(sessionCode.value.trim())
+    const data: SessionStatus | null = await sessionStore.checkSessionStatus(sessionCode.value.trim());
     if (!data) {
-      throw new Error('Session not found')
+      throw new Error("Session not found");
     }
     if (!data.is_active) {
       toastContainer.value?.add({
-        title: 'Session is not active',
-        message: 'This session is currently inactive and cannot be joined.'
-      })
-      error.value = 'Session inactive'
-      return
+        title: "Session is not active",
+        message: "This session is currently inactive and cannot be joined."
+      });
+      error.value = "Session inactive";
+      return;
     }
 
     router.push({
-      path: '/session/waiting',
+      path: "/session/waiting",
       query: { code: sessionCode.value.trim() }
-    })
+    });
   } catch (err: any) {
-    const message = err?.message
+    const message = err?.message;
     toastContainer.value?.add({
-      title: 'Failed to join session',
+      title: "Failed to join session",
       message
-    })
+    });
   } finally {
-    checking.value = false
+    checking.value = false;
   }
 }
 </script>

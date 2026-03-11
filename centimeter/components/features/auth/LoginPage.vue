@@ -3,7 +3,7 @@
     <a href="/"><img class="hover:saturate-50 h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8 text-[color:var(--text-color)]">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
-  <div class="flex items-center justify-center flex-col p-4 rounded-3xl mb-4 w-full max-w-md bg-[color:var(--bg-color)]">
+    <div class="flex items-center justify-center flex-col p-4 rounded-3xl mb-4 w-full max-w-md bg-[color:var(--bg-color)]">
       <h3 class="mb-4 text-[color:var(--text-color)]" v-show="showLogin">Log in to your Centimeter account</h3>
       <h3 class="mb-4 text-[color:var(--text-color)]" v-show="!showLogin">Create a free account</h3>
 
@@ -21,7 +21,7 @@
 
       <span class="m-4 text-[color:var(--text-color)]">or using email</span>
 
-  <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit.prevent="loginWithEmail">
+      <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit.prevent="loginWithEmail">
         <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium text-[color:var(--text-color)]" for="email">Your email address <span title="Required" class="text-[color:var(--danger)] font-2xl">*</span></label>
           <input
@@ -35,7 +35,9 @@
         </div>
 
         <div class="relative flex items-start justify-center flex-col gap-1">
-          <label class="font-medium text-[color:var(--text-color)]" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-[color:var(--danger)] font-2xl">*</span></label>
+          <label class="font-medium text-[color:var(--text-color)]" for="password"
+            >{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-[color:var(--danger)] font-2xl">*</span></label
+          >
           <input
             class="w-96 h-12 rounded-lg border-0 px-4 transition duration-500 focus:outline-2 bg-[color:var(--faded-bg-color)] outline-[color:var(--primary)] text-[color:var(--text-color)]"
             id="password"
@@ -47,10 +49,7 @@
           <p class="absolute error font-medium text-[color:var(--danger)] translate-y-14" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
         </div>
 
-        <button
-          class="w-96 h-12 rounded-full border-0 mt-4 transition duration-200 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] active:brightness-60"
-          type="submit"
-        >
+        <button class="w-96 h-12 rounded-full border-0 mt-4 transition duration-200 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] active:brightness-60" type="submit">
           <span>{{ showLogin ? "Log in" : "Sign up" }}</span>
         </button>
         <button type="button" @click="resetPassword = true" class="no-underline font-medium text-[color:var(--danger)]" v-if="showLogin">Forgot password?</button>
@@ -63,14 +62,14 @@
     <button class="bg-transparent border-0" @click="showLogin ? navigateTo('/auth/signup') : navigateTo('/auth/login')">
       <h3 class="m-0 font-medium cursor-pointer text-[color:var(--secondary)]">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
     </button>
-    
+
     <ToastContainer ref="toastRef" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '../stores/userStore';
-import ToastContainer from './ToastContainer.vue';
+import { useUserStore } from "../stores/userStore";
+import ToastContainer from "../ToastContainer.vue";
 
 const route = useRoute();
 const userStore = useUserStore();
@@ -82,7 +81,7 @@ watch(
   () => resetPassword.value,
   (value: boolean) => {
     if (value) navigateTo("/auth/reset-password");
-    else navigateTo('/auth/login');
+    else navigateTo("/auth/login");
   }
 );
 
@@ -90,7 +89,6 @@ const email = ref("");
 const name = ref("");
 const password = ref("");
 const confirmPassword = ref("");
-
 
 const emailErr = ref("");
 const nameErr = ref("");
@@ -100,11 +98,10 @@ const confirmPasswordErr = ref("");
 watch(
   () => route.name,
   (routeName: string | symbol | undefined) => {
-    showLogin.value = routeName === 'login';
+    showLogin.value = routeName === "login";
   },
   { immediate: true }
 );
-
 
 watch(
   () => email.value,
@@ -114,7 +111,6 @@ watch(
     else emailErr.value = "";
   }
 );
-
 
 watch(
   () => password.value,
@@ -136,7 +132,6 @@ watch(
   }
 );
 
-
 watch(
   () => confirmPassword.value,
   (value: string) => {
@@ -144,8 +139,6 @@ watch(
     else confirmPasswordErr.value = "";
   }
 );
-
-
 
 onMounted(() => {
   if (route.query["reset-password"]) resetPassword.value = true;
@@ -173,11 +166,11 @@ const loginButtons = [
 async function loginWithEmail() {
   try {
     await userStore.logIn(email.value, password.value);
-    
+
     if (userStore.isAuth) {
-      toastRef.value?.add({ 
-        title: 'Login successful!', 
-        message: 'Welcome back to Centimeter'
+      toastRef.value?.add({
+        title: "Login successful!",
+        message: "Welcome back to Centimeter"
       });
       setTimeout(() => navigateTo("/app/dashboard"), 1000);
     } else {
@@ -188,9 +181,9 @@ async function loginWithEmail() {
       passwordErr.value = error.message;
       if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
     }
-    toastRef.value?.add({ 
-      title: 'Login failed', 
-      message: 'Please check your credentials and try again'
+    toastRef.value?.add({
+      title: "Login failed",
+      message: "Please check your credentials and try again"
     });
     return;
   }
@@ -219,6 +212,4 @@ async function loginWithFacebook() {
 .opacity-leave-to {
   opacity: 0;
 }
-
-
 </style>
