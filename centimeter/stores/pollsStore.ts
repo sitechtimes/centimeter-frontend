@@ -25,12 +25,24 @@ export const usePollsStore = defineStore("pollsStore", () => {
           "Content-Type": "application/json",
           "Authorization": token ? `Bearer ${token}` : ''
         },
-        /* body: JSON.stringify({ title }) */ 
+        body: JSON.stringify({}),
       });
-    if (ok) {
-      // Handle successful response
-    } else {
-      // Handle error
-    }
+    if (!ok) {
+      throw new Error("Failed to open session");
+    } 
+    return (data ?? null) as OpenPollsResponse | null;
   }
+
+  async function deletePolls(){
+
+  }
+
+  async function closePolls(){
+
+  }
+
+  async function showResults(){
+  
+  }
+  
 })
