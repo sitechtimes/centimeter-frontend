@@ -19,8 +19,13 @@
       <User v-if="!isImportedAvatar" class="rounded-full h-10 w-10 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
       <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-10 w-10 rounded-full object-cover" />
     </div>
-    <div v-if="profileDropdown && !isMail" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md">
-      <button>Log Out</button>
+    <div v-if="profileDropdown && !isMail" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md p-2">
+      <button 
+        @click="handleLogout"
+        class="w-full px-4 py-2 text-left text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded"
+      >
+        Log Out
+      </button>
     </div>
   </div>
 </template>
@@ -36,6 +41,11 @@ const toggleMail = () => {
   isMail.value = !isMail.value;
   profileDropdown.value = false;
 };
+
+const handleLogout = () => {
+  userStore.logOut()
+  navigateTo("/auth/login")
+}
 
 const toggleProfileDropdown = () => {
   profileDropdown.value = !profileDropdown.value;
