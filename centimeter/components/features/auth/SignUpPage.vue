@@ -84,9 +84,9 @@
 </template>
 
 <script setup lang="ts">
-import ToastContainer from "../ToastContainer.vue";
+import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
 
-import { useUserStore } from "../stores/userStore";
+import { useUserStore } from "~/stores/userStore";
 const userStore = useUserStore();
 const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null);
 

@@ -6,6 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "~/components/Global/NavBar.vue";
-import LoginPage from "~/components/Accounts/LoginPage.vue";
+import NavBar from "~/components/presentation/ui/NavBar.vue";
+import LoginPage from "~/components/features/auth/LoginPage.vue";
 </script>

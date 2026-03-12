@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import NavBar from "~/components/Global/NavBar.vue";
-import homeindex from "~/components/Home/home-index.vue";
-import JoinBar from "~/components/Home/JoinBar.vue";
+import NavBar from "~/components/presentation/ui/NavBar.vue";
+import homeindex from "~/components/home/home-index.vue";
+import JoinBar from "~/components/home/JoinBar.vue";
 </script>
 
 <template>

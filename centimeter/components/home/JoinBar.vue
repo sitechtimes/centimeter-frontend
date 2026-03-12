@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import ToastContainer from "../ToastContainer.vue";
+import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
 import { ref } from "vue";
 import { useSessionStore } from "~/stores/sessionStore";
 import type { SessionStatus } from "~/utils/types";

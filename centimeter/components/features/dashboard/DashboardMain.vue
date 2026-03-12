@@ -1,14 +1,18 @@
 <template>
   <div class="min-h-screen bg-white flex-1">
-    <dashboard-main-dashboard-header/>
+    <DashboardHeader />
     <main class="flex-1">
-      <dashboard-main-empty-state v-if="empty" />
-      <dashboard-main-default-state v-if="!empty"/>
+      <EmptyState v-if="empty" />
+      <DefaultState v-if="!empty" />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const empty = ref(false)
+import { ref } from "vue";
+import DashboardHeader from "~/components/features/dashboard/DashboardHeader.vue";
+import EmptyState from "~/components/features/dashboard/PresentationCards.vue/EmptyState.vue";
+import DefaultState from "~/components/features/dashboard/PresentationCards.vue/DefaultState.vue";
+
+const empty = ref(false);
 </script>
