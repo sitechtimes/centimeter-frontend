@@ -11,10 +11,19 @@
         <User v-if="!isImportedAvatar" class="rounded-full h-9 w-9 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"/>
         <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-9 w-9 rounded-full object-contain">            
       </div>
-      <div v-if="profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md">
-        <button class="border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)]">Log Out</button>
-        <br>
-        <button class="border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)]" @click="goToAccSetting">Account Setting</button>
+      <div v-if="profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md p-2 flex flex-col gap-2 min-w-[150px] z-50">
+        <button 
+          @click="handleLogout"
+          class="w-full px-4 py-2 text-left border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded"
+        >
+          Log Out
+        </button>
+        <button 
+          @click="goToAccSetting" 
+          class="w-full px-4 py-2 text-left border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded"
+        >
+          Account Setting
+        </button>
       </div>
 
     </div>
@@ -33,5 +42,10 @@ const toggleProfileDropdown = () => {
 
 const goToAccSetting = () => {
   navigateTo("/UserProfile")
+}
+
+const handleLogout = () => {
+  userStore.logOut()
+  navigateTo("/auth/login")
 }
 </script>
