@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import TextComponent from "../slide-components/TextComponent.vue";
+import TextComponent from "../SlideComponents/TextComponent.vue";
 
 const props = defineProps<{ currentSlide?: Slide }>();
 

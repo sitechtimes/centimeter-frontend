@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex items-center gap-2 mb-3">
-      <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Quiz competitions</h3>
+      <h3 class="text-sm font-medium text-[var(--faded-text-color)]">Quiz completions</h3>
       <button class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]">
         <HelpCircle :size="16" />
       </button>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import type { Option } from "~/utils/types";
-import { BarChart3, Hourglass } from "lucide-vue-next";
+import { BarChart3, Hourglass, HelpCircle } from "lucide-vue-next";
 function handleClick(option: Option): void {
   console.log("Option clicked:", option.label);
   emits("add-slide", option.label);

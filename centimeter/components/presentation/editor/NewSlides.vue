@@ -37,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import ContentSlides from "../slide-types/ContentSlides.vue";
-import QuizCompletions from "../slide-types/QuizCompletions.vue";
-import InteractiveOptions from "../slide-types/InteractiveOptions.vue";
+import ContentSlides from "../SlideTypes/ContentSlides.vue";
+import QuizCompletions from "../SlideTypes/QuizCompletions.vue";
+import InteractiveOptions from "../SlideTypes/InteractiveOptions.vue";
 import { HelpCircle, X, Plus } from "lucide-vue-next";
 
 const isPlus = ref(false);
