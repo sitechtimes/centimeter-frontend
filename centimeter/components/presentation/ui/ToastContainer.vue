@@ -1,21 +1,10 @@
 <template>
-  <div 
-    class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none"
-  >
+  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none">
     <TransitionGroup name="toast" appear>
       <div
         v-for="message in toasts"
         :key="message.id"
-        class="
-          relative flex items-start justify-between gap-3 
-          bg-red-50 border border-red-400
-          text-red-900 
-          rounded-lg shadow-lg backdrop-blur-sm
-          px-4 py-3 min-w-72 max-w-96
-          pointer-events-auto
-          transition-all duration-300
-          hover:shadow-xl hover:scale-[1.02] hover:bg-red-200
-        "
+        class="relative flex items-start justify-between gap-3 bg-red-50 border border-red-400 text-red-900 rounded-lg shadow-lg backdrop-blur-sm px-4 py-3 min-w-72 max-w-96 pointer-events-auto transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:bg-red-200"
         @click="remove(message.id)"
         :style="{ ['--duration-ms']: (message.duration ?? props.defaultDuration) + 'ms' }"
       >
@@ -25,13 +14,7 @@
         </div>
         <button
           aria-label="Dismiss toast"
-          class="
-            flex-shrink-0 
-            text-red-900 opacity-70 
-            hover:opacity-100 hover:bg-red-400
-            rounded-full p-1 transition-all duration-200
-            focus:outline-none focus:ring-2 focus:ring-red-500
-          "
+          class="flex-shrink-0 text-red-900 opacity-70 hover:opacity-100 hover:bg-red-400 rounded-full p-1 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
           @click.stop="remove(message.id)"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,11 +23,7 @@
         </button>
 
         <div class="absolute left-0 bottom-0 h-1 w-full bg-red-100 rounded-b-lg overflow-hidden">
-            <div
-              class="h-full bg-red-300 progress-shrink"
-              :style="{ animationDuration: (message.duration ?? props.defaultDuration) + 'ms', transformOrigin: 'left' }"
-              :key="message.id + '-bar'"
-            ></div>
+          <div class="h-full bg-red-300 progress-shrink" :style="{ animationDuration: (message.duration ?? props.defaultDuration) + 'ms', transformOrigin: 'left' }" :key="message.id + '-bar'"></div>
         </div>
       </div>
     </TransitionGroup>
@@ -52,11 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ToastItem, ToastPayload } from '../utils/types';
+import type { ToastItem, ToastPayload } from "~/utils/types";
 
 const props = defineProps({
-  position: { type: String as () => 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left', default: 'top-right' },
-  defaultDuration: { type: Number, default: 6000 },
+  position: { type: String as () => "top-right" | "top-left" | "bottom-right" | "bottom-left", default: "top-right" },
+  defaultDuration: { type: Number, default: 6000 }
 });
 
 const toasts = ref<ToastItem[]>([]);
@@ -71,7 +50,7 @@ function add(toast: ToastPayload) {
     id,
     title: toast.title,
     message: toast.message,
-    duration: toast.duration ?? props.defaultDuration,
+    duration: toast.duration ?? props.defaultDuration
   };
   toasts.value.push(item);
 
@@ -119,8 +98,12 @@ defineExpose({ add, remove });
 }
 
 @keyframes progressShrink {
-  from { transform: translateX(0%); }
-  to { transform: translateX(-100%); }
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 /* Ensure clicks on the container are possible */
