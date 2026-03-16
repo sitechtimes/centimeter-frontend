@@ -5,7 +5,9 @@
   </div>
 </template>
 
-<style scoped>
-</style>
+<script setup lang="ts">
+import DashboardSideBar from "~/components/features/dashboard/SideBar.vue";
+import DashboardMain from "~/components/features/dashboard/DashboardMain.vue";
+</script>
 
-<script lang="ts"></script>
+<style scoped></style>
