@@ -118,42 +118,14 @@ const presentationCode = computed(() => {
 })
 
 function logPresentationData() {
-  const presentationData = {
-    title: presentationName.value,
-    activeTab: activeTab.value,
-    workspace: currentWorkspaceName.value,
-    totalSlides: props.slides?.length || 0,
-    slides: props.slides?.map((slide, index) => ({
-      slideNumber: index + 1,
-      id: slide.id,
-      title: slide.title,
-      backgroundColor: slide.backgroundColor,
-      backgroundImage: slide.backgroundImage,
-      totalComponents: slide.components?.length || 0,
-      components: slide.components?.map(comp => ({
-        id: comp.id,
-        type: comp.type,
-        position: { x: comp.x, y: comp.y },
-        size: { width: comp.width, height: comp.height },
-        content: comp.content,
-        fontSize: comp.fontSize,
-        color: comp.color,
-        backgroundColor: comp.backgroundColor,
-        textAlign: comp.textAlign,
-        fontWeight: comp.fontWeight,
-        fontStyle: comp.fontStyle,
-        zIndex: comp.zIndex
-      }))
-    }))
-  }
-  console.log(presentationData)
+  console.log(props.slides)
 }
 
 const handleSave = async () => {
   isSaving.value = true
   try {
     const presentationData = {
-      id: presentationCode.value,
+      presentation_code: presentationCode.value,
       title: presentationName.value,
       slides: props.slides || [],
       updated_at: new Date().toISOString()
