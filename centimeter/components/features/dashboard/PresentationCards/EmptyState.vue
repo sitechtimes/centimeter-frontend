@@ -19,13 +19,20 @@
 
 <script setup lang = "ts">
 import { useRouter } from 'vue-router'
-import { generatePresentationCode } from '@/utils/presentation'
+import { usePresentationStore } from '~/stores/presentationStore'
 
 const router = useRouter()
+const presentationStore = usePresentationStore()
 
-function goToCreatePresentation() {
-  const presentationId = generatePresentationCode(11)
-  router.push(`/app/create/${presentationId}`)
+async function goToCreatePresentation() {
+  try {
+    const presentation = await presentationStore.createPresentation('Untitled Presentation')
+    if (presentation?.id) {
+      router.push(`/app/create/${presentation.id}`)
+    }
+  } catch (err) {
+    console.error('Failed to create presentation:', err)
+  }
 }
 </script>
 
