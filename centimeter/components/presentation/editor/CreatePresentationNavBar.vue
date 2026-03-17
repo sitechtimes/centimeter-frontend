@@ -94,7 +94,7 @@
 
 <script setup lang="ts">
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play, Save } from 'lucide-vue-next'
-import type { Slide } from '@/utils/types'
+import type { Slide } from '@/utils/types/presentationTypes'
 
 const props = defineProps<{
   slides?: Slide[]
@@ -113,7 +113,6 @@ const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
 const isSaving = ref(false)
 
-// Get presentation code from route
 const presentationCode = computed(() => {
   return route.params.id as string
 })

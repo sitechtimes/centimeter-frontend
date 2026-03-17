@@ -58,8 +58,8 @@ import TextComponent from "../SlideComponents/TextComponent.vue";
 
 const props = defineProps<{ currentSlide?: Slide }>();
 
-const CANVAS_WIDTH = 1200,
-  CANVAS_HEIGHT = 800;
+const CANVAS_WIDTH = 1200;
+const CANVAS_HEIGHT = 800;
 const COMPONENT_MAP: Record<string, typeof TextComponent> = { text: TextComponent };
 
 const canvasRef = ref<HTMLDivElement>();
@@ -90,7 +90,7 @@ const resizeComponent = (comp: SlideComponent, w: number, h: number) => {
 
 const deleteSelected = () => {
   if (!selectedId.value) return;
-  components.value = components.value.filter((c) => c.id !== selectedId.value);
+  components.value = components.value.filter((c: SlideComponent) => c.id !== selectedId.value);
   selectedId.value = null;
 };
 

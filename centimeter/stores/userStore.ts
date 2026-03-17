@@ -1,17 +1,7 @@
-async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<{ ok: boolean; data?: ApiResponse }> {
-  const res = await fetch(url, options);
-  let data: ApiResponse | undefined = undefined;
-  try {
-    data = await res.json();
-  } catch (e){
-    console.log(`Response is not JSON: ${e}`);
-  }
-  return { ok: res.ok, data };
-}
+import type { User } from "../utils/types/userTypes";
+import type { Presentation } from "../utils/types/presentationTypes";
+import { apiCall } from "../utils/apiCall";
 
-
-import { defineStore } from "pinia";
-import type { User, Presentation } from "../utils/types";
 
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
