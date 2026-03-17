@@ -77,7 +77,7 @@
 import { ref, computed } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
-import CompactPresentationView from "./CompactPresentationView.vue";
+import CompactPresentationView from "./PresentationView.vue";
 import type { Presentation } from "~/utils/types";
 
 const presentations: Presentation[] = [
@@ -112,12 +112,20 @@ const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");
 
 import { useRouter } from "vue-router";
+import { usePresentationStore } from '~/stores/presentationStore'
 
 const router = useRouter();
+const presentationStore = usePresentationStore();
 
-function goToCreatePresentation() {
-  const presentationId = crypto.randomUUID();
-  router.push(`/app/create/${presentationId}`);
+async function goToCreatePresentation() {
+  try {
+    const presentation = await presentationStore.createPresentation('Untitled Presentation')
+    if (presentation?.id) {
+      router.push(`/app/create/${presentation.id}`)
+    }
+  } catch (err) {
+    console.error('Failed to create presentation:', err)
+  }
 }
 
 const filteredPresentations = computed(() => {
