@@ -2,7 +2,6 @@ import type { User } from "../utils/types/userTypes";
 import type { Presentation } from "../utils/types/presentationTypes";
 import { apiCall } from "../utils/apiCall";
 
-
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null);
   const isAuth = ref(false);
@@ -43,36 +42,49 @@ export const useUserStore = defineStore("userStore", () => {
     user.value = null;
     isAuth.value = false;
   }
+
   async function savePresentation(presentationData: Partial<Presentation>) {
     const token = user.value?.access
-    const code = presentationData.id
+    const code = presentationData.presentation_code
+
+    if (!code || !token) {
+      throw new Error('Presentation code and authentication token are required')
+    }
+
+    const payload = {
+      data: {
+        title: presentationData.title,
+        slides: presentationData.slides
+      }
+    }
 
     const { ok, data } = await apiCall<Presentation>(
-      import.meta.env.VITE_BACKEND_URL + `/presentations/${code}/save/`,
+      `${import.meta.env.VITE_BACKEND_URL}/presentations/${code}/save/`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({
-          ...presentationData,
-          presentation_code: code
-        })
+        body: JSON.stringify(payload)
       }
     )
 
-    if (ok && data) {
-      const existingIndex = presentations.value.findIndex(p => p.id === code || p.presentation_code === code)
-      if (existingIndex >= 0) {
-        presentations.value[existingIndex] = data
-      } else {
-        presentations.value.push(data)
-      }
-      return data
+    if (!ok || !data) {
+      throw new Error('Failed to save presentation')
     }
-    
-    throw new Error('Failed to save presentation')
+
+    const existingIndex = presentations.value.findIndex(
+      p => p.presentation_code === code || p.id === code
+    )
+
+    if (existingIndex >= 0) {
+      presentations.value[existingIndex] = data
+    } else {
+      presentations.value.push(data)
+    }
+
+    return data
   }
   return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation };
 }, {
