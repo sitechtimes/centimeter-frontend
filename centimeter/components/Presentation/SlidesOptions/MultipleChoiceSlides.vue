@@ -5,7 +5,7 @@
             aria-label="Presentation canvas"
             class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden p-10"
         >
-            <input id="MultipleChoiceQuestion" type="text" @click="changeText(changedQuestion, 'Ask your question here...', textEditPanel)" v-model="changedQuestion" class="h-[15%] p-5">
+            <input id="MultipleChoiceQuestion" type="text" @click="changeText()" v-model="changedQuestion" class="h-[15%] p-5">
         <div class="flex flex-wrap gap-4 h-[60%] p-10 border-2 border-transparent hover:border-slate-800 transition-colors duration-200"> 
             <div v-for="choice in placeHolderOptions">
                 <ol>{{ choice.position }}  {{ choice.option_text }}</ol>
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import type { EditPanel, PollsOption } from '~/utils/types'
 
-const changedQuestion = ref("")
+const changedQuestion = ref("Ask your question here...")
 const textEditPanel = multipleChoiceEditPanel.value[1].open
 const optionEditPanel = multipleChoiceEditPanel.value[2].open
 
@@ -37,29 +37,18 @@ const emit = defineEmits({
         }
     },
 
-    text: (changedText: string, defaultText: string, isOpen: boolean) => {
-        if ((changedText == defaultText) && isOpen){
-            changedText = ""
-            console.log(changedText, defaultText, isOpen)
-            return changedText
-        } else if ((changedText == defaultText) && !isOpen) {
-            console.log(changedText, defaultText, isOpen)
-            return changedText
-        } else if (!(changedText == defaultText) && isOpen) {
-            console.log(changedText, defaultText, isOpen)
-        } else {
-            console.log(changedText, defaultText, isOpen)
-        }
-    }
-
 })
 
 const openEditPanel = (editPanel: EditPanel) => {
     emit('open', editPanel)
 }
 
-const changeText = (changedText: string, defaultText: string, isOpen: boolean) => {
-    emit('text', changedText, defaultText, isOpen)
+const changeText = () => {
+    if (changedQuestion.value === "Ask your question here...") {
+        changedQuestion.value = " "
+    } else if (changedQuestion.value === " ") {
+        changedQuestion.value = "Ask your question here..."
+    }
 }
 
 const placeHolderOptions = ref<PollsOption[]>([

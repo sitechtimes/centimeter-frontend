@@ -1,24 +1,13 @@
-import type { EditPanel } from "./types"
+import type { EditPanel } from "../utils/types"
 
 export const slideOption = ref("")
 export const slides = ref<Slide[]>([])
 export const textEditPanel = ref(false)
 export const optionsEditPanel = ref(false)
 
-export const multipleChoiceEditPanel = computed(() => <EditPanel[]>([
-    {
-        component: "Slide",
-        open: true,
-    },
-    {
-        component: "Text",
-        open: false,
-    },
-    {
-        component: "Option",
-        open: false,
-    }
-]))
+export const multipleChoiceEditPanel = defineStore(
+    
+)
 
 export const openSlide = () => {
     slides.value.forEach((slide) => {
