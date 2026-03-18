@@ -10,6 +10,7 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 }
 import { defineStore } from "pinia";
 import type { User } from "../utils/types";
+import type { Presentation } from "../utils/presentationTypes";
 
 
 export const useUserStore = defineStore("userStore", () => {
@@ -51,7 +52,25 @@ export const useUserStore = defineStore("userStore", () => {
     isAuth.value = false;
   }
 
-  return { user, isAuth, theme, profilePic, logIn, signUp, logOut };
+  async function listPresentations(): Promise<Presentation[]> {
+    const token = user.value?.access;
+    const { ok, data } = await apiCall<Presentation[]>(
+      import.meta.env.VITE_BACKEND_URL + "/presentations/list/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : ''
+        }
+      }
+    );
+    if (!ok) {
+      throw new Error("Failed to fetch presentations");
+    }
+    return data ?? [];
+  }
+
+  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, listPresentations };
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),
