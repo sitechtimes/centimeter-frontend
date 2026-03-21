@@ -74,64 +74,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
-import type { Presentation } from "~/utils/types";
-
-const presentations: Presentation[] = [
-  {
-    presentation_name: "AI in Modern Healthcare",
-    host: "Dr. Sarah Thompson",
-    last_interacted: "2025-02-14T10:32:00Z"
-  },
-  {
-    presentation_name: "Sustainable Architecture Trends",
-    host: "Michael Reyes",
-    last_interacted: "2025-01-29T16:45:12Z"
-  },
-  {
-    presentation_name: "Quantum Computing 101",
-    host: "Prof. Emily Zhang",
-    last_interacted: "2024-12-08T09:15:47Z"
-  },
-  {
-    presentation_name: "Building Scalable Web Apps",
-    host: "Carlos Méndez",
-    last_interacted: "2025-02-01T21:03:00Z"
-  },
-  {
-    presentation_name: "Marketing Psychology Deep Dive",
-    host: "Aisha Karim",
-    last_interacted: "2025-02-10T14:20:30Z"
-  }
-];
+import type { Presentation } from "~/utils/presentationTypes";
 
 const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");
+const presentations = ref<Presentation[]>([]);
 
 import { useRouter } from "vue-router";
-import { usePresentationStore } from '~/stores/presentationStore'
+import { usePresentationStore } from "~/stores/presentationStore";
+import { useUserStore } from "~/stores/userStore";
 
 const router = useRouter();
-const presentationStore = usePresentationStore();
+const presentationStore = usePresentationStore()
+const userStore = useUserStore()
 
 async function goToCreatePresentation() {
   try {
-    const presentation = await presentationStore.createPresentation('Untitled Presentation')
+    const presentation = await presentationStore.createPresentation("Untitled Presentation")
     if (presentation?.id) {
       router.push(`/app/create/${presentation.id}`)
     }
   } catch (err) {
-    console.error('Failed to create presentation:', err)
+    console.error("Failed to create presentation:", err)
   }
 }
 
+async function loadPresentations() {
+  try {
+    presentations.value = await userStore.listPresentations();
+  } catch (err) {
+    console.error("Failed to load presentations:", err);
+    presentations.value = [];
+  }
+}
+
+onMounted(() => {
+  loadPresentations();
+});
+
 const filteredPresentations = computed(() => {
-  if (!searchQuery.value) return presentations;
+  if (!searchQuery.value) return presentations.value;
 
   const query = searchQuery.value.toLowerCase();
-  return presentations.filter((p) => p.presentation_name.toLowerCase().includes(query) || p.host.toLowerCase().includes(query));
+  return presentations.value.filter((p) => {
+    const titleMatch = p.title?.toLowerCase().includes(query);
+    const hostMatch = p.host?.toLowerCase().includes(query);
+    return titleMatch || hostMatch;
+  });
 });
 </script>
