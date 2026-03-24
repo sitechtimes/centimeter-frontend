@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { useMultipleChoiceStore } from '~/stores/slidesStore'
-import type { EditPanel, PollsOption } from '~/utils/types'
+import type { PollsOption } from '~/utils/pollsTypes'
 const multipleChoiceStore = useMultipleChoiceStore()
 
 const options = computed(() => multipleChoiceStore.options)
