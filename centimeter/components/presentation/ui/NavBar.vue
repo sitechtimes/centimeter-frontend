@@ -2,9 +2,7 @@
   <div class="flex flex-col items-center justify-center sticky top-0">
     <header class="transition duration-500 bg-[color:var(--bg-color)] text-[color:var(--text-color)] h-16 w-screen">
       <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] relative z-20">
-        <NuxtLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
-          <img class="h-16" src="/logo/logo.png" alt="Logo" /> Mentimeter
-        </NuxtLink>
+        <NuxtLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/"> <img class="h-16" src="/logo/logo.png" alt="Logo" /> Mentimeter </NuxtLink>
         <nav class="flex items-center justify-center gap-3">
           <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
             <NuxtLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center">
@@ -30,6 +28,13 @@
           <NuxtLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/app" v-if="userStore.isAuth"
             ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Go to dashboard</h3></NuxtLink
           >
+          <button 
+            v-if="userStore.isAuth"
+            @click="handleLogout"
+            class="no-underline bg-[color:var(--faded-bg-color)] px-5 py-2 transition rounded-full hover:bg-[color:var(--gray)] cursor-pointer border-0"
+          >
+            <h3 class="font-bold m-0 text-[color:var(--text-color)]">Log out</h3>
+          </button>
         </div>
       </div>
 
@@ -49,14 +54,19 @@
 </template>
 
 <script setup lang="ts">
-import ThemeToggle from './ThemeToggle.vue'
-import { useUserStore } from '../stores/userStore';
-import type { NavButtons } from '../utils/types';
+import ThemeToggle from "./ThemeToggle.vue";
+import { useUserStore } from "~/stores/userStore";
+import type { NavButtons } from "~/utils/types";
 
 const userStore = useUserStore();
 
 defineProps<{ showJoinBanner?: boolean }>();
 const emit = defineEmits<{ toggleBanner: [void] }>();
+
+const handleLogout = () => {
+  userStore.logOut()
+  navigateTo("/auth/login")
+}
 
 const navButtons = [
   {
@@ -218,7 +228,7 @@ const navButtons = [
         path: "/"
       }
     ]
-  },
+  }
 ] as const satisfies NavButtons[];
 </script>
 
@@ -233,6 +243,4 @@ const navButtons = [
   opacity: 0;
   transform: translateY(-10vh);
 }
-
-
 </style>

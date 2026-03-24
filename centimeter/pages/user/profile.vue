@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import UserProfileSideBar from "~/components/UserAccountSetting/UserProfileSideBar.vue";
+import UserAccountSettingContainer from "~/components/UserAccountSetting/AccountSettingContainer.vue";
 definePageMeta({
   middleware: "auth",
   requiresAuth: true

@@ -46,7 +46,7 @@ import { ChartNoAxesColumn, ArrowLeft, Bolt, UserRoundPen } from "lucide-vue-nex
 const navItems = [
   {
     category: "My Profile",
-    items: [{ name: "Account settings", path: "/userProfile", icon: Bolt }]
+    items: [{ name: "Account settings", path: "/user/profile", icon: Bolt }]
   },
   {
     category: "My Workspace",
