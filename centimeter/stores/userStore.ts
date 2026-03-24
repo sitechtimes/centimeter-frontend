@@ -75,7 +75,7 @@ export const useUserStore = defineStore("userStore", () => {
     }
 
     const existingIndex = presentations.value.findIndex(
-      p => p.presentation_code === code || p.id === code
+      p => p.presentation_code === code
     )
 
     if (existingIndex >= 0) {
