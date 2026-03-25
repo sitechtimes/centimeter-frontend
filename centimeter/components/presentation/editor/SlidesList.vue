@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Slide } from '@/utils/types'
+import type { Slide } from '@/utils/types/presentationTypes'
 import RightClickDropDown from './RightClickDropDown.vue'
 
 const slides = ref<Slide[]>([])
@@ -189,7 +189,7 @@ function handleDelete(index?: number | null) {
 }
 
 function addSlide(slideType: string) {
-  slides.value.push({ type: slideType })
+  slides.value.push({ id: String(slides.value.length), type: slideType })
   selectedSlide.value = slides.value.length - 1
   emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
 }

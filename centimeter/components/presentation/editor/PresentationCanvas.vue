@@ -63,16 +63,21 @@ const CANVAS_HEIGHT = 800;
 const COMPONENT_MAP: Record<string, typeof TextComponent> = { text: TextComponent };
 
 const canvasRef = ref<HTMLDivElement>();
-const components = ref<SlideComponent[]>([]);
 const selectedId = ref<string | null>(null);
 const componentCounter = ref<Record<string, number>>({ text: 0, image: 0, shape: 0 });
 
 const canvasStyle = computed(() => ({ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }));
 
+const components = computed(() => {
+  return props.currentSlide?.components ?? [];
+});
+
 watch(
   () => props.currentSlide,
   (slide) => {
-    components.value = slide?.components ? [...slide.components] : [];
+    if (slide && !slide.components) {
+      slide.components = [];
+    }
     selectedId.value = null;
   },
   { immediate: true }
@@ -95,6 +100,14 @@ const deleteSelected = () => {
 };
 
 const addComponent = (type: string) => {
+  if (!props.currentSlide?.components) {
+    if (props.currentSlide) {
+      props.currentSlide.components = [];
+    } else {
+      return;
+    }
+  }
+
   const offset = componentCounter.value[type] * 1;
   const newComponent: SlideComponent = {
     id: `${type}-${Date.now()}`,
@@ -107,9 +120,9 @@ const addComponent = (type: string) => {
     fontSize: 24,
     color: "#000",
     textAlign: "left",
-    zIndex: components.value.length + 1
+    zIndex: props.currentSlide.components.length + 1
   };
-  components.value.push(newComponent);
+  props.currentSlide.components.push(newComponent);
   selectedId.value = newComponent.id;
   componentCounter.value[type] = (componentCounter.value[type] + 1) % 21;
 };
