@@ -63,7 +63,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="viewMode === 'grid'">
-        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.presentation_name" :presentation="presentation" />
+        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.title" :presentation="presentation" />
       </div>
 
       <div v-else>
@@ -78,33 +78,38 @@ import { ref, computed } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
-import type { Presentation } from "~/utils/types";
+import type { Presentation } from "~/utils/types/presentationTypes";
 
 const presentations: Presentation[] = [
   {
-    presentation_name: "AI in Modern Healthcare",
+    id: "100",
+    title: "AI in Modern Healthcare",
     host: "Dr. Sarah Thompson",
-    last_interacted: "2025-02-14T10:32:00Z"
+    slides: [],
   },
   {
-    presentation_name: "Sustainable Architecture Trends",
+    id: "200",
+    title: "Sustainable Architecture Trends",
     host: "Michael Reyes",
-    last_interacted: "2025-01-29T16:45:12Z"
+    slides: [],
   },
   {
-    presentation_name: "Quantum Computing 101",
+    id: "300",
+    title: "Quantum Computing 101",
     host: "Prof. Emily Zhang",
-    last_interacted: "2024-12-08T09:15:47Z"
+    slides: [],
   },
   {
-    presentation_name: "Building Scalable Web Apps",
+    id: "400",
+    title: "Building Scalable Web Apps",
     host: "Carlos Méndez",
-    last_interacted: "2025-02-01T21:03:00Z"
+    slides: [],
   },
   {
-    presentation_name: "Marketing Psychology Deep Dive",
+    id: "500",
+    title: "Marketing Psychology Deep Dive",
     host: "Aisha Karim",
-    last_interacted: "2025-02-10T14:20:30Z"
+    slides: [],
   }
 ];
 
@@ -121,7 +126,7 @@ async function goToCreatePresentation() {
   try {
     const presentation = await presentationStore.createPresentation('Untitled Presentation')
     if (presentation?.id) {
-      router.push(`/app/create/${presentation.id}`)
+      router.push(`/app/create/${presentation.presentation_code}`)
     }
   } catch (err) {
     console.error('Failed to create presentation:', err)
@@ -132,6 +137,6 @@ const filteredPresentations = computed(() => {
   if (!searchQuery.value) return presentations;
 
   const query = searchQuery.value.toLowerCase();
-  return presentations.filter((p) => p.presentation_name.toLowerCase().includes(query) || p.host.toLowerCase().includes(query));
+  return presentations.filter((p) => p.title.toLowerCase().includes(query) || p.host?.toLowerCase().includes(query));
 });
 </script>

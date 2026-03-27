@@ -10,6 +10,7 @@ export interface Presentation {
 
 export interface Slide {
   id?: string;
+  type?: string;
   title?: string;
   components?: SlideComponent[];
   backgroundColor?: string;
