@@ -20,7 +20,6 @@ export const useUserStore = defineStore("userStore", () => {
         body: JSON.stringify({ email, password })
       }
     );
-    console.log( { ok, data });
     isAuth.value = ok;
     user.value = ok ? data ?? null : null;
   }
