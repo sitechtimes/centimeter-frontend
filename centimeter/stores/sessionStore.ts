@@ -1,16 +1,5 @@
-async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<{ ok: boolean; data?: ApiResponse }> {
-  const res = await fetch(url, options);
-  let data: ApiResponse | undefined = undefined;
-  try {
-    data = await res.json();
-  } catch (e){
-    console.log(`Response is not JSON: ${e}`);
-  }
-  return { ok: res.ok, data };
-}
-
-import { defineStore } from "pinia";
-import type { JoinSessionResponse, SessionStatus } from "../utils/types";
+import { apiCall } from "~/utils/apiCall";
+import type { JoinSessionResponse, SessionStatus } from "../utils/types/sessionTypes";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);

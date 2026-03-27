@@ -63,7 +63,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="viewMode === 'grid'">
-        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.presentation_name" :presentation="presentation" />
+        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.title" :presentation="presentation" />
       </div>
 
       <div v-else>
@@ -78,7 +78,40 @@ import { ref, computed, onMounted } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
-import type { Presentation } from "~/utils/presentationTypes";
+import type { Presentation } from "~/utils/types/presentationTypes";
+
+const presentations: Presentation[] = [
+  {
+    id: "100",
+    title: "AI in Modern Healthcare",
+    host: "Dr. Sarah Thompson",
+    slides: [],
+  },
+  {
+    id: "200",
+    title: "Sustainable Architecture Trends",
+    host: "Michael Reyes",
+    slides: [],
+  },
+  {
+    id: "300",
+    title: "Quantum Computing 101",
+    host: "Prof. Emily Zhang",
+    slides: [],
+  },
+  {
+    id: "400",
+    title: "Building Scalable Web Apps",
+    host: "Carlos Méndez",
+    slides: [],
+  },
+  {
+    id: "500",
+    title: "Marketing Psychology Deep Dive",
+    host: "Aisha Karim",
+    slides: [],
+  }
+];
 
 const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");
@@ -96,7 +129,7 @@ async function goToCreatePresentation() {
   try {
     const presentation = await presentationStore.createPresentation("Untitled Presentation")
     if (presentation?.id) {
-      router.push(`/app/create/${presentation.id}`)
+      router.push(`/app/create/${presentation.presentation_code}`)
     }
   } catch (err) {
     console.error("Failed to create presentation:", err)
