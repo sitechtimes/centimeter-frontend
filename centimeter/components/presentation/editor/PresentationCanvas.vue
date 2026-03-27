@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-
+    
     <div v-else class="flex flex-col items-center gap-4">
       <div
         ref="canvasRef"
@@ -55,6 +55,7 @@
 
 <script setup lang="ts">
 import TextComponent from "../SlideComponents/TextComponent.vue";
+import MultipleChoiceSlides from "../SlidesOptions/MultipleChoiceSlides.vue";
 
 const props = defineProps<{ currentSlide?: Slide }>();
 

@@ -3,7 +3,7 @@ export interface PollsOption {
   color: string;
   option_text: string;
   position?: number;
-  amount_chosen?: number;
+  amount_chosen: number;
   is_correct?: boolean;
 }
 

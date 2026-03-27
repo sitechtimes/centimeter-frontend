@@ -26,7 +26,8 @@ defineEmits<{
 const defaultOptionName = computed(()=> <PollsOption>{
     color: "black",
     option_text: "option " + (useMultipleChoiceStore().options.length + 1),
-    position: 1,
+    position: useMultipleChoiceStore().options.length + 1,
+    amount_chosen: 0
 }
 )
 

@@ -1,4 +1,4 @@
-import type { EditPanel, PollsOption } from "../utils/types"
+import type { EditPanel, PollsOption } from "../utils/pollsTypes"
 import { defineStore } from "pinia"
 
 export const slideOption = ref("")
@@ -7,19 +7,22 @@ export const slides = ref<Slide[]>([])
 export const useMultipleChoiceStore = defineStore( "multipleChoiceStore", () => {
     const options = ref<PollsOption[]>([
         {
-        color: "blue" /* supposed to be rgb */,
+        color: "#27F5EB",
         option_text: "option 1",
-        position: 1   
+        position: 1,
+        amount_chosen: 0
     },
     {
-        color: "orange" /* supposed to be rgb */,
+        color: "#F54927" ,
         option_text: "option 2",
-        position: 2
+        position: 2,
+        amount_chosen: 0
     },
     {
-        color: "black" /* supposed to be rgb */,
+        color: "#000000",
         option_text: "option 3",
-        position: 3
+        position: 3,
+        amount_chosen: 0
     }
     ])
 
@@ -46,6 +49,17 @@ export const useMultipleChoiceStore = defineStore( "multipleChoiceStore", () => 
     open: false,
     })
 
-    return { options, addOption, removeOption, textEditPanel, optionEditPanel, multipleChoiceEditPanel}
-}   
-)
+    const chartType = ref<'bar' | 'doughnut' | 'pie'>('bar')
+
+    const chartData = ref({
+        labels: options.value.map((option: PollsOption) => option.option_text),
+        datasets: [
+            {
+                data: options.value.map((option: PollsOption) => option.amount_chosen),
+                backgroundColor: options.value.map((option: PollsOption) => option.color),
+            }
+        ]
+    })
+
+    return { options, addOption, removeOption, textEditPanel, optionEditPanel, multipleChoiceEditPanel, chartType, chartData }
+})
