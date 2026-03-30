@@ -79,47 +79,13 @@ import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
 import type { Presentation } from "~/utils/types/presentationTypes";
-
-const presentations: Presentation[] = [
-  {
-    id: "100",
-    title: "AI in Modern Healthcare",
-    host: "Dr. Sarah Thompson",
-    slides: [],
-  },
-  {
-    id: "200",
-    title: "Sustainable Architecture Trends",
-    host: "Michael Reyes",
-    slides: [],
-  },
-  {
-    id: "300",
-    title: "Quantum Computing 101",
-    host: "Prof. Emily Zhang",
-    slides: [],
-  },
-  {
-    id: "400",
-    title: "Building Scalable Web Apps",
-    host: "Carlos Méndez",
-    slides: [],
-  },
-  {
-    id: "500",
-    title: "Marketing Psychology Deep Dive",
-    host: "Aisha Karim",
-    slides: [],
-  }
-];
+import { useRouter } from "vue-router";
+import { usePresentationStore } from "~/stores/presentationStore";
+import { useUserStore } from "~/stores/userStore";
 
 const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");
 const presentations = ref<Presentation[]>([]);
-
-import { useRouter } from "vue-router";
-import { usePresentationStore } from "~/stores/presentationStore";
-import { useUserStore } from "~/stores/userStore";
 
 const router = useRouter();
 const presentationStore = usePresentationStore()
