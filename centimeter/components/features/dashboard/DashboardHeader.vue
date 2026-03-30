@@ -42,7 +42,7 @@ const toggleProfileDropdown = () => {
 };
 
 const goToAccSetting = () => {
-  navigateTo("/UserProfile")
+  navigateTo("/user/profile")
 }
 
 const handleLogout = () => {
