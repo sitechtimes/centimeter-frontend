@@ -9,8 +9,8 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
   return { ok: res.ok, data };
 }
 import { defineStore } from "pinia";
-import type { User } from "../utils/types";
-import type { Presentation } from "../utils/presentationTypes";
+import type { User } from "../utils/types/userTypes";
+import type { Presentation } from "../utils/types/presentationTypes";
 
 
 export const useUserStore = defineStore("userStore", () => {
