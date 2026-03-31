@@ -1,5 +1,6 @@
-import type { EditPanel, PollsOption } from "../utils/pollsTypes"
 import { defineStore } from "pinia"
+import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement} from 'chart.js'
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
 export const slideOption = ref("")
 export const slides = ref<Slide[]>([])
@@ -54,9 +55,11 @@ export const useMultipleChoiceStore = defineStore( "multipleChoiceStore", () => 
     const chartData = ref({
         labels: options.value.map((option: PollsOption) => option.option_text),
         datasets: [
-            {
+            {   
+                label: 'Votes',
                 data: options.value.map((option: PollsOption) => option.amount_chosen),
                 backgroundColor: options.value.map((option: PollsOption) => option.color),
+                borderWidth: 1,
             }
         ]
     })

@@ -10,7 +10,6 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 }
 
 import { defineStore } from "pinia";
-import type { JoinSessionResponse, SessionStatus } from "../utils/types";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);

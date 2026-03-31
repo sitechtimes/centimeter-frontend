@@ -10,7 +10,6 @@ async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<
 }
 
 import { defineStore } from "pinia";
-import type { OpenPollsResponse } from "~/utils/types";
 
 export const usePollsStore = defineStore("pollsStore", () => {
 

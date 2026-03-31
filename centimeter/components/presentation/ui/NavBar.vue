@@ -55,8 +55,6 @@
 
 <script setup lang="ts">
 import ThemeToggle from "./ThemeToggle.vue";
-import { useUserStore } from "~/stores/userStore";
-import type { NavButtons } from "~/utils/types";
 
 const userStore = useUserStore();
 
@@ -232,7 +230,7 @@ const navButtons = [
 ] as const satisfies NavButtons[];
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .goToJoin-enter-active,
 .goToJoin-leave-active {
   transition: all 0.5s ease;

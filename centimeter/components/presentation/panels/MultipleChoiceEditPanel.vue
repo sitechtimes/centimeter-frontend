@@ -11,6 +11,9 @@
     </div>
 
     <button @click="addOption">Add Option</button>
+    <div v-for="chart in chartButtons">
+      <button @click="setChartType(chart)">{{ chart }}</button>
+    </div>
     </div>
 
 </template>
@@ -30,6 +33,12 @@ const defaultOptionName = computed(()=> <PollsOption>{
     amount_chosen: 0
 }
 )
+
+const chartButtons = ['bar', 'doughnut', 'pie'] as const
+
+const setChartType = (type: 'bar' | 'doughnut' | 'pie') => {
+    useMultipleChoiceStore().chartType = type
+}
 
 const addOption = () =>{
     useMultipleChoiceStore().options.push(defaultOptionName.value)
