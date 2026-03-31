@@ -31,8 +31,9 @@ const props = defineProps<{ presentation: Presentation }>();
 const router = useRouter();
 
 function goToPresentation() {
-  if (props.presentation.id) {
-    router.push(`/app/create/${props.presentation.id}`);
+  const code = props.presentation.presentation_code ?? props.presentation.id
+  if (code) {
+    router.push(`/app/create/${code}`);
   }
 }
 
