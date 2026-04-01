@@ -11,19 +11,19 @@ export const useMultipleChoiceStore = defineStore( "multipleChoiceStore", () => 
         color: "#27F5EB",
         option_text: "option 1",
         position: 1,
-        amount_chosen: 0
+        amount_chosen: 67
     },
     {
         color: "#F54927" ,
         option_text: "option 2",
         position: 2,
-        amount_chosen: 0
+        amount_chosen: 23
     },
     {
         color: "#000000",
         option_text: "option 3",
         position: 3,
-        amount_chosen: 0
+        amount_chosen: 47
     }
     ])
 
@@ -53,16 +53,36 @@ export const useMultipleChoiceStore = defineStore( "multipleChoiceStore", () => 
     const chartType = ref<'bar' | 'doughnut' | 'pie'>('bar')
 
     const chartData = ref({
-        labels: options.value.map((option: PollsOption) => option.option_text),
-        datasets: [
-            {   
-                label: 'Votes',
-                data: options.value.map((option: PollsOption) => option.amount_chosen),
-                backgroundColor: options.value.map((option: PollsOption) => option.color),
-                borderWidth: 1,
-            }
-        ]
+    labels: options.value.map((option: PollsOption) => option.option_text),
+    datasets: [
+        {
+        label: 'Votes',
+        data: options.value.map((option: PollsOption) => option.amount_chosen),
+        backgroundColor: options.value.map((option: PollsOption) => option.color),
+        borderWidth: 1,
+        }
+    ]
     })
 
-    return { options, addOption, removeOption, textEditPanel, optionEditPanel, multipleChoiceEditPanel, chartType, chartData }
+    const chartOptions = {
+    scales: {
+        y: {
+            ticks: {
+                display: false
+            }
+        },
+        x:{
+            ticks: {
+                display: false
+            }
+        }
+    },
+    plugins: {
+        legend: {
+            display: false
+        }
+    }
+    }
+
+    return { options, addOption, removeOption, textEditPanel, optionEditPanel, multipleChoiceEditPanel, chartType, chartData, chartOptions }
 })
