@@ -22,6 +22,12 @@ export const useUserStore = defineStore("userStore", () => {
   const profilePic = ref<string>("")
   const presentations = ref<Presentation[]>([])
 
+  function normalizePresentation(presentation: Presentation): Presentation {
+    const normalizedTitle = presentation.title ?? presentation.data?.title ?? "Untitled Presentation"
+    const normalizedSlides = presentation.slides ?? presentation.data?.slides ?? []
+    return { ...presentation, title: normalizedTitle, slides: normalizedSlides }
+  }
+
   async function logIn(email: string, password: string) {
     const { ok, data } = await apiCall<User>(
       import.meta.env.VITE_BACKEND_URL + "/users/login/",
@@ -71,6 +77,32 @@ export const useUserStore = defineStore("userStore", () => {
     return data ?? [];
   }
 
+  async function getPresentation(code: string): Promise<Presentation | null> {
+    if (!code) return null
+    const token = user.value?.access
+    if (token) {
+      const { ok, data } = await apiCall<Presentation>(
+        `${import.meta.env.VITE_BACKEND_URL}/presentations/${code}/get/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+
+      if (ok && data) {
+        return normalizePresentation(data)
+      }
+    }
+
+    const list = await listPresentations()
+    return list.find((presentation: Presentation) => (
+      presentation.presentation_code === code || presentation.id === code
+    )) ?? null
+  }
+
   async function savePresentation(presentationData: Partial<Presentation>) {
     const token = user.value?.access
     const code = presentationData.presentation_code
@@ -114,7 +146,7 @@ export const useUserStore = defineStore("userStore", () => {
 
     return data
   }
-  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation, listPresentations };
+  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation, listPresentations, getPresentation };
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),

@@ -26,8 +26,24 @@ const editorBarRef = ref<InstanceType<typeof EditorBar>>();
 const showEditPanel = ref(false);
 const currentSelectedSlide = ref<Slide | undefined>(undefined);
 
+const userStore = useUserStore();
+const route = useRoute();
+
 const allSlides = computed(() => {
   return editorBarRef.value?.getSlides() || [];
+});
+
+onMounted(async () => {
+  const code = route.params.id as string;
+  if (!code) return;
+  try {
+    const presentation = await userStore.getPresentation(code);
+    if (presentation) {
+      editorBarRef.value?.setSlides(presentation.slides ?? []);
+    }
+  } catch (err) {
+    console.error("Failed to load presentation:", err);
+  }
 });
 
 function toggleEditPanel() {
