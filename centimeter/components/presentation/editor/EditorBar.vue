@@ -7,7 +7,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Slide } from '@/utils/types/presentationTypes'
 import NewSlides from './NewSlides.vue'
 import SlidesList from './SlidesList.vue'
 
@@ -31,9 +30,5 @@ function getSlides() {
   return slidesListRef.value?.slides || []
 }
 
-function setSlides(nextSlides: Slide[]) {
-  slidesListRef.value?.setSlides(nextSlides)
-}
-
-defineExpose({ getSlides, setSlides })
+defineExpose({ getSlides })
 </script>

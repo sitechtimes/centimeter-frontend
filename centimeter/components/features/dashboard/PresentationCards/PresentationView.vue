@@ -2,9 +2,9 @@
   <div class="w-full max-w-5xl mx-auto p-6 space-y-1">
     <div
       v-for="presentation in presentations"
-      :key="presentation.presentation_code ?? presentation.id"
+      :key="presentation.id"
       class="flex items-center gap-4 py-3 px-2 rounded-lg hover:bg-[color:var(--secondary-shade)] transition-colors cursor-pointer"
-      @click="goToPresentation(presentation)"
+      @click="goToPresentation(presentation.id)"
     >
       <button class="flex-shrink-0 w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity" @click.stop>
         <Play class="w-5 h-5 text-[color:var(--text-color)]" />
@@ -46,10 +46,9 @@ import type { Presentation } from "~/utils/presentationTypes";
 defineProps<{ presentations: Presentation[] }>();
 
 const router = useRouter();
-function goToPresentation(presentation: Presentation) {
-  const code = presentation.presentation_code ?? presentation.id
-  if (code) {
-    router.push(`/app/create/${code}`);
+function goToPresentation(id: string) {
+  if (id) {
+    router.push(`/app/create/${id}`);
   }
 }
 const formatDate = (dateString: string): string => {

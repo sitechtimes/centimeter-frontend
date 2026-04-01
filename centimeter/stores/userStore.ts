@@ -71,14 +71,6 @@ export const useUserStore = defineStore("userStore", () => {
     return data ?? [];
   }
 
-  async function getPresentationByCode(code: string): Promise<Presentation | null> {
-    if (!code) return null
-    const list = await listPresentations()
-    return list.find((presentation: Presentation) => (
-      presentation.presentation_code === code || presentation.id === code
-    )) ?? null
-  }
-
   async function savePresentation(presentationData: Partial<Presentation>) {
     const token = user.value?.access
     const code = presentationData.presentation_code
@@ -122,7 +114,7 @@ export const useUserStore = defineStore("userStore", () => {
 
     return data
   }
-  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation, listPresentations, getPresentationByCode };
+  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation, listPresentations };
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),
