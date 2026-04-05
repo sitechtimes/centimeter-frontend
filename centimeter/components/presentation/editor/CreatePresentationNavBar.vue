@@ -51,7 +51,20 @@
 
 
       <div class="flex items-center gap-1 ml-4">
-        <button class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1">
+        <button 
+          @click="handleSave"
+          :disabled="isSaving"
+          class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1 disabled:opacity-50"
+          title="Save presentation"
+        >
+          <Save class="w-5 h-5 text-[var(--text-color)]" />
+        </button>
+
+        <button 
+          @click="logPresentationData"
+          class="p-2 hover:bg-[var(--faded-bg-color)] rounded-full transition-colors ml-1"
+          title="Log presentation data"
+        >
           <Plus class="w-5 h-5 text-[var(--text-color)]" />
         </button>
 
@@ -80,10 +93,17 @@
 </template>
 
 <script setup lang="ts">
-import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play } from 'lucide-vue-next'
+import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play, Save } from 'lucide-vue-next'
+import type { Slide } from '@/utils/types/presentationTypes'
+
+const props = defineProps<{
+  slides?: Slide[]
+}>()
 
 const sessionStore = useSessionStore()
+const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 
 const WorkspaceIcon: Component | null = null
 
@@ -91,6 +111,35 @@ const presentationName = ref('Untitled Presentation')
 const activeTab = ref<"create" | "results">("create");
 const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
+const isSaving = ref(false)
+
+const presentationCode = computed(() => {
+  return route.params.id as string
+})
+
+function logPresentationData() {
+  console.log(props.slides)
+}
+
+const handleSave = async () => {
+  isSaving.value = true
+  try {
+    const presentationData = {
+      presentation_code: presentationCode.value,
+      title: presentationName.value,
+      slides: props.slides || [],
+      updated_at: new Date().toISOString()
+    }
+    
+    const savedPresentation = await userStore.savePresentation(presentationData)
+    
+    console.log('Presentation saved successfully:', savedPresentation)
+  } catch (error) {
+    console.error('Failed to save presentation:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
 
 const handlePresent = async () => {
   try {
