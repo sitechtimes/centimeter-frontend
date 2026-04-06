@@ -24,15 +24,16 @@ import { computed } from "vue";
 import { LayoutGrid } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 
-import type { Presentation } from "~/utils/presentationTypes";
+import type { Presentation } from "~/utils/types/presentationTypes";
 
 const props = defineProps<{ presentation: Presentation }>();
 
 const router = useRouter();
 
 function goToPresentation() {
-  if (props.presentation.id) {
-    router.push(`/app/create/${props.presentation.id}`);
+  const code = props.presentation.presentation_code ?? props.presentation.id
+  if (code) {
+    router.push(`/app/create/${code}`);
   }
 }
 

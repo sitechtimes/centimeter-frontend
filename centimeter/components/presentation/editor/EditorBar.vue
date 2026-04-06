@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Slide } from '@/utils/types/presentationTypes'
 import NewSlides from './NewSlides.vue'
 import SlidesList from './SlidesList.vue'
 
@@ -27,8 +28,12 @@ function forwardSelect(index: number, slide: any) {
 }
 
 function getSlides() {
-  return slidesListRef.value?.slides || []
+  return slidesListRef.value?.getSlides?.() || []
 }
 
-defineExpose({ getSlides })
+function setSlides(nextSlides: Slide[]) {
+  slidesListRef.value?.setSlides?.(nextSlides)
+}
+
+defineExpose({ getSlides, setSlides })
 </script>

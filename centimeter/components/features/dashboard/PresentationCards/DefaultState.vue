@@ -63,7 +63,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="viewMode === 'grid'">
-        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.title" :presentation="presentation" />
+        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.id" :presentation="presentation" />
       </div>
 
       <div v-else>

@@ -4,7 +4,7 @@
       v-for="presentation in presentations"
       :key="presentation.id"
       class="flex items-center gap-4 py-3 px-2 rounded-lg hover:bg-[color:var(--secondary-shade)] transition-colors cursor-pointer"
-      @click="goToPresentation(presentation.id)"
+      @click="goToPresentation(presentation)"
     >
       <button class="flex-shrink-0 w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity" @click.stop>
         <Play class="w-5 h-5 text-[color:var(--text-color)]" />
@@ -15,7 +15,7 @@
           <h3 class="text-sm font-normal text-[color:var(--text-color)] truncate">
             {{ presentation.title }}
           </h3>
-          <span class="text-xs text-[color:var(--text-color)] flex-shrink-0">1 slide</span>
+          <span class="text-xs text-[color:var(--text-color)] flex-shrink-0">{{ presentation.slides?.length ?? 0 }} {{ (presentation.slides?.length ?? 0) === 1 ? 'slide' : 'slides' }}</span>
         </div>
       </div>
 
@@ -42,13 +42,14 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { Play, MoreHorizontal, BarChart3 } from "lucide-vue-next";
-import type { Presentation } from "~/utils/presentationTypes";
+import type { Presentation } from "~/utils/types/presentationTypes";
 defineProps<{ presentations: Presentation[] }>();
 
 const router = useRouter();
-function goToPresentation(id: string) {
-  if (id) {
-    router.push(`/app/create/${id}`);
+function goToPresentation(presentation: Presentation) {
+  const code = presentation.presentation_code ?? presentation.id
+  if (code) {
+    router.push(`/app/create/${code}`);
   }
 }
 const formatDate = (dateString: string): string => {

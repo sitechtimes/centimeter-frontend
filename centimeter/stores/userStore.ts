@@ -1,30 +1,25 @@
-async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<{ ok: boolean; data?: ApiResponse }> {
-  const res = await fetch(url, options);
-  let data: ApiResponse | undefined = undefined;
-  try {
-    data = await res.json();
-  } catch (e){
-    console.log(`Response is not JSON: ${e}`);
-  }
-  return { ok: res.ok, data };
-}
-import { defineStore } from "pinia";
-import type { User } from "../utils/types/userTypes";
-import type { Presentation } from "../utils/types/presentationTypes";
-
+import { defineStore } from "pinia"
+import type { User } from "../utils/types/userTypes"
+import type { Presentation } from "../utils/types/presentationTypes"
+import { apiCall } from "../utils/apiCall"
 
 export const useUserStore = defineStore("userStore", () => {
-  const user = ref<User | null>(null);
-  const isAuth = ref(false);
-  
-  const theme = ref<"light" | "dark">("light");
-
+  const user = ref<User | null>(null)
+  const isAuth = ref(false)
+  const theme = ref<"light" | "dark">("light")
   const profilePic = ref<string>("")
   const presentations = ref<Presentation[]>([])
 
+  function authHeaders(): Record<string, string> {
+    const token = user.value?.access
+    const headers: Record<string, string> = { "Content-Type": "application/json" }
+    if (token) headers["Authorization"] = `Bearer ${token}`
+    return headers
+  }
+
   function normalizePresentation(presentation: Presentation): Presentation {
-    const normalizedTitle = presentation.title ?? presentation.data?.title ?? "Untitled Presentation"
-    const normalizedSlides = presentation.slides ?? presentation.data?.slides ?? []
+    const normalizedTitle = presentation.data?.title ?? presentation.title ?? "Untitled Presentation"
+    const normalizedSlides = presentation.data?.slides ?? presentation.slides ?? []
     return { ...presentation, title: normalizedTitle, slides: normalizedSlides }
   }
 
@@ -34,11 +29,11 @@ export const useUserStore = defineStore("userStore", () => {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       }
-    );
-    isAuth.value = ok;
-    user.value = ok ? data ?? null : null;
+    )
+    isAuth.value = ok
+    user.value = ok ? data ?? null : null
   }
 
   async function signUp(email: string, password: string) {
@@ -47,60 +42,41 @@ export const useUserStore = defineStore("userStore", () => {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       }
-    );
-    isAuth.value = ok;
-    user.value = ok ? data ?? null : null;
+    )
+    isAuth.value = ok
+    user.value = ok ? data ?? null : null
   }
 
   async function logOut() {
-    user.value = null;
-    isAuth.value = false;
+    user.value = null
+    isAuth.value = false
   }
 
   async function listPresentations(): Promise<Presentation[]> {
-    const token = user.value?.access;
     const { ok, data } = await apiCall<Presentation[]>(
       import.meta.env.VITE_BACKEND_URL + "/presentations/list/",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : ''
-        }
-      }
-    );
+      { method: "GET", headers: authHeaders() }
+    )
     if (!ok) {
-      throw new Error("Failed to fetch presentations");
+      throw new Error("Failed to fetch presentations")
     }
-    return data ?? [];
+    return (data ?? []).map(normalizePresentation)
   }
 
   async function getPresentation(code: string): Promise<Presentation | null> {
     if (!code) return null
-    const token = user.value?.access
-    if (token) {
-      const { ok, data } = await apiCall<Presentation>(
-        `${import.meta.env.VITE_BACKEND_URL}/presentations/${code}/get/`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
-        }
-      )
 
-      if (ok && data) {
-        return normalizePresentation(data)
-      }
+    const { ok, data } = await apiCall<Presentation>(
+      `${import.meta.env.VITE_BACKEND_URL}/presentations/${code}/get/`,
+      { method: "GET", headers: authHeaders() }
+    )
+
+    if (ok && data) {
+      return normalizePresentation(data)
     }
-
-    const list = await listPresentations()
-    return list.find((presentation: Presentation) => (
-      presentation.presentation_code === code || presentation.id === code
-    )) ?? null
+    return null
   }
 
   async function savePresentation(presentationData: Partial<Presentation>) {
@@ -108,47 +84,46 @@ export const useUserStore = defineStore("userStore", () => {
     const code = presentationData.presentation_code
 
     if (!code || !token) {
-      throw new Error('Presentation code and authentication token are required')
+      throw new Error("Presentation code and authentication token are required")
     }
 
     const payload = {
       data: {
         title: presentationData.title,
-        slides: presentationData.slides
-      }
+        slides: presentationData.slides,
+      },
     }
 
     const { ok, data } = await apiCall<Presentation>(
       `${import.meta.env.VITE_BACKEND_URL}/presentations/${code}/save/`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
+        headers: authHeaders(),
+        body: JSON.stringify(payload),
       }
     )
 
     if (!ok || !data) {
-      throw new Error('Failed to save presentation')
+      throw new Error("Failed to save presentation")
     }
 
+    const normalized = normalizePresentation(data)
     const existingIndex = presentations.value.findIndex(
-      p => p.presentation_code === code
+      (p) => p.presentation_code === code
     )
 
     if (existingIndex >= 0) {
-      presentations.value[existingIndex] = data
+      presentations.value[existingIndex] = normalized
     } else {
-      presentations.value.push(data)
+      presentations.value.push(normalized)
     }
 
-    return data
+    return normalized
   }
-  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation, listPresentations, getPresentation };
+
+  return { user, isAuth, theme, profilePic, logIn, signUp, logOut, savePresentation, listPresentations, getPresentation }
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),
-  }
-});
+  },
+})
