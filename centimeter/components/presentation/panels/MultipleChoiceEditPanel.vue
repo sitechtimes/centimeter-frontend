@@ -1,47 +1,48 @@
 <template>
     <div class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
       <div class="flex items-center justify-between p-4 border-b border-gray-200">
-      <h2 class="text-lg font-semibold text-[var(--text-color)]">Question</h2>
+      <h2 class="text-lg font-semibold text-[var(--text-color)]">Edit</h2>
       <button
         class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]"
-        @click="$emit('close')"
+        @click="closeEditPanel"
       >
         <X class="w-6 h-6"/>
       </button>
     </div>
 
-    <button @click="addOption">Add Option</button>
-    <div v-for="chart in chartButtons">
-      <button @click="setChartType(chart)">{{ chart }}</button>
+      <h2 class="flex items-center justify-center mt-6">Chart Types</h2>
+
+    <div class="flex flex-wrap gap-3 mt-3 px-4 justify-center">
+      <div
+        v-for="chart in chartButtons"
+        :key="chart"
+        class="flex items-center justify-center w-[30px] min-w-[72px] rounded-2xl border border-gray-300 px-3 py-3 transition-colors duration-200 hover:border-gray-700 cursor-pointer"
+        @click="setChartType(chart)"
+      >
+        <ChartColumn v-if="chart === 'bar'" class="text-[var(--text-color)]" :size="18" />
+        <ChartPie v-else-if="chart === 'pie'" class="text-[var(--text-color)]" :size="18" />
+        <CircleDot v-else-if="chart === 'doughnut'" class="text-[var(--text-color)]" :size="18" />
+      </div>
     </div>
+
     </div>
 
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
-import { useMultipleChoiceStore } from '~/stores/slidesStore'
-defineProps<{ selectedSlide?: Slide }>()
-defineEmits<{ 
-  close: []
-}>()
+import { X, ChartColumn, ChartPie, CircleDot } from 'lucide-vue-next'
 
-const defaultOptionName = computed(()=> <PollsOption>{
-    color: "black",
-    option_text: "option " + (useMultipleChoiceStore().options.length + 1),
-    position: useMultipleChoiceStore().options.length + 1,
-    amount_chosen: 0
+const emit = defineEmits<{ close: [] }>()
+
+const closeEditPanel = () => {
+  emit('close')
 }
-)
 
 const chartButtons = ['bar', 'doughnut', 'pie'] as const
 
 const setChartType = (type: 'bar' | 'doughnut' | 'pie') => {
-    useMultipleChoiceStore().chartType = type
+    chartType.value = type
 }
 
-const addOption = () =>{
-    useMultipleChoiceStore().options.push(defaultOptionName.value)
-}
 </script>
 

@@ -57,6 +57,7 @@
 
 <script setup lang="ts">
 import type { Slide } from '@/utils/types/presentationTypes'
+import type { PollsOption } from '@/utils/types/pollsTypes'
 import RightClickDropDown from './RightClickDropDown.vue'
 
 const selectedSlide = ref<number | null>(null)
@@ -188,10 +189,29 @@ function handleDelete(index?: number | null) {
   closeContext()
 }
 
+const newTextSlide = (newSlide: Slide) => {
+  newSlide.components = []
+}
+
+const newMultipleChoiceSlide = (newSlide: Slide) => {
+  newSlide.question = 'Ask your question here...';
+  newSlide.options = [
+    { color: '#27F5EB', option_text: 'Option 1', position: 1, amount_chosen: 0 },
+    { color: '#F54927', option_text: 'Option 2', position: 2, amount_chosen: 0 },
+    { color: '#000000', option_text: 'Option 3', position: 3, amount_chosen: 0 }
+  ];
+}
+
 function addSlide(slideType: string) {
-  slides.value.push({ type: slideType })
-  selectedSlide.value = slides.value.length - 1
-  emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
+  const newSlide: Slide = { type: slideType };
+  if (slideType === 'Text') {
+    newTextSlide(newSlide);
+  } else if (slideType === 'Multiple Choice') {
+    newMultipleChoiceSlide(newSlide);
+  }
+  slides.value.push(newSlide);
+  selectedSlide.value = slides.value.length - 1;
+  emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value]);
 }
 
 function selectSlide(index: number) {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!openMultipleChoiceEditPanel()" class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
+  <div v-if="openSlideTypeEditPanel(props.selectedSlide) === 'Text' && props.isOpen" class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
       <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Slide</h2>
       <button
@@ -90,23 +90,26 @@
       </div>
       </div>
   </div>
-  <MultipleChoiceEditPanel v-if="openMultipleChoiceEditPanel()"/>
+  <MultipleChoiceEditPanel v-if="(openSlideTypeEditPanel(props.selectedSlide) === 'Multiple Choice') && props.isOpen" @close="$emit('close')"/>
 </template>
 
 <script setup lang="ts">
 import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
 import MultipleChoiceEditPanel from './MultipleChoiceEditPanel.vue';
-defineProps<{ selectedSlide?: Slide }>()
+
+const props = defineProps<{ selectedSlide?: Slide; isOpen?: boolean }>()
+
 defineEmits<{ 
   close: []
   'add-component': [type: string]
 }>()
 
-const openMultipleChoiceEditPanel = () => {
-  if (useMultipleChoiceStore().textEditPanel.open || useMultipleChoiceStore().optionEditPanel.open || useMultipleChoiceStore().multipleChoiceEditPanel.open) {
-    return true
-  } else if (!(useMultipleChoiceStore().textEditPanel.open || useMultipleChoiceStore().optionEditPanel.open || useMultipleChoiceStore().multipleChoiceEditPanel.open)) {
+const openSlideTypeEditPanel = (selectedSlide?: Slide) => {
+  if (selectedSlide?.type !== " ") {
+    return selectedSlide?.type
+  } else {
     return false
-  } 
+  }
 }
+
 </script>
