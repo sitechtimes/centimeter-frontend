@@ -27,8 +27,9 @@ const presentationStore = usePresentationStore()
 async function goToCreatePresentation() {
   try {
     const presentation = await presentationStore.createPresentation('Untitled Presentation')
-    if (presentation?.id) {
-      router.push(`/app/create/${presentation.id}`)
+    const code = presentation?.presentation_code ?? presentation?.id
+    if (code) {
+      router.push(`/app/create/${code}`)
     }
   } catch (err) {
     console.error('Failed to create presentation:', err)

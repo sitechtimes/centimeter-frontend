@@ -3,6 +3,10 @@ export interface Presentation {
   presentation_code?: string;
   title: string;
   slides: Slide[];
+  data?: {
+    title?: string;
+    slides?: Slide[];
+  };
   host?: string;
   created_at?: string;
   updated_at?: string;

@@ -194,9 +194,24 @@ function addSlide(slideType: string) {
   emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
 }
 
+function setSlides(nextSlides: Slide[]) {
+  slides.value = [...nextSlides]
+  if (slides.value.length > 0) {
+    selectedSlide.value = 0
+    emit('select-slide', 0, slides.value[0])
+  } else {
+    selectedSlide.value = null
+    emit('select-slide', -1, undefined as any)
+  }
+}
+
 function selectSlide(index: number) {
   selectedSlide.value = index
   emit('select-slide', index, slides.value[index])
+}
+
+function getSlides() {
+  return slides.value
 }
 
 onMounted(() => {
@@ -212,6 +227,8 @@ onUnmounted(() => {
 
 defineExpose({
   addSlide,
+  setSlides,
+  getSlides,
   slides
 })
 </script>
