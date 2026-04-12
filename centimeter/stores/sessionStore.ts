@@ -1,5 +1,4 @@
 import { apiCall } from "~/utils/apiCall";
-import type { JoinSessionResponse, SessionStatus } from "../utils/types/sessionTypes";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);

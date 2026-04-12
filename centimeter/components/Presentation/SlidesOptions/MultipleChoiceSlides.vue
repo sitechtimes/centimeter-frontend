@@ -15,21 +15,12 @@
                 v-model="props.slide!.question" 
                 class="flex-shrink-0 p-4 text-lg border-b border-gray-200"
                 >
-        <div :class="[`flex ${graphLayout}` + ' gap-4 h-[60%] p-10 border-2 border-transparent items-center justify-center mt-12']"> 
-            <div :class="[`flex ${graphLayout}` + ' items-center gap-4']">
+        <div :class="['flex gap-4 h-[60%] p-10 border-2 border-transparent items-center justify-center mt-12', chartType === 'bar' ? 'flex-col' : 'flex-row']"> 
+            <div :class="['flex items-center gap-4', chartType === 'bar' ? 'flex-col' : 'flex-row']">
                 <GraphComponent :options="props.slide?.options" />
-                <div :class="[
-                    'flex',
-                    optionsLayout,
-                    chartType === 'bar' ? 'gap-4' : 'gap-1'
-                    ]">
+                <div :class="['flex', chartType === 'bar' ? 'gap-4 flex-row' : 'gap-1 flex-col']">
                     <div v-for="choice in props.slide?.options"
-                        :class="[
-                            'flex items-center gap-2 bg-white rounded border border-gray-200 hover:border-slate-800 transition-colors min-w-0',
-                            chartType === 'bar'
-                            ? 'p-3 flex-1 h-[50px]'
-                            : 'p-1 px-2 h-auto'
-                        ]"
+                        :class="['flex items-center gap-2 bg-white rounded border border-gray-200 hover:border-slate-800 transition-colors min-w-0', chartType === 'bar' ? 'p-3 flex-1 h-[50px]': 'p-1 px-2 h-auto']"
                         >
                         <input 
                             type="text" 
@@ -41,12 +32,7 @@
                     </div>
                     <button 
                         @click="addOption" 
-                        :class="[
-                            'bg-blue-500 text-white rounded flex-shrink-0 flex items-center justify-center',
-                            chartType === 'bar'
-                            ? 'p-3 h-[50px]'
-                            : 'p-1 px-2 h-auto'
-                        ]"
+                        :class="['bg-blue-500 text-white rounded flex-shrink-0 flex items-center justify-center', chartType === 'bar' ? 'p-3 h-[50px]' : 'p-1 px-2 h-auto']"
                     >+</button>
                 </div>
                 
@@ -57,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { chartType } from '~/utils/slides';
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
 
 const props = defineProps<{ slide?: Slide }>();
@@ -113,18 +98,6 @@ const fontSize = computed(() => {
   if (count <= 6) return 'text-sm';
   return 'text-xs';
 });
-
-const graphLayout = computed(() => {
-  if (chartType.value === 'bar') return 'flex-col';
-  else return 'flex-row';
-})
-
-const optionsLayout = computed(() => {
-  if (chartType.value === 'bar') return 'flex-row';
-  else return 'flex-col';
-})
-
-
 </script>
 
 <style scoped>

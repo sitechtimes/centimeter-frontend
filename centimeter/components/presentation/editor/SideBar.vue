@@ -39,7 +39,5 @@ function handleClick(id: string) {
   if (activeItem.value === "edit") {
     openEditPanel.value = !openEditPanel.value
   }
-  console.log(openEditPanel.value)
-  console.log(`Clicked: ${id}`)
 }
 </script>

@@ -56,8 +56,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Slide } from '@/utils/types/presentationTypes'
-import type { PollsOption } from '@/utils/types/pollsTypes'
 import RightClickDropDown from './RightClickDropDown.vue'
 
 const selectedSlide = ref<number | null>(null)
@@ -219,8 +217,6 @@ function selectSlide(index: number) {
   slides.value.forEach((slide) =>{
     slide.on_slide = false
   })
-  console.log(slides.value)
-  console.log(slides.value[index].type)
   slides.value[index].on_slide = true
   emit('select-slide', index, slides.value[index])
 }

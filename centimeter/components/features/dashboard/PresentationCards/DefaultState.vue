@@ -78,7 +78,6 @@ import { ref, computed } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
-import type { Presentation } from "~/utils/types/presentationTypes";
 
 const presentations: Presentation[] = [
   {

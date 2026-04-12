@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Option } from "~/utils/uiTypes";
 import { BarChart3, Cloud, MessageSquare, Scale, List, Users, HelpCircle, Award, Grid2x2, Edit3, MapPin } from "lucide-vue-next";
 const interactiveOptions = [
   { icon: BarChart3, label: "Multiple Choice", color: "text-blue-600" },

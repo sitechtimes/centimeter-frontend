@@ -13,8 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { Slide } from "~/utils/types/presentationTypes";
 import NavBar from "@/components/Presentation/editor/CreatePresentationNavBar.vue";
 import SideBar from "@/components/Presentation/editor/SideBar.vue";
 import EditorBar from "@/components/Presentation/editor/EditorBar.vue";

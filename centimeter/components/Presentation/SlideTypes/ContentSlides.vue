@@ -22,7 +22,6 @@
 
 <script setup lang="ts">
 import { Type, Image, Play, LayoutGrid, HelpCircle } from "lucide-vue-next";
-import type { Option } from "~/utils/uiTypes";
 
 function handleClick(option: Option): void {
   console.log("Option clicked:", option.label);
