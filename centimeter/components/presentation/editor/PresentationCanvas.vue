@@ -16,10 +16,12 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <MultipleChoiceSlides />
+    
+    <div v-if="props.currentSlide?.type === 'Multiple Choice'">
+      <MultipleChoiceSlides :slide="props.currentSlide" />
     </div>
-    <!-- <div v-else class="flex flex-col items-center gap-4">
+
+    <div v-if="props.currentSlide?.type === 'Text'" class="flex flex-col items-center gap-4">
       <div
         ref="canvasRef"
         role="region"
@@ -51,7 +53,7 @@
       >
         Console slide properties
       </button>
-    </div> -->
+    </div>
   </div>
 </template>
 

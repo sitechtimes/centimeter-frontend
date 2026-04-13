@@ -36,6 +36,8 @@ const activeItem = ref<string | null>(null)
 
 function handleClick(id: string) {
   activeItem.value = id
-  console.log(`Clicked: ${id}`)
+  if (activeItem.value === "edit") {
+    openEditPanel.value = !openEditPanel.value
+  }
 }
 </script>

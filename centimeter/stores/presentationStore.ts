@@ -5,9 +5,6 @@ export const usePresentationStore = defineStore("presentationStore", () => {
     try {
       const userStore = useUserStore();
       const token = userStore.user?.access
-
-      console.log("Token exists:", !!token);
-      console.log("Token prefix:", token?.substring(0, 20) + "...");  
       
       const { ok, data } = await apiCall<Presentation>(
         import.meta.env.VITE_BACKEND_URL + "/presentations/create/",

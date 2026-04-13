@@ -7,11 +7,6 @@ export interface PollsOption {
   is_correct?: boolean;
 }
 
-export interface EditPanel{
-  component: string;
-  open: boolean
-}
-
 export interface OpenPollsResponse{
   session_id: string;
   question?: string;

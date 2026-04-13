@@ -31,17 +31,4 @@ export const usePollsStore = defineStore("pollsStore", () => {
     } 
     return (data ?? null) as OpenPollsResponse | null;
   }
-
-  async function deletePolls(){
-
-  }
-
-  async function closePolls(){
-
-  }
-
-  async function showResults(){
-  
-  }
-  
 })

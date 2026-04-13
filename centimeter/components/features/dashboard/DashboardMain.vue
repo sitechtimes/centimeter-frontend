@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import DashboardHeader from "~/components/features/dashboard/DashboardHeader.vue";
 import EmptyState from "~/components/features/dashboard/PresentationCards/EmptyState.vue";
 import DefaultState from "~/components/features/dashboard/PresentationCards/DefaultState.vue";

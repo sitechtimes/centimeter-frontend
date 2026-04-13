@@ -13,6 +13,8 @@ export interface Slide {
   type?: string;
   title?: string;
   components?: SlideComponent[];
+  options?: PollsOption[];
+  question?: string;
   backgroundColor?: string;
   backgroundImage?: string;
 }
