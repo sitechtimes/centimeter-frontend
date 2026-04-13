@@ -97,6 +97,7 @@ import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play, Save } from 
 
 const props = defineProps<{
   slides?: Slide[]
+  initialTitle?: string
 }>()
 
 const sessionStore = useSessionStore()
@@ -115,6 +116,16 @@ const isSaving = ref(false)
 const presentationCode = computed(() => {
   return route.params.id as string
 })
+
+watch(
+  () => props.initialTitle,
+  (title) => {
+    if (title !== undefined && title !== null) {
+      presentationName.value = title
+    }
+  },
+  { immediate: true }
+)
 
 function logPresentationData() {
   console.log(props.slides)
