@@ -1,7 +1,7 @@
 <template>
   <header class="flex items-center justify-end px-6 py-4 border-b border-[var(--faded-bg-color)] w-full bg-[var(--bg-color)] text-[var(--text-color)]">
     <div class="flex items-center gap-4">
-      <ThemeToggle />
+      <ThemeToggle/>
       <button class="relative p-2 text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors">
         <Bell :size="20" />
         <span class="absolute top-1 right-1 w-2 h-2 bg-[var(--danger)] rounded-full"></span>
@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import { Bell, User } from "lucide-vue-next";
+import ThemeToggle from "~/components/Presentation/ui/ThemeToggle.vue";
 const userStore = useUserStore();
 const isImportedAvatar = ref(userStore.profilePic !== "");
 const profileDropdown = ref(false);

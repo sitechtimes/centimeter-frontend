@@ -1,7 +1,4 @@
-import { defineStore } from "pinia"
-import type { User } from "../utils/types/userTypes"
-import type { Presentation } from "../utils/types/presentationTypes"
-import { apiCall } from "../utils/apiCall"
+import { apiCall } from "../utils/apiCall";
 
 export const useUserStore = defineStore("userStore", () => {
   const user = ref<User | null>(null)

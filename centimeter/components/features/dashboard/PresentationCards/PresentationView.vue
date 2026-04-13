@@ -40,9 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import { Play, MoreHorizontal, BarChart3 } from "lucide-vue-next";
-import type { Presentation } from "~/utils/types/presentationTypes";
 defineProps<{ presentations: Presentation[] }>();
 
 const router = useRouter();

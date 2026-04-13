@@ -1,14 +1,14 @@
 <template>
-  <div class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
-    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+  <div v-if="openSlideTypeEditPanel(props.selectedSlide) === 'Text' && props.isOpen" class="w-full max-w-xs bg-[var(--bg-color)] rounded-lg shadow-sm h-full flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-[var(--text-color)]">Slide</h2>
       <button
         class="text-[var(--faded-text-color)] hover:text-[var(--text-color)]"
         @click="$emit('close')"
       >
-        <X class="w-6 h-6" />
+        <X class="w-6 h-6"/>
       </button>
-    </div>
+      </div>
 
     <div class="flex-1 overflow-y-auto p-6 space-y-8">
       <div class="space-y-3">
@@ -30,7 +30,7 @@
           >
             <BookPlus class="w-6 h-6 text-[var(--faded-text-color)]" />
             <span class="text-sm font-medium text-[var(--faded-text-color)]"> 
-              {{ selectedSlide?.type ?? 'Multiple Choice' }}
+              {{ selectedSlide?.title ?? 'Multiple Choice' }}
             </span> 
             <span class="ml-auto">
               <ArrowDown class="w-6 h-6 text-[var(--faded-text-color)]" />
@@ -88,15 +88,28 @@
           Reset to theme defaults
         </button>
       </div>
-    </div>
+      </div>
   </div>
+  <MultipleChoiceEditPanel v-if="(openSlideTypeEditPanel(props.selectedSlide) === 'Multiple Choice') && props.isOpen" @close="$emit('close')"/>
 </template>
 
 <script setup lang="ts">
-import { BookPlus, X, ArrowDown, Plus, Type } from 'lucide-vue-next'
-defineProps<{ selectedSlide?: Slide }>()
+import { BookPlus, X, ArrowDown, Plus } from 'lucide-vue-next'
+import MultipleChoiceEditPanel from './MultipleChoiceEditPanel.vue';
+
+const props = defineProps<{ selectedSlide?: Slide; isOpen?: boolean }>()
+
 defineEmits<{ 
   close: []
   'add-component': [type: string]
 }>()
+
+const openSlideTypeEditPanel = (selectedSlide?: Slide) => {
+  if (selectedSlide?.type !== " ") {
+    return selectedSlide?.type
+  } else {
+    return false
+  }
+}
+
 </script>

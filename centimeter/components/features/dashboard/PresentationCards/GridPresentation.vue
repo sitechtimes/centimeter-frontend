@@ -20,11 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { LayoutGrid } from "lucide-vue-next";
-import { useRouter } from "vue-router";
 
-import type { Presentation } from "~/utils/types/presentationTypes";
 
 const props = defineProps<{ presentation: Presentation }>();
 
