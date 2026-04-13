@@ -1,14 +1,14 @@
 <template>
-    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="emit('select')">
-        <div ref="textRef" contenteditable :style="textStyle" class="absolute inset-0 p-2 outline-none cursor-text" 
+    <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="!readOnly && emit('select')">
+        <div ref="textRef" :contenteditable="!readOnly" :style="textStyle" class="absolute inset-0 p-2 outline-none" :class="readOnly ? 'cursor-default' : 'cursor-text'"
             @focus="isEditing = true" 
             @blur="isEditing = false; emit('update', ($event.target as HTMLElement).textContent || '')"
             @keydown.delete.stop @keydown.backspace.stop v-text="component.content" />
         
-        <div v-show="!isEditing" :class="['absolute inset-0 cursor-move z-10', { 'bg-blue-50 bg-opacity-10': isSelected }]" 
+        <div v-show="!isEditing && !readOnly" :class="['absolute inset-0 cursor-move z-10', { 'bg-blue-50 bg-opacity-10': isSelected }]" 
             @mousedown="startDrag" @dblclick="startEdit" />
         
-        <div v-if="isSelected" class="absolute inset-0 pointer-events-none">
+        <div v-if="isSelected && !readOnly" class="absolute inset-0 pointer-events-none">
             <div v-for="(classes, direction) in HANDLE_MAP" :class="classes" :style="{ cursor: `${direction}-resize` }"
                 class="absolute w-3 h-3 bg-blue-500 border-2 border-white rounded-full pointer-events-auto hover:scale-125 transition-transform z-20"
                 @mousedown.stop="startResize($event, direction)" />
@@ -22,7 +22,10 @@ const props = defineProps<{
     isSelected: boolean
     canvasWidth: number
     canvasHeight: number
+    readOnly?: boolean
 }>()
+
+const readOnly = computed(() => props.readOnly === true)
 
 const emit = defineEmits<{
     select: [], update: [content: string], move: [dx: number, dy: number], resize: [width: number, height: number]

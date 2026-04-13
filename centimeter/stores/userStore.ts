@@ -11,8 +11,39 @@ export const useUserStore = defineStore("userStore", () => {
   const profilePic = ref<string>("")
   const presentations = ref<Presentation[]>([])
 
+  function extractApiErrorMessage(payload: unknown): string | null {
+    if (!payload) return null
+    if (typeof payload === "string") return payload
+    if (Array.isArray(payload)) {
+      const first = payload[0]
+      return typeof first === "string" ? first : null
+    }
+
+    if (typeof payload === "object") {
+      const data = payload as Record<string, unknown>
+      if (typeof data.detail === "string") return data.detail
+
+      for (const value of Object.values(data)) {
+        if (typeof value === "string") return value
+        if (Array.isArray(value) && typeof value[0] === "string") return value[0]
+      }
+    }
+
+    return null
+  }
+
+  function splitName(fullName?: string): { first_name?: string; last_name?: string } {
+    const trimmed = (fullName || "").trim()
+    if (!trimmed) return {}
+
+    const segments = trimmed.split(/\s+/)
+    const first_name = segments.shift() || ""
+    const last_name = segments.join(" ")
+    return { first_name, last_name }
+  }
+
   async function logIn(email: string, password: string) {
-    const { ok, data } = await apiCall<User>(
+    const { ok, status, data } = await apiCall<User | Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + "/users/login/",
       {
         method: "POST",
@@ -20,21 +51,44 @@ export const useUserStore = defineStore("userStore", () => {
         body: JSON.stringify({ email, password })
       }
     );
-    isAuth.value = ok;
-    user.value = ok ? data ?? null : null;
+
+    if (!ok || !(data && typeof data === "object" && "access" in data)) {
+      isAuth.value = false;
+      user.value = null;
+      const detail = extractApiErrorMessage(data)
+      throw new Error(detail || `Invalid credentials (HTTP ${status}).`);
+    }
+
+    isAuth.value = true;
+    user.value = data as User;
   }
 
-  async function signUp(email: string, password: string) {
-    const { ok, data } = await apiCall<User>(
+  async function signUp(email: string, password: string, fullName?: string) {
+    const namePayload = splitName(fullName)
+
+    const { ok, status, data } = await apiCall<User | Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + "/users/register/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, ...namePayload })
       }
     );
-    isAuth.value = ok;
-    user.value = ok ? data ?? null : null;
+
+    if (!ok) {
+      isAuth.value = false;
+      user.value = null;
+      const detail = extractApiErrorMessage(data)
+      throw new Error(detail || `Sign up failed (HTTP ${status}).`);
+    }
+
+    if (data && typeof data === "object" && "access" in data) {
+      isAuth.value = true;
+      user.value = data as User;
+      return;
+    }
+
+    await logIn(email, password)
   }
 
   async function logOut() {
@@ -51,9 +105,12 @@ export const useUserStore = defineStore("userStore", () => {
     }
 
     const payload = {
+      title: presentationData.title,
       data: {
         title: presentationData.title,
-        slides: presentationData.slides
+        slides: presentationData.slides || [],
+        theme: {},
+        active_slide: presentationData.slides?.[0]?.id || null
       }
     }
 

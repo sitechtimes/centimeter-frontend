@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex items-start justify-center bg-[var(--faded-bg-color-light)] p-6 pt-12 overflow-auto">
+  <div :class="rootClass">
     <div v-if="!currentSlide" class="flex flex-col items-center justify-center h-full gap-6">
       <div class="text-center space-y-4">
         <svg class="w-32 h-32 mx-auto text-[var(--faded-text-color)] opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div v-else class="flex flex-col items-center gap-4">
+    <div v-else :class="contentClass">
       <div
         ref="canvasRef"
         role="region"
@@ -25,18 +25,19 @@
         :style="canvasStyle"
         class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)]"
         tabindex="0"
-        @click="selectedId = null"
-        @keydown.delete="deleteSelected"
-        @keydown.escape="selectedId = null"
+        @click="!isPresentationMode && (selectedId = null)"
+        @keydown.delete="!isPresentationMode && deleteSelected()"
+        @keydown.escape="!isPresentationMode && (selectedId = null)"
       >
         <component
           v-for="comp in components"
           :key="comp.id"
           :is="COMPONENT_MAP[comp.type]"
           :component="comp"
-          :isSelected="selectedId === comp.id"
+          :isSelected="!isPresentationMode && selectedId === comp.id"
           :canvasWidth="CANVAS_WIDTH"
           :canvasHeight="CANVAS_HEIGHT"
+          :readOnly="isPresentationMode"
           @select="selectedId = comp.id"
           @update="(content: string) => (comp.content = content)"
           @move="(dx: number, dy: number) => moveComponent(comp, dx, dy)"
@@ -44,6 +45,7 @@
         />
       </div>
       <button
+        v-if="!isPresentationMode"
         @click="console.log({ type: 'slide', components, canvasSize: { w: CANVAS_WIDTH, h: CANVAS_HEIGHT } })"
         class="px-4 py-2 bg-[var(--faded-bg-color)] text-[var(--text-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-lg transition-colors text-sm font-medium"
       >
@@ -56,7 +58,10 @@
 <script setup lang="ts">
 import TextComponent from "../SlideComponents/TextComponent.vue";
 
-const props = defineProps<{ currentSlide?: Slide }>();
+const props = defineProps<{
+  currentSlide?: Slide
+  presentationMode?: boolean
+}>();
 
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 800;
@@ -66,7 +71,28 @@ const canvasRef = ref<HTMLDivElement>();
 const selectedId = ref<string | null>(null);
 const componentCounter = ref<Record<string, number>>({ text: 0, image: 0, shape: 0 });
 
-const canvasStyle = computed(() => ({ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }));
+const isPresentationMode = computed(() => props.presentationMode === true)
+
+const rootClass = computed(() => {
+  return isPresentationMode.value
+    ? "h-full w-full flex items-center justify-center bg-[var(--faded-bg-color-light)] p-2 overflow-hidden"
+    : "h-screen flex items-start justify-center bg-[var(--faded-bg-color-light)] p-6 pt-12 overflow-auto"
+})
+
+const contentClass = computed(() => {
+  return isPresentationMode.value ? "w-full h-full flex items-center justify-center" : "flex flex-col items-center gap-4"
+})
+
+const canvasStyle = computed(() => {
+  if (isPresentationMode.value) {
+    return {
+      width: "min(96vw, calc((100vh - 120px) * 1.5))",
+      aspectRatio: "3 / 2",
+      height: "auto",
+    }
+  }
+  return { width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }
+});
 
 const components = computed(() => {
   return props.currentSlide?.components ?? [];

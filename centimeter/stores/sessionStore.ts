@@ -1,9 +1,43 @@
 import { apiCall } from "~/utils/apiCall";
-import type { JoinSessionResponse, SessionStatus } from "../utils/types/sessionTypes";
+import type {
+  JoinSessionResponse,
+  ParticipantPresencePayload,
+  SessionParticipant,
+  SessionStatus,
+} from "../utils/types/sessionTypes";
 
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);
   const isInSession = ref(false);
+
+  function normalizeSessionTitle(title: string): string {
+    const trimmed = (title || "").trim();
+    const fallback = "Live Session";
+    return (trimmed || fallback).slice(0, 20);
+  }
+
+  function extractApiErrorMessage(payload: unknown): string | null {
+    if (!payload) return null
+    if (typeof payload === "string") return payload
+    if (Array.isArray(payload)) {
+      const first = payload[0]
+      return typeof first === "string" ? first : null
+    }
+
+    if (typeof payload === "object") {
+      const data = payload as Record<string, unknown>
+      const detail = data.detail
+      if (typeof detail === "string") return detail
+      if (Array.isArray(detail) && typeof detail[0] === "string") return detail[0]
+
+      for (const value of Object.values(data)) {
+        if (typeof value === "string") return value
+        if (Array.isArray(value) && typeof value[0] === "string") return value[0]
+      }
+    }
+
+    return null
+  }
 
   async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
     const { ok, data } = await apiCall<SessionStatus>(
@@ -20,7 +54,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
   }
 
   async function joinSession(join_code: string, nickname: string) {
-    const { ok, data } = await apiCall<JoinSessionResponse>(
+    const { ok, status, data } = await apiCall<JoinSessionResponse | Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + "/session/join/",
       {
         method: "POST",
@@ -29,33 +63,55 @@ export const useSessionStore = defineStore("sessionStore", () => {
       }
     );
     if (!ok) {
-      throw new Error("Failed to join session");
+      const detail = extractApiErrorMessage(data)
+      throw new Error(detail || `Failed to join session (HTTP ${status})`);
     }
-    currentSession.value = data ?? null;
+
+    const sessionData = data as JoinSessionResponse | undefined
+    currentSession.value = sessionData ?? null;
     isInSession.value = true;
-    return data;
+    return sessionData;
   }
 
   async function openSession(title: string) {
     const userStore = useUserStore();
     const token = userStore.user?.access
-    const { ok, data } = await apiCall<JoinSessionResponse>(
+    if (!token) {
+      throw new Error("You are not authenticated. Please log in again.");
+    }
+
+    const normalizedTitle = normalizeSessionTitle(title)
+
+    const { ok, status, data } = await apiCall<JoinSessionResponse | Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + "/session/open/",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : ''
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ title })
+        body: JSON.stringify({ title: normalizedTitle })
       }
     );
     if (!ok) {
-      throw new Error("Failed to open session");
+      const detail = extractApiErrorMessage(data)
+
+      if (status === 401) {
+        userStore.logOut()
+        throw new Error("Your login session expired. Please log in again.")
+      }
+
+      throw new Error(detail || `Failed to open session (HTTP ${status})`)
     }
-    currentSession.value = data ?? null;
+
+    const sessionData = data as JoinSessionResponse | undefined
+    if (!sessionData?.join_code) {
+      throw new Error("Session created but response payload was invalid.")
+    }
+
+    currentSession.value = sessionData;
     isInSession.value = true;
-    return data;
+    return sessionData;
   }
   
   async function endSession(sessionCode: string) {
@@ -80,8 +136,8 @@ export const useSessionStore = defineStore("sessionStore", () => {
     currentSession.value = null;
     isInSession.value = false;
   }
-  async function listParticipants(code: string) {
-    const { ok, data } = await apiCall<any[]>(
+  async function listParticipants(code: string): Promise<SessionParticipant[]> {
+    const { ok, data } = await apiCall<SessionParticipant[]>(
       import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`,
       {
         method: "GET",
@@ -94,11 +150,54 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return data ?? [];
   }
 
+  async function sendHeartbeat(payload: ParticipantPresencePayload) {
+    const { ok, status, data } = await apiCall<Record<string, unknown> | string | string[]>(
+      import.meta.env.VITE_BACKEND_URL + "/participants/heartbeat/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    )
+
+    if (!ok) {
+      const detail = extractApiErrorMessage(data)
+      throw new Error(detail || `Failed to send heartbeat (HTTP ${status})`)
+    }
+  }
+
+  async function leaveParticipant(payload: ParticipantPresencePayload) {
+    const { ok, status, data } = await apiCall<Record<string, unknown> | string | string[]>(
+      import.meta.env.VITE_BACKEND_URL + "/participants/leave/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    )
+
+    if (!ok) {
+      const detail = extractApiErrorMessage(data)
+      throw new Error(detail || `Failed to leave session (HTTP ${status})`)
+    }
+  }
+
   function leaveSession() {
     currentSession.value = null;
     isInSession.value = false;
   }
-  return { currentSession, isInSession, checkSessionStatus, joinSession, openSession, listParticipants, leaveSession, endSession };
+  return {
+    currentSession,
+    isInSession,
+    checkSessionStatus,
+    joinSession,
+    openSession,
+    listParticipants,
+    sendHeartbeat,
+    leaveParticipant,
+    leaveSession,
+    endSession,
+  };
 
 
 }, {

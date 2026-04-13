@@ -59,6 +59,10 @@
 import type { Slide } from '@/utils/types/presentationTypes'
 import RightClickDropDown from './RightClickDropDown.vue'
 
+const props = defineProps<{
+  slides?: Slide[]
+}>()
+
 const slides = ref<Slide[]>([])
 const selectedSlide = ref<number | null>(null)
 
@@ -72,7 +76,45 @@ const dragging = ref(false)
 
 const emit = defineEmits<{
   'select-slide': [slideIndex: number, slide: Slide]
+  'update:slides': [slides: Slide[]]
 }>()
+
+function cloneSlides(input: Slide[] = []): Slide[] {
+  return input.map((slide) => ({ ...slide }))
+}
+
+function areSlidesEqual(a: Slide[], b: Slide[]): boolean {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+watch(
+  () => props.slides,
+  (incoming) => {
+    const normalized = cloneSlides(incoming || [])
+    if (!areSlidesEqual(normalized, slides.value)) {
+      slides.value = normalized
+    }
+
+    if (slides.value.length === 0) {
+      selectedSlide.value = null
+      return
+    }
+
+    if (selectedSlide.value === null || selectedSlide.value >= slides.value.length) {
+      selectedSlide.value = 0
+      emit('select-slide', 0, slides.value[0])
+    }
+  },
+  { immediate: true, deep: true }
+)
+
+watch(
+  slides,
+  (value) => {
+    emit('update:slides', cloneSlides(value))
+  },
+  { deep: true }
+)
 
 function onContextMenu(index: number, event: MouseEvent) {
   if (dragging.value) return
@@ -189,7 +231,8 @@ function handleDelete(index?: number | null) {
 }
 
 function addSlide(slideType: string) {
-  slides.value.push({ id: String(slides.value.length), type: slideType })
+  const newId = crypto.randomUUID()
+  slides.value.push({ id: newId, type: slideType })
   selectedSlide.value = slides.value.length - 1
   emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="group cursor-pointer">
+  <div class="group cursor-pointer" @click="openPresentation">
     <div class="bg-[var(--bg-color)] rounded-lg border border-[var(--faded-bg-color)] overflow-hidden hover:shadow-lg transition-shadow">
       <div class="relative aspect-[4/3] bg-[var(--faded-bg-color-light)]">
         <div class="absolute top-3 right-3 bg-[var(--bg-color)] rounded p-1.5 shadow-sm">
@@ -14,7 +14,7 @@
       </div>
       <div class="flex-1 min-w-0">
         <h3 class="text-sm font-medium text-[var(--text-color)] truncate group-hover:text-[var(--secondary)]">
-          {{ presentation.presentation_name }}
+          {{ presentation.title || 'Untitled Presentation' }}
         </h3>
         <p class="text-xs text-[var(--gray)] mt-0.5">Edited {{ formattedDate }}</p>
       </div>
@@ -25,22 +25,31 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { LayoutGrid } from "lucide-vue-next";
-
-import type { Presentation } from "~/utils/types";
+import type { Presentation } from "~/utils/types/presentationTypes";
 
 const props = defineProps<{ presentation: Presentation }>();
+const router = useRouter()
+
+function openPresentation() {
+  const routeId = props.presentation.presentation_code || props.presentation.id
+  if (!routeId) return
+  router.push(`/app/create/${routeId}`)
+}
 
 const initials = computed(() => {
-  const words = props.presentation.host.split(" ");
+  const hostName = props.presentation.host || 'You'
+  const words = hostName.split(" ");
   if (words.length >= 2) {
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
   }
-  return props.presentation.host.substring(0, 2).toUpperCase();
+  return hostName.substring(0, 2).toUpperCase();
 });
 
-const formattedDate = computed(() => formatDate(props.presentation.last_interacted));
+const formattedDate = computed(() => formatDate(props.presentation.updated_at || props.presentation.created_at));
 
-const formatDate = (dateString: string): string => {
+const formatDate = (dateString?: string): string => {
+  if (!dateString) return "today";
+
   const date = new Date(dateString);
   const now = new Date();
   const diffInMs = now.getTime() - date.getTime();
