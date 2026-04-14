@@ -1,5 +1,5 @@
 <template>
-  <div :class="wrapperClass + `m-4`" :style="wrapperStyle">
+  <div :class="wrapperClass" :style="wrapperStyle">
     <Bar v-if="chartType === 'bar'" :data="chartData" :options="chartOptions" class="w-full h-full" />
     <Doughnut v-else-if="chartType === 'doughnut'" :data="chartData" :options="chartOptions" class="w-full h-full" />
     <Pie v-else-if="chartType === 'pie'" :data="chartData" :options="chartOptions" class="w-full h-full" />
@@ -17,18 +17,20 @@ const props = defineProps<{ options?: PollsOption[]}>()
 const wrapperStyle = computed(() => {
   if (chartType.value === 'pie' || chartType.value === 'doughnut') {
     return {
-      width: '360px',
-      height: '360px',
-      minWidth: '360px',
-      minHeight: '360px'
+      width: '100%',
+      height: '100%'
     }
   }
   if (chartType.value === 'bar') {
     return {
       width: '100%',
-      minHeight: '260px',
-      height: '260px'
+      height: '100%'
     }
+  }
+
+  return {
+    width: '100%',
+    height: '100%'
   }
 })
 
@@ -73,6 +75,13 @@ const chartOptions = {
   plugins: {
     legend: {
       display: false
+    },
+    tooltip: {
+      backgroundColor: 'var(--bg-color-contrast)',
+      titleColor: 'var(--text-color-contrast)',
+      bodyColor: 'var(--text-color-contrast)',
+      borderColor: 'var(--faded-bg-color)',
+      borderWidth: 1
     }
   },
   responsive: true,

@@ -1,66 +1,106 @@
 <template>
-    <div class="flex-1 flex items-center justify-center p-4 bg-[var(--bg-color)] ">
-        <div
-            ref="canvasRef"
-            role="region"
-            aria-label="Presentation canvas"
-            :style="canvasStyle"
-            class="w-[96vw] max-w-[1400px] aspect-video bg-[whitesmoke] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[rgba(0,0,0,0.06)] overflow-hidden p-10 hover:border-slate-800 transition-shadow cursor-pointer"
+  <div :class="rootClass">
+    <div
+      ref="canvasRef"
+      role="region"
+      aria-label="Multiple choice slide canvas"
+      :style="canvasStyle"
+      class="relative bg-[var(--bg-color)] rounded-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-[var(--faded-bg-color)] overflow-hidden"
+      :class="{ 'hover:border-[var(--bg-color-contrast)] transition-colors': !isPresentationMode }"
+    >
+      <div class="h-full w-full flex flex-col px-8 py-6 gap-6">
+        <input
+          id="MultipleChoiceQuestion"
+          type="text"
+          @click="clearQuestion"
+          @blur="restoreQuestionDefault"
+          v-model="props.slide!.question"
+          :readonly="isPresentationMode"
+          class="w-full bg-transparent text-3xl font-semibold text-[var(--text-color)] border-b border-[var(--faded-bg-color)] pb-3 outline-none"
+          :class="isPresentationMode ? 'cursor-pointer pointer-events-none select-none' : ''"
         >
-            <input 
-                id="MultipleChoiceQuestion" 
-                type="text" 
-                @click="clearQuestion" 
-                @blur="() => { if (!props.slide!.question) props.slide!.question = defaultQuestion }"
-                v-model="props.slide!.question" 
-                class="flex-shrink-0 p-4 text-lg border-b border-gray-200"
-                >
-        <div :class="['flex gap-4 h-[60%] p-10 border-2 border-transparent items-center justify-center mt-12', chartType === 'bar' ? 'flex-col' : 'flex-row']"> 
-            <div :class="['flex items-center gap-4', chartType === 'bar' ? 'flex-col' : 'flex-row']">
-                <GraphComponent :options="props.slide?.options" />
-                <div :class="['flex', chartType === 'bar' ? 'gap-4 flex-row' : 'gap-1 flex-col']">
-                    <div v-for="choice in props.slide?.options"
-                        :class="['flex items-center gap-2 bg-white rounded border border-gray-200 hover:border-slate-800 transition-colors min-w-0', chartType === 'bar' ? 'p-3 flex-1 h-[50px]': 'p-1 px-2 h-auto']"
-                        >
-                        <input 
-                            type="text" 
-                            @click="clearOptionText(choice)" 
-                            @blur="() => { if (!choice.option_text) choice.option_text = 'Option ' + choice.position }"
-                            v-model="choice.option_text" 
-                            :class="['w-full min-w-0 truncate border-transparent', fontSize]">
-                        <button @click="removeOption(choice)" class="text-red-500 flex-shrink-0">X</button>
-                    </div>
-                    <button 
-                        @click="addOption" 
-                        :class="['bg-blue-500 text-white rounded flex-shrink-0 flex items-center justify-center', chartType === 'bar' ? 'p-3 h-[50px]' : 'p-1 px-2 h-auto']"
-                    >+</button>
-                </div>
-                
+
+        <div class="flex-1 min-h-0" :class="chartLayoutClass">
+          <div :class="chartShellClass">
+            <GraphComponent :options="props.slide?.options" />
+          </div>
+
+          <div :class="optionsLayoutClass">
+            <div
+              v-for="choice in props.slide?.options"
+              :key="choice.position"
+              class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
+              :class="[choiceClass, isPresentationMode ? 'cursor-pointer' : '']"
+            >
+              <input
+                type="text"
+                @click="clearOptionText(choice)"
+                @blur="restoreOptionDefault(choice)"
+                v-model="choice.option_text"
+                :readonly="isPresentationMode"
+                :class="[
+                  'w-full min-w-0 truncate bg-transparent outline-none',
+                  fontSize,
+                  isPresentationMode ? 'cursor-pointer pointer-events-none select-none' : ''
+                ]"
+              >
+              <button
+                v-if="!isPresentationMode"
+                @click="removeOption(choice)"
+                class="text-[var(--danger)] flex-shrink-0"
+              >
+                X
+              </button>
             </div>
+
+            <button
+              v-if="!isPresentationMode"
+              @click="addOption"
+              class="bg-[var(--primary)] text-[var(--text-color-contrast)] rounded flex-shrink-0 flex items-center justify-center hover:bg-[var(--primary-shade)] transition-colors"
+              :class="addButtonClass"
+            >
+              +
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
+import { chartType } from '~/utils/slides'
 
-const props = defineProps<{ slide?: Slide }>();
+const props = defineProps<{
+  slide?: Slide
+  presentationMode?: boolean
+}>();
 
 const defaultQuestion = "Ask your question here..."
 
 const canvasRef = ref<HTMLDivElement>();
 
 function clearQuestion() {
+  if (isPresentationMode.value) return
   if (props.slide!.question === defaultQuestion) {
     props.slide!.question = '';
   }
 }
 
+function restoreQuestionDefault() {
+  if (!props.slide?.question) props.slide!.question = defaultQuestion
+}
+
 function clearOptionText(choice: PollsOption) {
+  if (isPresentationMode.value) return
   if (choice.option_text === `Option ${choice.position}`) {
     choice.option_text = '';
   }
+}
+
+function restoreOptionDefault(choice: PollsOption) {
+  if (!choice.option_text) choice.option_text = `Option ${choice.position}`
 }
 
 const generateHex = (): string => {
@@ -68,6 +108,7 @@ const generateHex = (): string => {
 };
 
 function addOption() {
+  if (isPresentationMode.value) return
   if (!props.slide!.options) props.slide!.options = [];
   const position = props.slide!.options.length + 1;
   props.slide!.options.push({
@@ -79,6 +120,7 @@ function addOption() {
 }
 
 function removeOption(choice: PollsOption) {
+  if (isPresentationMode.value) return
   if (props.slide!.options) {
     const index = props.slide!.options.indexOf(choice);
     if (index > -1) {
@@ -90,7 +132,51 @@ function removeOption(choice: PollsOption) {
 
 const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;
-const canvasStyle = computed(() => ({ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }));
+const isPresentationMode = computed(() => props.presentationMode === true)
+
+const rootClass = computed(() => {
+  return isPresentationMode.value
+    ? 'w-full h-full flex items-center justify-center'
+    : 'flex-1 flex items-center justify-center p-4 bg-[var(--bg-color)]'
+})
+
+const canvasStyle = computed(() => {
+  if (isPresentationMode.value) {
+    return {
+      width: 'min(96vw, calc((100vh - 120px) * 1.5))',
+      aspectRatio: '3 / 2',
+      height: 'auto',
+    }
+  }
+
+  return { width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }
+});
+
+const chartLayoutClass = computed(() => {
+  return chartType.value === 'bar'
+    ? 'grid h-full grid-rows-[1.4fr_1fr] gap-4'
+    : 'grid h-full grid-cols-[1.1fr_1fr] gap-4 items-center'
+})
+
+const chartShellClass = computed(() => {
+  return chartType.value === 'bar'
+    ? 'min-h-0 rounded-lg border border-[var(--faded-bg-color)] p-2'
+    : 'min-h-0 h-full rounded-lg border border-[var(--faded-bg-color)] p-2'
+})
+
+const optionsLayoutClass = computed(() => {
+  return chartType.value === 'bar'
+    ? 'min-h-0 flex flex-wrap items-stretch gap-3 overflow-y-auto pr-1'
+    : 'min-h-0 flex flex-col gap-2 overflow-y-auto pr-1'
+})
+
+const choiceClass = computed(() => {
+  return chartType.value === 'bar' ? 'px-3 py-2 h-12 flex-1' : 'px-3 py-2'
+})
+
+const addButtonClass = computed(() => {
+  return chartType.value === 'bar' ? 'px-4 py-2 h-12' : 'px-3 py-2'
+})
 
 const fontSize = computed(() => {
   const count = props.slide?.options?.length ?? 1;

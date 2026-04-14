@@ -17,8 +17,8 @@
       </div>
     </div>
     
-    <div v-if="props.currentSlide?.type === 'Multiple Choice'">
-      <MultipleChoiceSlides :slide="props.currentSlide" />
+    <div v-if="props.currentSlide?.type === 'Multiple Choice'" :class="contentClass">
+      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode" />
     </div>
 
     <div v-else :class="contentClass">
@@ -126,7 +126,8 @@ const resizeComponent = (comp: SlideComponent, w: number, h: number) => {
 
 const deleteSelected = () => {
   if (!selectedId.value) return;
-  components.value = components.value.filter((c: SlideComponent) => c.id !== selectedId.value);
+  if (!props.currentSlide?.components) return;
+  props.currentSlide.components = props.currentSlide.components.filter((c: SlideComponent) => c.id !== selectedId.value);
   selectedId.value = null;
 };
 

@@ -1,6 +1,6 @@
 <template>
     <div :style="componentStyle" :class="['group select-none absolute', { 'ring-2 ring-blue-500': isSelected }]" @click.stop="!readOnly && emit('select')">
-        <div ref="textRef" :contenteditable="!readOnly" :style="textStyle" class="absolute inset-0 p-2 outline-none" :class="readOnly ? 'cursor-default' : 'cursor-text'"
+        <div ref="textRef" :contenteditable="!readOnly" :style="textStyle" class="absolute inset-0 p-2 outline-none" :class="readOnly ? 'cursor-pointer pointer-events-none select-none' : 'cursor-text'"
             @focus="isEditing = true" 
             @blur="isEditing = false; emit('update', ($event.target as HTMLElement).textContent || '')"
             @keydown.delete.stop @keydown.backspace.stop v-text="component.content" />
