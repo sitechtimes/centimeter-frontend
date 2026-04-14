@@ -16,29 +16,6 @@ export const useSessionStore = defineStore("sessionStore", () => {
     return (trimmed || fallback).slice(0, 20);
   }
 
-  function extractApiErrorMessage(payload: unknown): string | null {
-    if (!payload) return null
-    if (typeof payload === "string") return payload
-    if (Array.isArray(payload)) {
-      const first = payload[0]
-      return typeof first === "string" ? first : null
-    }
-
-    if (typeof payload === "object") {
-      const data = payload as Record<string, unknown>
-      const detail = data.detail
-      if (typeof detail === "string") return detail
-      if (Array.isArray(detail) && typeof detail[0] === "string") return detail[0]
-
-      for (const value of Object.values(data)) {
-        if (typeof value === "string") return value
-        if (Array.isArray(value) && typeof value[0] === "string") return value[0]
-      }
-    }
-
-    return null
-  }
-
   async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
     const { ok, data } = await apiCall<SessionStatus>(
       import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`,
@@ -63,8 +40,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
       }
     );
     if (!ok) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to join session (HTTP ${status})`);
+      throw new Error(`Failed to join session (HTTP ${status})`);
     }
 
     const sessionData = data as JoinSessionResponse | undefined
@@ -94,14 +70,12 @@ export const useSessionStore = defineStore("sessionStore", () => {
       }
     );
     if (!ok) {
-      const detail = extractApiErrorMessage(data)
-
       if (status === 401) {
         userStore.logOut()
         throw new Error("Your login session expired. Please log in again.")
       }
 
-      throw new Error(detail || `Failed to open session (HTTP ${status})`)
+      throw new Error(`Failed to open session (HTTP ${status})`)
     }
 
     const sessionData = data as JoinSessionResponse | undefined
@@ -161,8 +135,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
     )
 
     if (!ok) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to send heartbeat (HTTP ${status})`)
+      throw new Error(`Failed to send heartbeat (HTTP ${status})`)
     }
   }
 
@@ -177,8 +150,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
     )
 
     if (!ok) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to leave session (HTTP ${status})`)
+      throw new Error(`Failed to leave session (HTTP ${status})`)
     }
   }
 

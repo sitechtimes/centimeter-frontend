@@ -4,24 +4,6 @@ import type { Presentation } from "../utils/types/presentationTypes";
 export const usePresentationStore = defineStore("presentationStore", () => {
   const presentations = ref<Presentation[]>([])
 
-  function extractApiErrorMessage(payload: unknown): string | null {
-    if (!payload) return null
-    if (typeof payload === "string") return payload
-    if (Array.isArray(payload)) {
-      const first = payload[0]
-      return typeof first === "string" ? first : null
-    }
-    if (typeof payload === "object") {
-      const data = payload as Record<string, unknown>
-      if (typeof data.detail === "string") return data.detail
-      for (const value of Object.values(data)) {
-        if (typeof value === "string") return value
-        if (Array.isArray(value) && typeof value[0] === "string") return value[0]
-      }
-    }
-    return null
-  }
-
   function getAuthToken(): string {
     const userStore = useUserStore();
     const token = userStore.user?.access
@@ -52,8 +34,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
         presentations.value = [presentation, ...presentations.value]
         return presentation;
       } else {
-        const detail = extractApiErrorMessage(data)
-        throw new Error(detail || `Failed to create presentation (HTTP ${status})`);
+        throw new Error(`Failed to create presentation (HTTP ${status})`);
       }
     } catch (err) {
       throw err;
@@ -74,10 +55,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
       }
     )
 
-    if (!ok) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to fetch presentations (HTTP ${status})`)
-    }
+    if (!ok) throw new Error(`Failed to fetch presentations (HTTP ${status})`)
 
     const isPresentationArray = Array.isArray(data) && data.every((item) => {
       return typeof item === "object" && item !== null && "id" in item
@@ -100,10 +78,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
       }
     )
 
-    if (!ok || !data) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to fetch presentation (HTTP ${status})`)
-    }
+    if (!ok || !data) throw new Error(`Failed to fetch presentation (HTTP ${status})`)
 
     return data
   }
@@ -122,10 +97,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
       }
     )
 
-    if (!ok) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to attach presentation to session (HTTP ${status})`)
-    }
+    if (!ok) throw new Error(`Failed to attach presentation to session (HTTP ${status})`)
   }
 
   async function changeActiveSlide(presentationCode: string, slideId: string): Promise<void> {
@@ -142,10 +114,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
       }
     )
 
-    if (!ok) {
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Failed to change active slide (HTTP ${status})`)
-    }
+    if (!ok) throw new Error(`Failed to change active slide (HTTP ${status})`)
   }
 
   return {

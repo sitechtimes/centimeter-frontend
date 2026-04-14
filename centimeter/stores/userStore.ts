@@ -11,27 +11,6 @@ export const useUserStore = defineStore("userStore", () => {
   const profilePic = ref<string>("")
   const presentations = ref<Presentation[]>([])
 
-  function extractApiErrorMessage(payload: unknown): string | null {
-    if (!payload) return null
-    if (typeof payload === "string") return payload
-    if (Array.isArray(payload)) {
-      const first = payload[0]
-      return typeof first === "string" ? first : null
-    }
-
-    if (typeof payload === "object") {
-      const data = payload as Record<string, unknown>
-      if (typeof data.detail === "string") return data.detail
-
-      for (const value of Object.values(data)) {
-        if (typeof value === "string") return value
-        if (Array.isArray(value) && typeof value[0] === "string") return value[0]
-      }
-    }
-
-    return null
-  }
-
   function splitName(fullName?: string): { first_name?: string; last_name?: string } {
     const trimmed = (fullName || "").trim()
     if (!trimmed) return {}
@@ -55,8 +34,7 @@ export const useUserStore = defineStore("userStore", () => {
     if (!ok || !(data && typeof data === "object" && "access" in data)) {
       isAuth.value = false;
       user.value = null;
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Invalid credentials (HTTP ${status}).`);
+      throw new Error(`Invalid credentials (HTTP ${status}).`);
     }
 
     isAuth.value = true;
@@ -78,8 +56,7 @@ export const useUserStore = defineStore("userStore", () => {
     if (!ok) {
       isAuth.value = false;
       user.value = null;
-      const detail = extractApiErrorMessage(data)
-      throw new Error(detail || `Sign up failed (HTTP ${status}).`);
+      throw new Error(`Sign up failed (HTTP ${status}).`);
     }
 
     if (data && typeof data === "object" && "access" in data) {
