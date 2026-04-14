@@ -42,10 +42,9 @@ async function goToCreatePresentation() {
   isCreating.value = true
   try {
     const presentation = await presentationStore.createPresentation('Untitled Presentation')
-    const routeId = presentation?.presentation_code || presentation?.id
-
-    if (routeId) {
-      router.push(`/app/create/${routeId}`)
+    const code = presentation?.presentation_code ?? presentation?.id
+    if (code) {
+      router.push(`/app/create/${code}`)
     } else {
       alert('Presentation created but no identifier was returned by the API.')
     }

@@ -124,6 +124,7 @@ function onContextMenu(index: number, event: MouseEvent) {
   contextY.value = event.clientY
   contextVisible.value = true
   selectSlide(index)
+  
 }
 
 function onDragStart(index: number, event: DragEvent) {
@@ -230,16 +231,56 @@ function handleDelete(index?: number | null) {
   closeContext()
 }
 
+const newTextSlide = (newSlide: Slide) => {
+  newSlide.components = []
+}
+
+const newMultipleChoiceSlide = (newSlide: Slide) => {
+  newSlide.question = 'Ask your question here...';
+  newSlide.options = [
+    { color: '#27F5EB', option_text: 'Option 1', position: 1, amount_chosen: 0 },
+    { color: '#F54927', option_text: 'Option 2', position: 2, amount_chosen: 0 },
+    { color: '#000000', option_text: 'Option 3', position: 3, amount_chosen: 0 }
+  ];
+}
+
 function addSlide(slideType: string) {
-  const newId = crypto.randomUUID()
-  slides.value.push({ id: newId, type: slideType })
-  selectedSlide.value = slides.value.length - 1
-  emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value])
+  const newSlide: Slide = { type: slideType };
+  if (slideType === 'Text') {
+    newTextSlide(newSlide);
+  } else if (slideType === 'Multiple Choice') {
+    newMultipleChoiceSlide(newSlide);
+  }
+  if (!newSlide.id) {
+    newSlide.id = crypto.randomUUID()
+  }
+  slides.value.push(newSlide);
+  selectedSlide.value = slides.value.length - 1;
+  emit('select-slide', selectedSlide.value, slides.value[selectedSlide.value]);
+}
+
+function setSlides(nextSlides: Slide[]) {
+  slides.value = [...nextSlides]
+  if (slides.value.length > 0) {
+    selectedSlide.value = 0
+    emit('select-slide', 0, slides.value[0])
+  } else {
+    selectedSlide.value = null
+    emit('select-slide', -1, undefined as any)
+  }
 }
 
 function selectSlide(index: number) {
   selectedSlide.value = index
+  slides.value.forEach((slide) =>{
+    slide.on_slide = false
+  })
+  slides.value[index].on_slide = true
   emit('select-slide', index, slides.value[index])
+}
+
+function getSlides() {
+  return slides.value
 }
 
 onMounted(() => {
@@ -255,6 +296,8 @@ onUnmounted(() => {
 
 defineExpose({
   addSlide,
+  setSlides,
+  getSlides,
   slides
 })
 </script>

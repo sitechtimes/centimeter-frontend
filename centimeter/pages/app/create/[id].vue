@@ -11,7 +11,7 @@
           @select-slide="handleSlideSelect"
         />
         <PresentationCanvas ref="canvasRef" class="flex-1 min-w-0" :currentSlide="currentSelectedSlide" />
-        <EditPanel v-if="showEditPanel" class="w-80 flex-none" :selectedSlide="currentSelectedSlide" @close="showEditPanel = false" @add-component="handleAddComponent" />
+        <EditPanel v-if="showEditPanel" class="w-80 flex-none" :selectedSlide="currentSelectedSlide" :isOpen="showEditPanel" @close="showEditPanel = false" @add-component="handleAddComponent" />
         <SideBar class="w-72 flex-shrink-0" @open-edit-panel="toggleEditPanel" />
       </div>
     </div>
@@ -19,8 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { Slide } from "~/utils/types/presentationTypes";
 import NavBar from "@/components/Presentation/editor/CreatePresentationNavBar.vue";
 import SideBar from "@/components/Presentation/editor/SideBar.vue";
 import EditorBar from "@/components/Presentation/editor/EditorBar.vue";

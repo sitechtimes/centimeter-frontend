@@ -64,7 +64,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="viewMode === 'grid'">
-        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.title" :presentation="presentation" />
+        <GridPresentation v-for="presentation in filteredPresentations" :key="presentation.id" :presentation="presentation" />
       </div>
 
       <div v-else>
@@ -79,16 +79,15 @@ import { ref, computed, onMounted } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
+import { useRouter } from "vue-router";
+import { usePresentationStore } from '~/stores/presentationStore'
+import { useUserStore } from '~/stores/userStore'
 import type { Presentation } from "~/utils/types/presentationTypes";
 
 const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");
 const isCreating = ref(false)
 const isLoading = ref(true)
-
-import { useRouter } from "vue-router";
-import { usePresentationStore } from '~/stores/presentationStore'
-import { useUserStore } from '~/stores/userStore'
 
 const router = useRouter();
 const presentationStore = usePresentationStore();

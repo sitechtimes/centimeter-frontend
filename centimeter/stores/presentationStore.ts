@@ -85,7 +85,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
 
   async function attachPresentationToSession(presentationCode: string, sessionId: string | number): Promise<void> {
     const token = getAuthToken()
-    const { ok, status, data } = await apiCall<Record<string, unknown> | string | string[]>(
+    const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + `/presentations/${presentationCode}/attach/`,
       {
         method: "POST",
@@ -102,7 +102,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
 
   async function changeActiveSlide(presentationCode: string, slideId: string): Promise<void> {
     const token = getAuthToken()
-    const { ok, status, data } = await apiCall<Record<string, unknown> | string | string[]>(
+    const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + `/presentations/${presentationCode}/slide/`,
       {
         method: "POST",

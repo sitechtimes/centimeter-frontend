@@ -27,12 +27,12 @@
         {{ formatDate(presentation.updated_at || presentation.created_at) }}
       </div>
 
-      <button class="flex items-center gap-2 text-sm text-[color:var(--text-color)] hover:text-[color:var(--text-color)] transition-colors flex-shrink-0">
+      <button class="flex items-center gap-2 text-sm text-[color:var(--text-color)] hover:text-[color:var(--text-color)] transition-colors flex-shrink-0" @click.stop>
         <BarChart3 class="w-4 h-4" />
         View results
       </button>
 
-      <button class="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-opacity-75 rounded transition-colors">
+      <button class="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-opacity-75 rounded transition-colors" @click.stop>
         <MoreHorizontal class="w-5 h-5 text-[color:var(--text-color)]" />
       </button>
     </div>
@@ -53,7 +53,6 @@ function openPresentation(presentation: Presentation): void {
 
 const formatDate = (dateString?: string): string => {
   if (!dateString) return "-";
-
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
     year: "numeric",

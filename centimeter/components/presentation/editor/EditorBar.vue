@@ -42,8 +42,12 @@ function forwardSlidesUpdate(updatedSlides: Slide[]) {
 }
 
 function getSlides() {
-  return slidesListRef.value?.slides || []
+  return slidesListRef.value?.getSlides?.() || []
 }
 
-defineExpose({ getSlides })
+function setSlides(nextSlides: Slide[]) {
+  slidesListRef.value?.setSlides?.(nextSlides)
+}
+
+defineExpose({ getSlides, setSlides })
 </script>

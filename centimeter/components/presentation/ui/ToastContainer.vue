@@ -31,8 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ToastItem, ToastPayload } from "~/utils/types";
-
 const props = defineProps({
   position: { type: String as () => "top-right" | "top-left" | "bottom-right" | "bottom-left", default: "top-right" },
   defaultDuration: { type: Number, default: 6000 }

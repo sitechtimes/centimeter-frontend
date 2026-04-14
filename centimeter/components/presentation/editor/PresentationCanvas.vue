@@ -16,6 +16,10 @@
         </div>
       </div>
     </div>
+    
+    <div v-if="props.currentSlide?.type === 'Multiple Choice'">
+      <MultipleChoiceSlides :slide="props.currentSlide" />
+    </div>
 
     <div v-else :class="contentClass">
       <div
@@ -57,6 +61,7 @@
 
 <script setup lang="ts">
 import TextComponent from "../SlideComponents/TextComponent.vue";
+import MultipleChoiceSlides from "../SlidesOptions/MultipleChoiceSlides.vue";
 
 const props = defineProps<{
   currentSlide?: Slide

@@ -9,9 +9,6 @@
     </div>
 
     <div class="mt-3 flex items-start gap-3">
-      <div class="flex items-center justify-center w-9 h-9 bg-[var(--faded-bg-color)] rounded-full text-xs font-semibold shrink-0 text-[var(--text-color)]">
-        {{ initials }}
-      </div>
       <div class="flex-1 min-w-0">
         <h3 class="text-sm font-medium text-[var(--text-color)] truncate group-hover:text-[var(--secondary)]">
           {{ presentation.title || 'Untitled Presentation' }}
@@ -36,20 +33,10 @@ function openPresentation() {
   router.push(`/app/create/${routeId}`)
 }
 
-const initials = computed(() => {
-  const hostName = props.presentation.host || 'You'
-  const words = hostName.split(" ");
-  if (words.length >= 2) {
-    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
-  }
-  return hostName.substring(0, 2).toUpperCase();
-});
-
 const formattedDate = computed(() => formatDate(props.presentation.updated_at || props.presentation.created_at));
 
 const formatDate = (dateString?: string): string => {
   if (!dateString) return "today";
-
   const date = new Date(dateString);
   const now = new Date();
   const diffInMs = now.getTime() - date.getTime();

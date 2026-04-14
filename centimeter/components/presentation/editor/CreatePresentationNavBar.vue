@@ -128,6 +128,16 @@ const presentationCode = computed(() => {
   return route.params.id as string
 })
 
+watch(
+  () => props.title,
+  (title) => {
+    if (title !== undefined && title !== null) {
+      presentationName.value = title
+    }
+  },
+  { immediate: true }
+)
+
 function logPresentationData() {
   console.log(props.slides)
 }
