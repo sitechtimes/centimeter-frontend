@@ -1,7 +1,7 @@
 <template>
   <header class="flex items-center justify-end px-6 py-4 border-b border-[var(--faded-bg-color)] w-full bg-[var(--bg-color)] text-[var(--text-color)]">
     <div class="flex items-center gap-4">
-      <ThemeToggle/>
+      <ThemeToggle />
       <button class="relative p-2 text-[var(--faded-text-color)] hover:text-[var(--text-color)] transition-colors">
         <Bell :size="20" />
         <span class="absolute top-1 right-1 w-2 h-2 bg-[var(--danger)] rounded-full"></span>
@@ -14,14 +14,11 @@
         <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-9 w-9 rounded-full object-contain" />
       </div>
       <div v-if="profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md p-2 flex flex-col gap-2 min-w-[150px] z-50">
-        <button 
-          @click="handleLogout"
-          class="w-full px-4 py-2 text-left border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded"
-        >
+        <button @click="handleLogout" class="w-full px-4 py-2 text-left border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded">
           Log Out
         </button>
-        <button 
-          @click="goToAccSetting" 
+        <button
+          @click="goToAccSetting"
           class="w-full px-4 py-2 text-left border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded"
         >
           Account Setting
@@ -33,7 +30,7 @@
 
 <script setup lang="ts">
 import { Bell, User } from "lucide-vue-next";
-import ThemeToggle from "~/components/Presentation/ui/ThemeToggle.vue";
+import ThemeToggle from "~/components/presentation/ui/ThemeToggle.vue";
 const userStore = useUserStore();
 const isImportedAvatar = ref(userStore.profilePic !== "");
 const profileDropdown = ref(false);
@@ -43,11 +40,11 @@ const toggleProfileDropdown = () => {
 };
 
 const goToAccSetting = () => {
-  navigateTo("/UserProfile")
-}
+  navigateTo("/UserProfile");
+};
 
 const handleLogout = () => {
-  userStore.logOut()
-  navigateTo("/auth/login")
-}
+  userStore.logOut();
+  navigateTo("/auth/login");
+};
 </script>

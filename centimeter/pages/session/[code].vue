@@ -26,9 +26,7 @@
             <div class="text-right">
               <p class="text-sm text-[var(--faded-text-color)]">Current slide ID</p>
               <p class="text-xl font-mono text-[var(--text-color)]">{{ currentSlideId || "No slide selected" }}</p>
-              <p class="text-sm text-[var(--faded-text-color)] mt-1">
-                Slide {{ hostSlides.length ? hostSlideIndex + 1 : 0 }} / {{ hostSlides.length }}
-              </p>
+              <p class="text-sm text-[var(--faded-text-color)] mt-1">Slide {{ hostSlides.length ? hostSlideIndex + 1 : 0 }} / {{ hostSlides.length }}</p>
             </div>
           </div>
 
@@ -95,9 +93,9 @@ import { usePresentationStore } from "~/stores/presentationStore";
 import type { SessionParticipant, SessionStatus } from "~/utils/types/sessionTypes";
 import type { Slide } from "~/utils/types/presentationTypes";
 import { Copy, Users, Play } from "lucide-vue-next";
-import NavBar from "~/components/Presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
-import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
+import NavBar from "~/components/presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
+import PresentationCanvas from "~/components/presentation/editor/PresentationCanvas.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -106,27 +104,27 @@ const presentationStore = usePresentationStore();
 const toastContainer = ref<InstanceType<typeof ToastContainer>>();
 
 const joinCode = ref(route.params.code as string);
-const statusData = ref<SessionStatus | null>(null)
+const statusData = ref<SessionStatus | null>(null);
 const presentationCode = computed(() => {
-  const fromQuery = (route.query.presentation as string) || ""
-  const fromStorage = localStorage.getItem(`centimeter.session.presentation.${joinCode.value}`) || ""
-  return fromQuery || fromStorage
-})
+  const fromQuery = (route.query.presentation as string) || "";
+  const fromStorage = localStorage.getItem(`centimeter.session.presentation.${joinCode.value}`) || "";
+  return fromQuery || fromStorage;
+});
 const sessionData = ref(sessionStore.currentSession);
 const participants = ref<SessionParticipant[]>([]);
 const loading = ref(true);
 const isEndingSession = ref(false);
-const isStartingPresentation = ref(false)
-const currentSlideId = ref("")
-const isLiveHost = ref(false)
-const hostSlides = ref<Slide[]>([])
-const hostSlideIndex = ref(0)
-const pollTimerId = ref<ReturnType<typeof setInterval> | null>(null)
+const isStartingPresentation = ref(false);
+const currentSlideId = ref("");
+const isLiveHost = ref(false);
+const hostSlides = ref<Slide[]>([]);
+const hostSlideIndex = ref(0);
+const pollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 
 const currentHostSlide = computed<Slide | undefined>(() => {
-  if (!hostSlides.value.length) return undefined
-  return hostSlides.value[hostSlideIndex.value]
-})
+  if (!hostSlides.value.length) return undefined;
+  return hostSlides.value[hostSlideIndex.value];
+});
 
 onMounted(async () => {
   if (!joinCode.value) {
@@ -134,15 +132,15 @@ onMounted(async () => {
     return;
   }
 
-  await refreshParticipants()
-  await refreshSessionStatus()
-  startParticipantsPolling()
+  await refreshParticipants();
+  await refreshSessionStatus();
+  startParticipantsPolling();
 });
 
 onBeforeUnmount(() => {
-  stopParticipantsPolling()
-  window.removeEventListener("keydown", onHostKeyDown)
-})
+  stopParticipantsPolling();
+  window.removeEventListener("keydown", onHostKeyDown);
+});
 
 const copyJoinCode = () => {
   navigator.clipboard.writeText(joinCode.value);
@@ -153,98 +151,98 @@ const copyJoinCode = () => {
 };
 
 const startPresentation = async () => {
-  if (isStartingPresentation.value) return
+  if (isStartingPresentation.value) return;
 
   if (!presentationCode.value) {
     toastContainer.value?.add({
       title: "Missing presentation",
       message: "Open this session from the editor so the presentation can be attached."
-    })
-    return
+    });
+    return;
   }
 
-  const sessionId = sessionData.value?.id || statusData.value?.id
+  const sessionId = sessionData.value?.id || statusData.value?.id;
   if (!sessionId) {
     toastContainer.value?.add({
       title: "Missing session",
       message: "Session ID not found. Please reopen the session from the editor."
-    })
-    return
+    });
+    return;
   }
 
-  isStartingPresentation.value = true
+  isStartingPresentation.value = true;
   try {
-    await presentationStore.attachPresentationToSession(presentationCode.value, sessionId)
+    await presentationStore.attachPresentationToSession(presentationCode.value, sessionId);
 
-    const presentation = await presentationStore.getPresentation(presentationCode.value)
-    const incomingSlides = Array.isArray(presentation?.data?.slides) ? presentation.data.slides : []
-    hostSlides.value = incomingSlides
+    const presentation = await presentationStore.getPresentation(presentationCode.value);
+    const incomingSlides = Array.isArray(presentation?.data?.slides) ? presentation.data.slides : [];
+    hostSlides.value = incomingSlides;
 
-    const activeSlide = presentation?.data?.active_slide
-    const firstSlideId = presentation?.data?.slides?.[0]?.id
-    const slideIdToBroadcast = activeSlide || firstSlideId
+    const activeSlide = presentation?.data?.active_slide;
+    const firstSlideId = presentation?.data?.slides?.[0]?.id;
+    const slideIdToBroadcast = activeSlide || firstSlideId;
 
     if (slideIdToBroadcast) {
-      await presentationStore.changeActiveSlide(presentationCode.value, slideIdToBroadcast)
-      currentSlideId.value = slideIdToBroadcast
-      const foundIndex = hostSlides.value.findIndex((slide) => slide.id === slideIdToBroadcast)
-      hostSlideIndex.value = foundIndex >= 0 ? foundIndex : 0
-      localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slideIdToBroadcast)
+      await presentationStore.changeActiveSlide(presentationCode.value, slideIdToBroadcast);
+      currentSlideId.value = slideIdToBroadcast;
+      const foundIndex = hostSlides.value.findIndex((slide) => slide.id === slideIdToBroadcast);
+      hostSlideIndex.value = foundIndex >= 0 ? foundIndex : 0;
+      localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slideIdToBroadcast);
     }
 
-    localStorage.setItem(`centimeter.session.presentationData.${joinCode.value}`, JSON.stringify(presentation))
+    localStorage.setItem(`centimeter.session.presentationData.${joinCode.value}`, JSON.stringify(presentation));
 
-    isLiveHost.value = true
-    window.addEventListener("keydown", onHostKeyDown)
+    isLiveHost.value = true;
+    window.addEventListener("keydown", onHostKeyDown);
 
     toastContainer.value?.add({
       title: "Live session started",
       message: "Participants will now receive live session updates."
-    })
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to start presentation"
+    const message = error instanceof Error ? error.message : "Failed to start presentation";
     toastContainer.value?.add({
       title: "Failed to start",
-      message,
-    })
+      message
+    });
   } finally {
-    isStartingPresentation.value = false
+    isStartingPresentation.value = false;
   }
 };
 
 function onHostKeyDown(event: KeyboardEvent): void {
-  if (!isLiveHost.value) return
-  if (!hostSlides.value.length) return
+  if (!isLiveHost.value) return;
+  if (!hostSlides.value.length) return;
 
   if (event.key === "ArrowRight") {
-    event.preventDefault()
-    navigateHostBy(1)
+    event.preventDefault();
+    navigateHostBy(1);
   }
 
   if (event.key === "ArrowLeft") {
-    event.preventDefault()
-    navigateHostBy(-1)
+    event.preventDefault();
+    navigateHostBy(-1);
   }
 }
 
 function navigateHostBy(delta: number): void {
-  const next = Math.max(0, Math.min(hostSlides.value.length - 1, hostSlideIndex.value + delta))
-  if (next === hostSlideIndex.value) return
-  void broadcastSlideByIndex(next)
+  const next = Math.max(0, Math.min(hostSlides.value.length - 1, hostSlideIndex.value + delta));
+  if (next === hostSlideIndex.value) return;
+  void broadcastSlideByIndex(next);
 }
 
 async function broadcastSlideByIndex(index: number): Promise<void> {
-  const slide = hostSlides.value[index]
-  if (!slide?.id || !presentationCode.value) return
+  const slide = hostSlides.value[index];
+  if (!slide?.id || !presentationCode.value) return;
 
   try {
-    await presentationStore.changeActiveSlide(presentationCode.value, slide.id)
-    hostSlideIndex.value = index
-    currentSlideId.value = slide.id
-    localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slide.id)
+    await presentationStore.changeActiveSlide(presentationCode.value, slide.id);
+    hostSlideIndex.value = index;
+    currentSlideId.value = slide.id;
+    localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slide.id);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to change slide"
-    toastContainer.value?.add({ title: "Slide change failed", message })
+    const message = error instanceof Error ? error.message : "Failed to change slide";
+    toastContainer.value?.add({ title: "Slide change failed", message });
   }
 }
 
@@ -266,31 +264,31 @@ async function refreshParticipants(showErrorToast: boolean = true): Promise<void
 
 async function refreshSessionStatus(): Promise<void> {
   try {
-    statusData.value = await sessionStore.checkSessionStatus(joinCode.value)
+    statusData.value = await sessionStore.checkSessionStatus(joinCode.value);
 
     if (statusData.value?.id && !sessionData.value?.id) {
       sessionData.value = {
         id: String(statusData.value.id),
         join_code: statusData.value.join_code || joinCode.value,
-        title: statusData.value.title || "Presentation Session",
-      }
+        title: statusData.value.title || "Presentation Session"
+      };
     }
   } catch (error) {
-    console.error("Failed to load session status:", error)
+    console.error("Failed to load session status:", error);
   }
 }
 
 function startParticipantsPolling(): void {
-  stopParticipantsPolling()
+  stopParticipantsPolling();
   pollTimerId.value = setInterval(() => {
-    refreshParticipants(false)
-  }, 3000)
+    refreshParticipants(false);
+  }, 3000);
 }
 
 function stopParticipantsPolling(): void {
   if (pollTimerId.value) {
-    clearInterval(pollTimerId.value)
-    pollTimerId.value = null
+    clearInterval(pollTimerId.value);
+    pollTimerId.value = null;
   }
 }
 
@@ -298,7 +296,7 @@ const endSession = async () => {
   if (isEndingSession.value) return;
 
   isEndingSession.value = true;
-  stopParticipantsPolling()
+  stopParticipantsPolling();
 
   try {
     await sessionStore.endSession(joinCode.value);
@@ -309,7 +307,7 @@ const endSession = async () => {
     });
 
     if (presentationCode.value) {
-      router.push(`/app/create/${presentationCode.value}`)
+      router.push(`/app/create/${presentationCode.value}`);
     } else {
       router.push("/app/dashboard");
     }

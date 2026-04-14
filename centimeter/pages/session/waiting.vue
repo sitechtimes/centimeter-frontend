@@ -55,8 +55,8 @@
 import { useSessionStore } from "~/stores/sessionStore";
 import type { ParticipantPresencePayload, SessionStatus } from "~/utils/types/sessionTypes";
 import type { Slide } from "~/utils/types/presentationTypes";
-import NavBar from "~/components/Presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
+import NavBar from "~/components/presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -67,71 +67,71 @@ const sessionCode = ref((route.query.code as string) || "");
 const nickname = ref("");
 const joining = ref(false);
 const hasJoined = ref(false);
-const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null)
-const joinedNickname = ref("")
-const sessionSocket = ref<WebSocket | null>(null)
-const skipLeaveOnUnmount = ref(false)
-const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null)
+const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
+const joinedNickname = ref("");
+const sessionSocket = ref<WebSocket | null>(null);
+const skipLeaveOnUnmount = ref(false);
+const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 
 function sessionJoinStorageKey(code: string): string {
-  return `centimeter.session.joined.${code}`
+  return `centimeter.session.joined.${code}`;
 }
 
 function sessionPresentationStorageKey(code: string): string {
-  return `centimeter.session.presentationData.${code}`
+  return `centimeter.session.presentationData.${code}`;
 }
 
 function sessionActiveSlideStorageKey(code: string): string {
-  return `centimeter.session.activeSlide.${code}`
+  return `centimeter.session.activeSlide.${code}`;
 }
 
 function restoreJoinedParticipant(): void {
-  const code = sessionCode.value
-  if (!code) return
+  const code = sessionCode.value;
+  if (!code) return;
 
-  const savedNickname = localStorage.getItem(sessionJoinStorageKey(code))
-  if (!savedNickname) return
+  const savedNickname = localStorage.getItem(sessionJoinStorageKey(code));
+  if (!savedNickname) return;
 
-  nickname.value = savedNickname
-  joinedNickname.value = savedNickname
-  hasJoined.value = true
-  startHeartbeat()
+  nickname.value = savedNickname;
+  joinedNickname.value = savedNickname;
+  hasJoined.value = true;
+  startHeartbeat();
 }
 
 onMounted(() => {
   if (!sessionCode.value) {
     router.push("/");
-    return
+    return;
   }
 
-  connectSessionSocket()
-  restoreJoinedParticipant()
-  startStatusPolling()
-  window.addEventListener("beforeunload", handleBeforeUnload)
+  connectSessionSocket();
+  restoreJoinedParticipant();
+  startStatusPolling();
+  window.addEventListener("beforeunload", handleBeforeUnload);
 });
 
 onBeforeUnmount(async () => {
-  window.removeEventListener("beforeunload", handleBeforeUnload)
-  disconnectSessionSocket()
-  stopStatusPolling()
-  stopHeartbeat()
+  window.removeEventListener("beforeunload", handleBeforeUnload);
+  disconnectSessionSocket();
+  stopStatusPolling();
+  stopHeartbeat();
   if (!skipLeaveOnUnmount.value) {
-    await leaveIfJoined()
+    await leaveIfJoined();
   }
-})
+});
 
 onBeforeRouteLeave(async (to) => {
-  const navigatingToLive = to.path === "/session/live"
-  skipLeaveOnUnmount.value = navigatingToLive
+  const navigatingToLive = to.path === "/session/live";
+  skipLeaveOnUnmount.value = navigatingToLive;
 
-  disconnectSessionSocket()
-  stopStatusPolling()
-  stopHeartbeat()
+  disconnectSessionSocket();
+  stopStatusPolling();
+  stopHeartbeat();
 
   if (!navigatingToLive) {
-    await leaveIfJoined()
+    await leaveIfJoined();
   }
-})
+});
 
 const handleJoin = async () => {
   const trimmedNickname = nickname.value.trim();
@@ -152,10 +152,10 @@ const joinSession = async (nicknameValue: string) => {
 
   try {
     await sessionStore.joinSession(sessionCode.value, nicknameValue);
-    joinedNickname.value = nicknameValue
+    joinedNickname.value = nicknameValue;
     hasJoined.value = true;
-    localStorage.setItem(sessionJoinStorageKey(sessionCode.value), nicknameValue)
-    startHeartbeat()
+    localStorage.setItem(sessionJoinStorageKey(sessionCode.value), nicknameValue);
+    startHeartbeat();
   } catch (err: any) {
     toastContainer.value?.add({
       title: "Failed to join session",
@@ -171,192 +171,194 @@ const joinSession = async (nicknameValue: string) => {
 };
 
 function getPresencePayload(): ParticipantPresencePayload | null {
-  if (!sessionCode.value || !joinedNickname.value) return null
+  if (!sessionCode.value || !joinedNickname.value) return null;
   return {
     join_code: sessionCode.value,
-    nickname: joinedNickname.value,
-  }
+    nickname: joinedNickname.value
+  };
 }
 
 async function sendHeartbeat(): Promise<void> {
-  const payload = getPresencePayload()
-  if (!payload) return
+  const payload = getPresencePayload();
+  if (!payload) return;
 
   try {
-    await sessionStore.sendHeartbeat(payload)
+    await sessionStore.sendHeartbeat(payload);
   } catch (error) {
-    console.error("Heartbeat failed:", error)
+    console.error("Heartbeat failed:", error);
 
-    const message = error instanceof Error ? error.message.toLowerCase() : ""
+    const message = error instanceof Error ? error.message.toLowerCase() : "";
     if (message.includes("not found") || message.includes("404")) {
-      stopHeartbeat()
-      hasJoined.value = false
-      joinedNickname.value = ""
-      localStorage.removeItem(sessionJoinStorageKey(sessionCode.value))
+      stopHeartbeat();
+      hasJoined.value = false;
+      joinedNickname.value = "";
+      localStorage.removeItem(sessionJoinStorageKey(sessionCode.value));
     }
   }
 }
 
 function startHeartbeat(): void {
-  stopHeartbeat()
-  sendHeartbeat()
-  heartbeatTimerId.value = setInterval(sendHeartbeat, 3000)
+  stopHeartbeat();
+  sendHeartbeat();
+  heartbeatTimerId.value = setInterval(sendHeartbeat, 3000);
 }
 
 function stopHeartbeat(): void {
   if (heartbeatTimerId.value) {
-    clearInterval(heartbeatTimerId.value)
-    heartbeatTimerId.value = null
+    clearInterval(heartbeatTimerId.value);
+    heartbeatTimerId.value = null;
   }
 }
 
 async function leaveIfJoined(): Promise<void> {
-  const payload = getPresencePayload()
-  if (!payload || !hasJoined.value) return
+  const payload = getPresencePayload();
+  if (!payload || !hasJoined.value) return;
 
   try {
-    await sessionStore.leaveParticipant(payload)
+    await sessionStore.leaveParticipant(payload);
   } catch (error) {
-    console.error("Failed to leave session:", error)
+    console.error("Failed to leave session:", error);
   } finally {
-    hasJoined.value = false
-    joinedNickname.value = ""
-    localStorage.removeItem(sessionJoinStorageKey(sessionCode.value))
+    hasJoined.value = false;
+    joinedNickname.value = "";
+    localStorage.removeItem(sessionJoinStorageKey(sessionCode.value));
   }
 }
 
 function handleBeforeUnload(): void {
-  const payload = getPresencePayload()
-  if (!payload || !hasJoined.value) return
+  const payload = getPresencePayload();
+  if (!payload || !hasJoined.value) return;
 
   try {
-    const endpoint = `${import.meta.env.VITE_BACKEND_URL}/participants/leave/`
-    const blob = new Blob([JSON.stringify(payload)], { type: "application/json" })
-    navigator.sendBeacon(endpoint, blob)
-  } catch {
-  }
+    const endpoint = `${import.meta.env.VITE_BACKEND_URL}/participants/leave/`;
+    const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+    navigator.sendBeacon(endpoint, blob);
+  } catch {}
 }
 
 function buildSessionSocketUrl(code: string): string {
-  const baseUrl = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "")
-  if (!baseUrl) return ""
+  const baseUrl = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "");
+  if (!baseUrl) return "";
 
-  const wsBase = baseUrl
-    .replace(/^http:\/\//i, "ws://")
-    .replace(/^https:\/\//i, "wss://")
+  const wsBase = baseUrl.replace(/^http:\/\//i, "ws://").replace(/^https:\/\//i, "wss://");
 
-  return `${wsBase}/ws/session/${code}/`
+  return `${wsBase}/ws/session/${code}/`;
 }
 
 function connectSessionSocket(): void {
-  if (!sessionCode.value || sessionSocket.value) return
+  if (!sessionCode.value || sessionSocket.value) return;
 
-  const socketUrl = buildSessionSocketUrl(sessionCode.value)
-  if (!socketUrl) return
+  const socketUrl = buildSessionSocketUrl(sessionCode.value);
+  if (!socketUrl) return;
 
-  const socket = new WebSocket(socketUrl)
-  sessionSocket.value = socket
+  const socket = new WebSocket(socketUrl);
+  sessionSocket.value = socket;
 
   socket.onmessage = (event: MessageEvent) => {
-    let payload: any
+    let payload: any;
     try {
-      payload = JSON.parse(event.data)
+      payload = JSON.parse(event.data);
     } catch {
-      return
+      return;
     }
 
-    const eventName = payload?.event
-    const data = payload?.data || {}
+    const eventName = payload?.event;
+    const data = payload?.data || {};
 
     if (eventName === "presentation_attached") {
-      const presentationPayload = data?.presentation
-      const slideId = presentationPayload?.data?.active_slide || ""
+      const presentationPayload = data?.presentation;
+      const slideId = presentationPayload?.data?.active_slide || "";
       if (presentationPayload) {
-        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload))
+        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload));
       }
       if (slideId) {
-        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId)
+        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId);
       }
-      skipLeaveOnUnmount.value = true
-      router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } })
+      skipLeaveOnUnmount.value = true;
+      router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } });
     }
 
     if (eventName === "slide_changed") {
-      const slideId = data?.active_slide || ""
+      const slideId = data?.active_slide || "";
       if (slideId) {
-        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId)
+        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId);
       }
-      skipLeaveOnUnmount.value = true
-      router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } })
+      skipLeaveOnUnmount.value = true;
+      router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } });
     }
 
     if (eventName === "presentation_updated") {
-      const presentationPayload = data?.presentation
-      const slideId = presentationPayload?.data?.active_slide || ""
+      const presentationPayload = data?.presentation;
+      const slideId = presentationPayload?.data?.active_slide || "";
       if (presentationPayload) {
-        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload))
+        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload));
       }
       if (slideId) {
-        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId)
+        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId);
       }
-      skipLeaveOnUnmount.value = true
-      router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } })
+      skipLeaveOnUnmount.value = true;
+      router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } });
     }
-  }
+  };
 
   socket.onclose = () => {
-    sessionSocket.value = null
-  }
+    sessionSocket.value = null;
+  };
 }
 
 function routeToLiveFromStatus(status: SessionStatus): void {
-  const presentation = status.presentation
-  if (!presentation) return
+  const presentation = status.presentation;
+  if (!presentation) return;
 
-  const slideId = presentation.active_slide || ""
+  const slideId = presentation.active_slide || "";
   if (presentation) {
-    localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify({ data: {
-      slides: (presentation.slides || []) as Slide[],
-      active_slide: slideId || null,
-    }}))
+    localStorage.setItem(
+      sessionPresentationStorageKey(sessionCode.value),
+      JSON.stringify({
+        data: {
+          slides: (presentation.slides || []) as Slide[],
+          active_slide: slideId || null
+        }
+      })
+    );
   }
   if (slideId) {
-    localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId)
+    localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), slideId);
   }
 
-  skipLeaveOnUnmount.value = true
-  router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } })
+  skipLeaveOnUnmount.value = true;
+  router.push({ path: "/session/live", query: { code: sessionCode.value, slide: slideId } });
 }
 
 async function pollSessionStatus(): Promise<void> {
-  if (!sessionCode.value || !hasJoined.value) return
+  if (!sessionCode.value || !hasJoined.value) return;
 
   try {
-    const status = await sessionStore.checkSessionStatus(sessionCode.value)
+    const status = await sessionStore.checkSessionStatus(sessionCode.value);
     if (status?.presentation) {
-      routeToLiveFromStatus(status)
+      routeToLiveFromStatus(status);
     }
   } catch (error) {
-    console.error("Failed to poll session status:", error)
+    console.error("Failed to poll session status:", error);
   }
 }
 
 function startStatusPolling(): void {
-  stopStatusPolling()
-  statusPollTimerId.value = setInterval(pollSessionStatus, 3000)
+  stopStatusPolling();
+  statusPollTimerId.value = setInterval(pollSessionStatus, 3000);
 }
 
 function stopStatusPolling(): void {
   if (statusPollTimerId.value) {
-    clearInterval(statusPollTimerId.value)
-    statusPollTimerId.value = null
+    clearInterval(statusPollTimerId.value);
+    statusPollTimerId.value = null;
   }
 }
 
 function disconnectSessionSocket(): void {
   if (sessionSocket.value) {
-    sessionSocket.value.close()
-    sessionSocket.value = null
+    sessionSocket.value.close();
+    sessionSocket.value = null;
   }
 }
 </script>

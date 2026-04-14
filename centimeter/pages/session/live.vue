@@ -33,262 +33,256 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "~/components/Presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
-import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
+import NavBar from "~/components/presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
+import PresentationCanvas from "~/components/presentation/editor/PresentationCanvas.vue";
 import type { Slide } from "~/utils/types/presentationTypes";
 
-const route = useRoute()
-const router = useRouter()
-const sessionStore = useSessionStore()
+const route = useRoute();
+const router = useRouter();
+const sessionStore = useSessionStore();
 
-const toastContainer = ref<InstanceType<typeof ToastContainer>>()
-const sessionCode = ref((route.query.code as string) || "")
-const currentSlideId = ref((route.query.slide as string) || "")
-const sessionIdentifier = ref("")
-const hostName = ref("")
-const presentationStatus = ref("open")
-const slides = ref<Slide[]>([])
-const sessionSocket = ref<WebSocket | null>(null)
-const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null)
-const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null)
+const toastContainer = ref<InstanceType<typeof ToastContainer>>();
+const sessionCode = ref((route.query.code as string) || "");
+const currentSlideId = ref((route.query.slide as string) || "");
+const sessionIdentifier = ref("");
+const hostName = ref("");
+const presentationStatus = ref("open");
+const slides = ref<Slide[]>([]);
+const sessionSocket = ref<WebSocket | null>(null);
+const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
+const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 
 const currentSlide = computed<Slide | undefined>(() => {
-  if (!slides.value.length) return undefined
-  const matched = slides.value.find((slide) => slide.id === currentSlideId.value)
-  return matched || slides.value[0]
-})
+  if (!slides.value.length) return undefined;
+  const matched = slides.value.find((slide) => slide.id === currentSlideId.value);
+  return matched || slides.value[0];
+});
 
 function sessionJoinStorageKey(code: string): string {
-  return `centimeter.session.joined.${code}`
+  return `centimeter.session.joined.${code}`;
 }
 
 function sessionPresentationStorageKey(code: string): string {
-  return `centimeter.session.presentationData.${code}`
+  return `centimeter.session.presentationData.${code}`;
 }
 
 function sessionActiveSlideStorageKey(code: string): string {
-  return `centimeter.session.activeSlide.${code}`
+  return `centimeter.session.activeSlide.${code}`;
 }
 
 function getJoinedNickname(): string {
-  return localStorage.getItem(sessionJoinStorageKey(sessionCode.value)) || ""
+  return localStorage.getItem(sessionJoinStorageKey(sessionCode.value)) || "";
 }
 
 function restorePresentationState(): void {
-  const raw = localStorage.getItem(sessionPresentationStorageKey(sessionCode.value))
-  if (!raw) return
+  const raw = localStorage.getItem(sessionPresentationStorageKey(sessionCode.value));
+  if (!raw) return;
 
   try {
-    const parsed = JSON.parse(raw)
-    const dataSlides = Array.isArray(parsed?.data?.slides) ? parsed.data.slides : []
-    slides.value = dataSlides
-    const activeSlideFromData = parsed?.data?.active_slide || ""
-    const activeSlideFromStorage = localStorage.getItem(sessionActiveSlideStorageKey(sessionCode.value)) || ""
-    currentSlideId.value = currentSlideId.value || activeSlideFromData || activeSlideFromStorage
-  } catch {
-  }
+    const parsed = JSON.parse(raw);
+    const dataSlides = Array.isArray(parsed?.data?.slides) ? parsed.data.slides : [];
+    slides.value = dataSlides;
+    const activeSlideFromData = parsed?.data?.active_slide || "";
+    const activeSlideFromStorage = localStorage.getItem(sessionActiveSlideStorageKey(sessionCode.value)) || "";
+    currentSlideId.value = currentSlideId.value || activeSlideFromData || activeSlideFromStorage;
+  } catch {}
 }
 
 function applyStatusPresentation(status: any): void {
-  const presentation = status?.presentation
-  if (!presentation) return
+  const presentation = status?.presentation;
+  if (!presentation) return;
 
-  const statusSlides = Array.isArray(presentation.slides) ? presentation.slides : []
+  const statusSlides = Array.isArray(presentation.slides) ? presentation.slides : [];
   if (statusSlides.length) {
-    slides.value = statusSlides
+    slides.value = statusSlides;
   }
 
-  const statusActiveSlide = presentation.active_slide || ""
+  const statusActiveSlide = presentation.active_slide || "";
   if (statusActiveSlide) {
-    currentSlideId.value = statusActiveSlide
-    localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), statusActiveSlide)
+    currentSlideId.value = statusActiveSlide;
+    localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), statusActiveSlide);
   }
 
-  localStorage.setItem(
-    sessionPresentationStorageKey(sessionCode.value),
-    JSON.stringify({ data: { slides: statusSlides, active_slide: statusActiveSlide || null } })
-  )
+  localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify({ data: { slides: statusSlides, active_slide: statusActiveSlide || null } }));
 }
 
 async function ensureSlideExists(slideId: string): Promise<void> {
-  const exists = slides.value.some((slide) => slide.id === slideId)
-  if (exists) return
+  const exists = slides.value.some((slide) => slide.id === slideId);
+  if (exists) return;
 
   try {
-    const status = await sessionStore.checkSessionStatus(sessionCode.value)
-    applyStatusPresentation(status)
+    const status = await sessionStore.checkSessionStatus(sessionCode.value);
+    applyStatusPresentation(status);
   } catch (error) {
-    console.error("Failed to sync slide data after broadcast:", error)
+    console.error("Failed to sync slide data after broadcast:", error);
   }
 }
 
 function buildSessionSocketUrl(code: string): string {
-  const baseUrl = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "")
-  if (!baseUrl) return ""
+  const baseUrl = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "");
+  if (!baseUrl) return "";
 
-  const wsBase = baseUrl
-    .replace(/^http:\/\//i, "ws://")
-    .replace(/^https:\/\//i, "wss://")
+  const wsBase = baseUrl.replace(/^http:\/\//i, "ws://").replace(/^https:\/\//i, "wss://");
 
-  return `${wsBase}/ws/session/${code}/`
+  return `${wsBase}/ws/session/${code}/`;
 }
 
 function connectSessionSocket(): void {
-  if (!sessionCode.value || sessionSocket.value) return
+  if (!sessionCode.value || sessionSocket.value) return;
 
-  const socketUrl = buildSessionSocketUrl(sessionCode.value)
-  if (!socketUrl) return
+  const socketUrl = buildSessionSocketUrl(sessionCode.value);
+  if (!socketUrl) return;
 
-  const socket = new WebSocket(socketUrl)
-  sessionSocket.value = socket
+  const socket = new WebSocket(socketUrl);
+  sessionSocket.value = socket;
 
   socket.onmessage = (event: MessageEvent) => {
-    let payload: any
+    let payload: any;
     try {
-      payload = JSON.parse(event.data)
+      payload = JSON.parse(event.data);
     } catch {
-      return
+      return;
     }
 
-    const eventName = payload?.event
-    const data = payload?.data || {}
+    const eventName = payload?.event;
+    const data = payload?.data || {};
 
     if (eventName === "slide_changed") {
-      currentSlideId.value = data?.active_slide || ""
+      currentSlideId.value = data?.active_slide || "";
       if (currentSlideId.value) {
-        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), currentSlideId.value)
-        void ensureSlideExists(currentSlideId.value)
+        localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), currentSlideId.value);
+        void ensureSlideExists(currentSlideId.value);
       }
     }
 
     if (eventName === "presentation_updated") {
-      const presentationPayload = data?.presentation
+      const presentationPayload = data?.presentation;
       if (presentationPayload) {
-        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload))
-        slides.value = Array.isArray(presentationPayload?.data?.slides) ? presentationPayload.data.slides : slides.value
+        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload));
+        slides.value = Array.isArray(presentationPayload?.data?.slides) ? presentationPayload.data.slides : slides.value;
       }
-      currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value
+      currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value;
     }
 
     if (eventName === "presentation_attached") {
-      const presentationPayload = data?.presentation
+      const presentationPayload = data?.presentation;
       if (presentationPayload) {
-        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload))
-        slides.value = Array.isArray(presentationPayload?.data?.slides) ? presentationPayload.data.slides : slides.value
+        localStorage.setItem(sessionPresentationStorageKey(sessionCode.value), JSON.stringify(presentationPayload));
+        slides.value = Array.isArray(presentationPayload?.data?.slides) ? presentationPayload.data.slides : slides.value;
       }
-      currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value
+      currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value;
     }
-  }
+  };
 
   socket.onclose = () => {
-    sessionSocket.value = null
-  }
+    sessionSocket.value = null;
+  };
 }
 
 function disconnectSessionSocket(): void {
   if (sessionSocket.value) {
-    sessionSocket.value.close()
-    sessionSocket.value = null
+    sessionSocket.value.close();
+    sessionSocket.value = null;
   }
 }
 
 async function sendHeartbeat(): Promise<void> {
-  const nickname = getJoinedNickname()
-  if (!sessionCode.value || !nickname) return
+  const nickname = getJoinedNickname();
+  if (!sessionCode.value || !nickname) return;
 
   try {
     await sessionStore.sendHeartbeat({
       join_code: sessionCode.value,
-      nickname,
-    })
+      nickname
+    });
   } catch (error) {
-    console.error("Heartbeat failed:", error)
+    console.error("Heartbeat failed:", error);
   }
 }
 
 async function refreshStatus(): Promise<void> {
-  if (!sessionCode.value) return
+  if (!sessionCode.value) return;
   try {
-    const status = await sessionStore.checkSessionStatus(sessionCode.value)
-    sessionIdentifier.value = String(status?.id || status?.join_code || sessionCode.value)
-    hostName.value = status?.host_name || ""
-    presentationStatus.value = status?.is_active ? "open" : "closed"
-    applyStatusPresentation(status)
+    const status = await sessionStore.checkSessionStatus(sessionCode.value);
+    sessionIdentifier.value = String(status?.id || status?.join_code || sessionCode.value);
+    hostName.value = status?.host_name || "";
+    presentationStatus.value = status?.is_active ? "open" : "closed";
+    applyStatusPresentation(status);
   } catch (error) {
-    console.error("Failed to refresh session status:", error)
+    console.error("Failed to refresh session status:", error);
   }
 }
 
 function startStatusPolling(): void {
-  stopStatusPolling()
-  refreshStatus()
-  statusPollTimerId.value = setInterval(refreshStatus, 3000)
+  stopStatusPolling();
+  refreshStatus();
+  statusPollTimerId.value = setInterval(refreshStatus, 3000);
 }
 
 function stopStatusPolling(): void {
   if (statusPollTimerId.value) {
-    clearInterval(statusPollTimerId.value)
-    statusPollTimerId.value = null
+    clearInterval(statusPollTimerId.value);
+    statusPollTimerId.value = null;
   }
 }
 
 function startHeartbeat(): void {
-  stopHeartbeat()
-  sendHeartbeat()
-  heartbeatTimerId.value = setInterval(sendHeartbeat, 3000)
+  stopHeartbeat();
+  sendHeartbeat();
+  heartbeatTimerId.value = setInterval(sendHeartbeat, 3000);
 }
 
 function stopHeartbeat(): void {
   if (heartbeatTimerId.value) {
-    clearInterval(heartbeatTimerId.value)
-    heartbeatTimerId.value = null
+    clearInterval(heartbeatTimerId.value);
+    heartbeatTimerId.value = null;
   }
 }
 
 async function leaveSession(): Promise<void> {
-  const nickname = getJoinedNickname()
-  if (!sessionCode.value || !nickname) return
+  const nickname = getJoinedNickname();
+  if (!sessionCode.value || !nickname) return;
 
   try {
     await sessionStore.leaveParticipant({
       join_code: sessionCode.value,
-      nickname,
-    })
-    localStorage.removeItem(sessionJoinStorageKey(sessionCode.value))
+      nickname
+    });
+    localStorage.removeItem(sessionJoinStorageKey(sessionCode.value));
   } catch (error) {
-    console.error("Failed to leave session:", error)
+    console.error("Failed to leave session:", error);
   }
 }
 
 onMounted(() => {
   if (!sessionCode.value) {
-    router.push("/")
-    return
+    router.push("/");
+    return;
   }
 
   if (!getJoinedNickname()) {
-    router.push({ path: "/session/waiting", query: { code: sessionCode.value } })
-    return
+    router.push({ path: "/session/waiting", query: { code: sessionCode.value } });
+    return;
   }
 
-  restorePresentationState()
-  connectSessionSocket()
-  startHeartbeat()
-  startStatusPolling()
-})
+  restorePresentationState();
+  connectSessionSocket();
+  startHeartbeat();
+  startStatusPolling();
+});
 
 onBeforeUnmount(async () => {
-  disconnectSessionSocket()
-  stopHeartbeat()
-  stopStatusPolling()
-  await leaveSession()
-})
+  disconnectSessionSocket();
+  stopHeartbeat();
+  stopStatusPolling();
+  await leaveSession();
+});
 
 onBeforeRouteLeave(async () => {
-  disconnectSessionSocket()
-  stopHeartbeat()
-  stopStatusPolling()
-  await leaveSession()
-})
+  disconnectSessionSocket();
+  stopHeartbeat();
+  stopStatusPolling();
+  await leaveSession();
+});
 </script>
