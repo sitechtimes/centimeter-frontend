@@ -125,7 +125,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
   }
 
   async function sendHeartbeat(payload: ParticipantPresencePayload) {
-    const { ok, status, data } = await apiCall<Record<string, unknown> | string | string[]>(
+    const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
       import.meta.env.VITE_BACKEND_URL + "/participants/heartbeat/",
       {
         method: "POST",
