@@ -14,18 +14,17 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      url: import.meta.env.VITE_URL
+      // Use VITE_URL if present (original key), otherwise fall back to VITE_BACKEND_URL.
+      // This keeps existing code working while supporting LAN testing.
+      url: import.meta.env.VITE_URL ?? import.meta.env.VITE_BACKEND_URL
     }
   },
-  modules: [
-    "@pinia/nuxt",
-    "pinia-plugin-persistedstate/nuxt"
-  ],
+  modules: ["@pinia/nuxt", "pinia-plugin-persistedstate/nuxt"],
   pinia: {
-    storesDirs: ['./stores/**'],
+    storesDirs: ["./stores/**"]
   },
   piniaPersistedstate: {
-    storage: 'localStorage'
+    storage: "localStorage"
   },
   postcss: {
     plugins: {
@@ -48,9 +47,9 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: "icon", type: "image/svg+xml", href: "/logo/logo.svg" },
-        { 
-          rel: "stylesheet", 
-          href: "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" 
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
         }
       ]
     }

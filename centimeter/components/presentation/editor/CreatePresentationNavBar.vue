@@ -82,10 +82,11 @@
      
         <button
           @click="handlePresent"
-          class="px-5 py-2.5 text-sm font-medium text-[color:var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full flex items-center gap-2 transition-colors shadow-sm"
+          :disabled="isOpeningSession"
+          class="px-5 py-2.5 text-sm font-medium text-[color:var(--text-color-contrast)] bg-[var(--primary)] hover:bg-[var(--primary-shade)] rounded-full flex items-center gap-2 transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <Play class="w-5 h-5" />
-          Present
+          {{ isOpeningSession ? 'Opening...' : 'Present' }}
         </button>
       </div>
     </div>
@@ -94,10 +95,15 @@
 
 <script setup lang="ts">
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play, Save } from 'lucide-vue-next'
+import type { Slide } from '@/utils/types/presentationTypes'
 
 const props = defineProps<{
   slides?: Slide[]
-  initialTitle?: string
+  title?: string
+}>()
+
+const emit = defineEmits<{
+  'update:title': [title: string]
 }>()
 
 const sessionStore = useSessionStore()
@@ -107,18 +113,23 @@ const route = useRoute()
 
 const WorkspaceIcon: Component | null = null
 
-const presentationName = ref('Untitled Presentation')
 const activeTab = ref<"create" | "results">("create");
 const currentWorkspaceName = ref("Workspace Name")
 const results = ref(0)
 const isSaving = ref(false)
+const isOpeningSession = ref(false)
+
+const presentationName = computed({
+  get: () => props.title || 'Untitled Presentation',
+  set: (value: string) => emit('update:title', value)
+})
 
 const presentationCode = computed(() => {
   return route.params.id as string
 })
 
 watch(
-  () => props.initialTitle,
+  () => props.title,
   (title) => {
     if (title !== undefined && title !== null) {
       presentationName.value = title
@@ -152,6 +163,8 @@ const handleSave = async () => {
 }
 
 const handlePresent = async () => {
+  if (isOpeningSession.value) return
+
   try {
     const userStore = useUserStore();
     
@@ -159,13 +172,28 @@ const handlePresent = async () => {
       console.error('User is not authenticated');
       return;
     }
+
+    isOpeningSession.value = true
+    const safeTitle = (presentationName.value || '').trim().slice(0, 20) || 'Live Session'
     
-    const session = await sessionStore.openSession(presentationName.value)
+    const session = await sessionStore.openSession(safeTitle)
     if (session?.join_code) {
-      router.push(`/session/${session.join_code}`)
+      localStorage.setItem(`centimeter.session.presentation.${session.join_code}`, presentationCode.value)
+      router.push({
+        path: `/session/${session.join_code}`,
+        query: { presentation: presentationCode.value }
+      })
     }
   } catch (error) {
     console.error('Failed to open session:', error)
+    const message = error instanceof Error ? error.message : 'Failed to open session.'
+    alert(message)
+
+    if (message.toLowerCase().includes('log in')) {
+      router.push('/auth/login')
+    }
+  } finally {
+    isOpeningSession.value = false
   }
 }
 </script>

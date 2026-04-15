@@ -7,10 +7,11 @@
         <div class="flex items-center gap-3">
           <button
             @click="goToCreatePresentation"
+            :disabled="isCreating"
             class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-white text-sm font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors"
           >
             <span class="text-lg leading-none">+</span>
-            <span>New Menti</span>
+            <span>{{ isCreating ? 'Creating...' : 'New Menti' }}</span>
           </button>
           <button
             class="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--faded-bg-color-light)] text-[color:var(--text-color)] text-sm font-medium rounded-full hover:bg-[var(--faded-bg-color)] transition-colors"
@@ -74,51 +75,82 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
-
+import { useRouter } from "vue-router";
+import { usePresentationStore } from '~/stores/presentationStore'
+import { useUserStore } from '~/stores/userStore'
+import type { Presentation } from "~/utils/types/presentationTypes";
 
 const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");
-const presentations = ref<Presentation[]>([]);
+const isCreating = ref(false)
+const isLoading = ref(true)
 
 const router = useRouter();
-const presentationStore = usePresentationStore()
-const userStore = useUserStore()
+const presentationStore = usePresentationStore();
+const userStore = useUserStore();
+
+const presentations = computed<Presentation[]>(() => presentationStore.presentations)
+
+onMounted(async () => {
+  if (!userStore.isAuth) {
+    isLoading.value = false
+    return
+  }
+
+  try {
+    await presentationStore.listPresentations()
+  } catch (err) {
+    console.error('Failed to load presentations:', err)
+  } finally {
+    isLoading.value = false
+  }
+})
 
 async function goToCreatePresentation() {
+  if (isCreating.value) return
+
+  if (!userStore.isAuth) {
+    alert('Please log in before creating a presentation.')
+    router.push('/auth/login')
+    return
+  }
+
+  isCreating.value = true
   try {
-    const presentation = await presentationStore.createPresentation("Untitled Presentation")
-    if (presentation?.id) {
-      router.push(`/app/create/${presentation.presentation_code}`)
+    const presentation = await presentationStore.createPresentation('Untitled Presentation')
+    const routeId = presentation?.presentation_code || presentation?.id
+
+    if (routeId) {
+      router.push(`/app/create/${routeId}`)
+    } else {
+      alert('Presentation created but no identifier was returned by the API.')
     }
   } catch (err) {
-    console.error("Failed to create presentation:", err)
+    console.error('Failed to create presentation:', err)
+    const message = err instanceof Error ? err.message : 'Failed to create presentation.'
+    alert(message)
+
+    if (message.toLowerCase().includes('authenticated') || message.toLowerCase().includes('log in')) {
+      router.push('/auth/login')
+    }
+  } finally {
+    isCreating.value = false
   }
 }
-
-async function loadPresentations() {
-  try {
-    presentations.value = await userStore.listPresentations();
-  } catch (err) {
-    console.error("Failed to load presentations:", err);
-    presentations.value = [];
-  }
-}
-
-onMounted(() => {
-  loadPresentations();
-});
 
 const filteredPresentations = computed(() => {
+  if (isLoading.value) return []
   if (!searchQuery.value) return presentations.value;
 
   const query = searchQuery.value.toLowerCase();
   return presentations.value.filter((p) => {
-    const titleMatch = p.title?.toLowerCase().includes(query);
-    const hostMatch = p.host?.toLowerCase().includes(query);
-    return titleMatch || hostMatch;
+    const title = (p.title || '').toLowerCase()
+    const host = (p.host || '').toLowerCase()
+    return title.includes(query) || host.includes(query)
   });
 });
 </script>

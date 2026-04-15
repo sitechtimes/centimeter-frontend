@@ -9,9 +9,13 @@
       </p>
 
 
-      <button @click="goToCreatePresentation" class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary)] text-[var(--text-color-contrast)] font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors">
+      <button
+        @click="goToCreatePresentation"
+        :disabled="isCreating"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary)] text-[var(--text-color-contrast)] font-medium rounded-full hover:bg-[var(--primary-shade)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+      >
         <span>+</span>
-        <span>New Menti</span>
+        <span>{{ isCreating ? 'Creating...' : 'New Menti' }}</span>
       </button>
     </div>
   </div>
@@ -23,16 +27,37 @@ import { usePresentationStore } from '~/stores/presentationStore'
 
 const router = useRouter()
 const presentationStore = usePresentationStore()
+const userStore = useUserStore()
+const isCreating = ref(false)
 
 async function goToCreatePresentation() {
+  if (isCreating.value) return
+
+  if (!userStore.isAuth) {
+    alert('Please log in before creating a presentation.')
+    router.push('/auth/login')
+    return
+  }
+
+  isCreating.value = true
   try {
     const presentation = await presentationStore.createPresentation('Untitled Presentation')
     const code = presentation?.presentation_code ?? presentation?.id
     if (code) {
       router.push(`/app/create/${code}`)
+    } else {
+      alert('Presentation created but no identifier was returned by the API.')
     }
   } catch (err) {
     console.error('Failed to create presentation:', err)
+    const message = err instanceof Error ? err.message : 'Failed to create presentation.'
+    alert(message)
+
+    if (message.toLowerCase().includes('authenticated') || message.toLowerCase().includes('log in')) {
+      router.push('/auth/login')
+    }
+  } finally {
+    isCreating.value = false
   }
 }
 </script>

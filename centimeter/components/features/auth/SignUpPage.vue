@@ -138,7 +138,7 @@ watch(
 
 async function signupWithEmail() {
   try {
-    await userStore.signUp(email.value, password.value);
+    await userStore.signUp(email.value, password.value, name.value);
 
     if (userStore.isAuth) {
       toastRef.value?.add({
@@ -150,13 +150,15 @@ async function signupWithEmail() {
       passwordErr.value = "Account creation failed. Please try again.";
     }
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+
     if (error instanceof Error) {
       passwordErr.value = error.message;
       if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
     }
     toastRef.value?.add({
       title: "Sign up failed",
-      message: "Please check your information and try again"
+      message: errorMessage
     });
     return;
   }
