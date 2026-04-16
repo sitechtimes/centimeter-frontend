@@ -10,18 +10,18 @@
     >
       <div class="h-full w-full flex flex-col px-8 py-6 gap-6">
         <input
+          v-if="!isPresentationMode"
           id="MultipleChoiceQuestion"
           type="text"
           @click="clearQuestion"
           @blur="restoreQuestionDefault"
           v-model="props.slide!.question"
-          :readonly="isPresentationMode"
           class="w-full bg-transparent text-3xl font-semibold text-[var(--text-color)] border-b border-[var(--faded-bg-color)] pb-3 outline-none"
           :class="isPresentationMode ? 'cursor-pointer pointer-events-none select-none' : ''"
         >
 
         <div class="flex-1 min-h-0" :class="chartLayoutClass">
-          <div :class="chartShellClass">
+          <div v-if="!isPresentationMode" :class="chartShellClass">
             <GraphComponent :options="props.slide?.options" />
           </div>
 
@@ -70,7 +70,6 @@
 
 <script setup lang="ts">
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
-import { chartType } from '~/utils/slides'
 
 const props = defineProps<{
   slide?: Slide
