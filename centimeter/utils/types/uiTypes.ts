@@ -5,12 +5,14 @@ export interface ToastItem {
   title: string;
   message?: string;
   duration?: number;
+  type?: 'success' | 'error' | 'warning' | 'info';
 }
 
 export interface ToastPayload {
   title: string;
   message?: string;
   duration?: number;
+  type?: 'success' | 'error' | 'warning' | 'info';
 }
 
 export interface Option {

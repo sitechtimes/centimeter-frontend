@@ -159,7 +159,8 @@ const joinSession = async (nicknameValue: string) => {
   } catch (err: any) {
     toastContainer.value?.add({
       title: "Failed to join session",
-      message: err?.message || "Please try again."
+      message: err?.message || "Please try again.",
+      type: 'error'
     });
     joining.value = false;
     nickname.value = "";

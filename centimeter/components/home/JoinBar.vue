@@ -60,7 +60,8 @@ async function handleJoin() {
     if (!data.is_active) {
       toastContainer.value?.add({
         title: "Session is not active",
-        message: "This session is currently inactive and cannot be joined."
+        message: "This session is currently inactive and cannot be joined.",
+        type: 'warning'
       });
       error.value = "Session inactive";
       return;
@@ -74,7 +75,8 @@ async function handleJoin() {
     const message = err?.message;
     toastContainer.value?.add({
       title: "Failed to join session",
-      message
+      message,
+      type: 'error'
     });
   } finally {
     checking.value = false;

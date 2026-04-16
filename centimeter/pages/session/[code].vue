@@ -146,7 +146,8 @@ const copyJoinCode = () => {
   navigator.clipboard.writeText(joinCode.value);
   toastContainer.value?.add({
     title: "Copied!",
-    message: "Join code copied to clipboard"
+    message: "Join code copied to clipboard",
+    type: 'success'
   });
 };
 
@@ -156,7 +157,8 @@ const startPresentation = async () => {
   if (!presentationCode.value) {
     toastContainer.value?.add({
       title: "Missing presentation",
-      message: "Open this session from the editor so the presentation can be attached."
+      message: "Open this session from the editor so the presentation can be attached.",
+      type: 'error'
     });
     return;
   }
@@ -165,7 +167,8 @@ const startPresentation = async () => {
   if (!sessionId) {
     toastContainer.value?.add({
       title: "Missing session",
-      message: "Session ID not found. Please reopen the session from the editor."
+      message: "Session ID not found. Please reopen the session from the editor.",
+      type: 'error'
     });
     return;
   }
@@ -197,13 +200,15 @@ const startPresentation = async () => {
 
     toastContainer.value?.add({
       title: "Live session started",
-      message: "Participants will now receive live session updates."
+      message: "Participants will now receive live session updates.",
+      type: 'success'
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to start presentation";
     toastContainer.value?.add({
       title: "Failed to start",
-      message
+      message,
+      type: 'error'
     });
   } finally {
     isStartingPresentation.value = false;
@@ -242,7 +247,7 @@ async function broadcastSlideByIndex(index: number): Promise<void> {
     localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slide.id);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to change slide";
-    toastContainer.value?.add({ title: "Slide change failed", message });
+    toastContainer.value?.add({ title: "Slide change failed", message, type: 'error' });
   }
 }
 
@@ -254,7 +259,8 @@ async function refreshParticipants(showErrorToast: boolean = true): Promise<void
     if (showErrorToast) {
       toastContainer.value?.add({
         title: "Error",
-        message: "Failed to load participants"
+        message: "Failed to load participants",
+        type: 'error'
       });
     }
   } finally {
@@ -303,7 +309,8 @@ const endSession = async () => {
 
     toastContainer.value?.add({
       title: "Session Ended",
-      message: "The session has been successfully closed"
+      message: "The session has been successfully closed",
+      type: 'success'
     });
 
     if (presentationCode.value) {
@@ -315,7 +322,8 @@ const endSession = async () => {
     console.error("Failed to end session:", error);
     toastContainer.value?.add({
       title: "Error",
-      message: "Failed to end session. Please try again."
+      message: "Failed to end session. Please try again.",
+      type: 'error'
     });
     isEndingSession.value = false;
   }
