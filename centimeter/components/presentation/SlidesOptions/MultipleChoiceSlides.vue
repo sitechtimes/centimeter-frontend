@@ -34,7 +34,7 @@
             >
               <input
                 type="text"
-                @click="clearOptionText(choice)"
+                @click="!isPresentationMode ? clearOptionText(choice) : chooseChoice(choice)"
                 @blur="restoreOptionDefault(choice)"
                 v-model="choice.option_text"
                 :readonly="isPresentationMode"
@@ -129,6 +129,8 @@ function removeOption(choice: PollsOption) {
     }
   }
 }
+
+function chooseChoice(choice: PollsOption) { choice.amount_chosen += 1; console.log("bang")}
 
 const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;

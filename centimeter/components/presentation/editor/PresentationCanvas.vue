@@ -18,7 +18,7 @@
     </div>
     
     <div v-if="props.currentSlide?.type === 'Multiple Choice'" :class="contentClass">
-      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode" />
+      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode"/>
     </div>
 
     <div v-else :class="contentClass">

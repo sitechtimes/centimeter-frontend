@@ -1,19 +1,8 @@
-async function apiCall<ApiResponse>(url: string, options: RequestInit): Promise<{ ok: boolean; data?: ApiResponse }> {
-  const res = await fetch(url, options);
-  let data: ApiResponse | undefined = undefined;
-  try {
-    data = await res.json();
-  } catch (e){
-    console.log(`Response is not JSON: ${e}`);
-  }
-  return { ok: res.ok, data };
-}
-
 import { defineStore } from "pinia";
 
 export const usePollsStore = defineStore("pollsStore", () => {
 
-  async function openPolls() {
+  async function createPollsSlide(question: string, options: PollsOption[], is_quiz?: boolean) {
     const userStore = useUserStore();
     const token = userStore.user?.access
     const { ok, data } = await apiCall<OpenPollsResponse>(
@@ -22,13 +11,18 @@ export const usePollsStore = defineStore("pollsStore", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : ''
+          "Authorization": `Bearer ${token}` 
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({question, options, is_quiz}),
       });
     if (!ok) {
-      throw new Error("Failed to open session");
+      throw new Error("Failed to make slide");
     } 
     return (data ?? null) as OpenPollsResponse | null;
+  }
+
+
+  return {
+    createPollsSlide
   }
 })
