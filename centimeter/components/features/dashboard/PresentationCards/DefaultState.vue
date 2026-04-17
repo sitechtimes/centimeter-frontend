@@ -75,14 +75,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
 import { Search, LayoutGrid, Menu, ChevronDown } from "lucide-vue-next";
 import GridPresentation from "./GridPresentation.vue";
 import CompactPresentationView from "./PresentationView.vue";
-import { useRouter } from "vue-router";
 import { usePresentationStore } from '~/stores/presentationStore'
 import { useUserStore } from '~/stores/userStore'
-import type { Presentation } from "~/utils/types/presentationTypes";
 
 const searchQuery = ref("");
 const viewMode = ref<"grid" | "list">("grid");

@@ -86,16 +86,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import { useSessionStore } from "~/stores/sessionStore";
 import { usePresentationStore } from "~/stores/presentationStore";
-import type { SessionParticipant, SessionStatus } from "~/utils/types/sessionTypes";
-import type { Slide } from "~/utils/types/presentationTypes";
 import { Copy, Users, Play } from "lucide-vue-next";
-import NavBar from "~/components/presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
-import PresentationCanvas from "~/components/presentation/editor/PresentationCanvas.vue";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
+import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
 
 const route = useRoute();
 const router = useRouter();

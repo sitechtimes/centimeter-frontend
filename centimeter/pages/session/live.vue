@@ -33,10 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "~/components/presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
-import PresentationCanvas from "~/components/presentation/editor/PresentationCanvas.vue";
-import type { Slide } from "~/utils/types/presentationTypes";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
+import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
 
 const route = useRoute();
 const router = useRouter();

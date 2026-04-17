@@ -31,17 +31,18 @@
               :key="choice.position"
               class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
               :class="[choiceClass, isPresentationMode ? 'cursor-pointer' : '']"
+              @click="isPresentationMode ? chooseChoice(choice) : undefined"
             >
               <input
                 type="text"
-                @click="!isPresentationMode ? clearOptionText(choice) : chooseChoice(choice)"
+                @click="clearOptionText(choice)"
                 @blur="restoreOptionDefault(choice)"
                 v-model="choice.option_text"
                 :readonly="isPresentationMode"
                 :class="[
                   'w-full min-w-0 truncate bg-transparent outline-none',
                   fontSize,
-                  isPresentationMode ? 'cursor-pointer pointer-events-none select-none' : ''
+                  isPresentationMode ? 'cursor-pointer select-none' : ''
                 ]"
               >
               <button
@@ -74,11 +75,12 @@ import GraphComponent from '../SlideComponents/GraphComponent.vue'
 const props = defineProps<{
   slide?: Slide
   presentationMode?: boolean
+  limitChoices?: LimitPollsChoices
 }>();
 
 const defaultQuestion = "Ask your question here..."
-
 const canvasRef = ref<HTMLDivElement>();
+const defaultChoiceAmount = 1  
 
 function clearQuestion() {
   if (isPresentationMode.value) return

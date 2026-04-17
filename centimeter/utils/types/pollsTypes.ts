@@ -15,3 +15,8 @@ export interface OpenPollsResponse{
   created_at?: string;
   options: PollsOption[];
 }
+
+export interface LimitPollsChoices {
+  slide_id: string;
+  limit: number;
+}

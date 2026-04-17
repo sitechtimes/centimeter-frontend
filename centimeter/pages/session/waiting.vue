@@ -53,10 +53,8 @@
 
 <script setup lang="ts">
 import { useSessionStore } from "~/stores/sessionStore";
-import type { ParticipantPresencePayload, SessionStatus } from "~/utils/types/sessionTypes";
-import type { Slide } from "~/utils/types/presentationTypes";
-import NavBar from "~/components/presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 
 const route = useRoute();
 const router = useRouter();
