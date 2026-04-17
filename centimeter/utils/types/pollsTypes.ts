@@ -5,6 +5,7 @@ export interface PollsOption {
   position?: number;
   amount_chosen: number;
   is_correct?: boolean;
+  chosen: boolean;
 }
 
 export interface OpenPollsResponse{

@@ -31,7 +31,7 @@
               :key="choice.position"
               class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
               :class="[choiceClass, isPresentationMode ? 'cursor-pointer' : '']"
-              @click="isPresentationMode ? chooseChoice(choice) : undefined"
+              @click="isPresentationMode ? chooseChoice(choice, props.limitChoices) : undefined"
             >
               <input
                 type="text"
@@ -70,12 +70,13 @@
 </template>
 
 <script setup lang="ts">
+import type { LimitPollsChoices } from '~/utils/types/pollsTypes';
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
 
 const props = defineProps<{
   slide?: Slide
   presentationMode?: boolean
-  limitChoices?: LimitPollsChoices
+  limitChoices: LimitPollsChoices
 }>();
 
 const defaultQuestion = "Ask your question here..."
@@ -116,7 +117,8 @@ function addOption() {
     color: generateHex(),
     option_text: `Option ${position}`,
     position,
-    amount_chosen: 0
+    amount_chosen: 0,
+    chosen: false
   });
 }
 
@@ -131,7 +133,18 @@ function removeOption(choice: PollsOption) {
   }
 }
 
-function chooseChoice(choice: PollsOption) { choice.amount_chosen += 1; console.log("bang")}
+function chooseChoice(choice: PollsOption, choiceLimit: LimitPollsChoices) {
+  const currentChosenCount = props.slide?.options?.filter(opt => opt.chosen).length ?? 0;
+  const limit = choiceLimit.limit ?? defaultChoiceAmount;
+
+  if (choice.chosen) {
+    choice.chosen = false;
+  } else if (currentChosenCount < limit) {
+    choice.amount_chosen += 1
+    choice.chosen = true
+    console.log(`chosen ${choice.option_text}`)
+  }
+}
 
 const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;
