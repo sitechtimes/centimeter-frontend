@@ -124,89 +124,35 @@ function remove(id: string) {
 function toastClasses(type?: string) {
   const baseClasses = 'relative flex items-start justify-between gap-3 rounded-lg shadow-lg backdrop-blur-sm px-4 py-3 min-w-72 max-w-96 pointer-events-auto transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border';
   
-  switch (type) {
-    case 'success':
-      return `${baseClasses} bg-green-50 border-green-400 text-green-900 hover:bg-green-100`;
-    case 'error':
-      return `${baseClasses} bg-red-50 border-red-400 text-red-900 hover:bg-red-100`;
-    case 'warning':
-      return `${baseClasses} bg-amber-50 border-amber-400 text-amber-900 hover:bg-amber-100`;
-    case 'info':
-    default:
-      return `${baseClasses} bg-blue-50 border-blue-400 text-blue-900 hover:bg-blue-100`;
+  if (type === 'error') {
+    return `${baseClasses} bg-red-50 border-red-400 text-red-900 hover:bg-red-100`;
   }
+  return `${baseClasses} bg-green-50 border-green-400 text-green-900 hover:bg-green-100`;
 }
 
 function toastIconClasses(type?: string) {
-  switch (type) {
-    case 'success':
-      return 'text-green-600';
-    case 'error':
-      return 'text-red-600';
-    case 'warning':
-      return 'text-amber-600';
-    case 'info':
-    default:
-      return 'text-blue-600';
-  }
+  return type === 'error' ? 'text-red-600' : 'text-green-600';
 }
 
 function toastTextClasses(type?: string) {
-  switch (type) {
-    case 'success':
-      return 'text-green-700';
-    case 'error':
-      return 'text-red-700';
-    case 'warning':
-      return 'text-amber-700';
-    case 'info':
-    default:
-      return 'text-blue-700';
-  }
+  return type === 'error' ? 'text-red-700' : 'text-green-700';
 }
 
 function toastCloseButtonClasses(type?: string) {
   const baseClasses = 'flex-shrink-0 opacity-70 hover:opacity-100 rounded-full p-1 transition-all duration-200 focus:outline-none focus:ring-2';
   
-  switch (type) {
-    case 'success':
-      return `${baseClasses} text-green-900 hover:bg-green-400 focus:ring-green-500`;
-    case 'error':
-      return `${baseClasses} text-red-900 hover:bg-red-400 focus:ring-red-500`;
-    case 'warning':
-      return `${baseClasses} text-amber-900 hover:bg-amber-400 focus:ring-amber-500`;
-    case 'info':
-    default:
-      return `${baseClasses} text-blue-900 hover:bg-blue-400 focus:ring-blue-500`;
+  if (type === 'error') {
+    return `${baseClasses} text-red-900 hover:bg-red-400 focus:ring-red-500`;
   }
+  return `${baseClasses} text-green-900 hover:bg-green-400 focus:ring-green-500`;
 }
 
 function toastProgressBarBgClasses(type?: string) {
-  switch (type) {
-    case 'success':
-      return 'bg-green-100';
-    case 'error':
-      return 'bg-red-100';
-    case 'warning':
-      return 'bg-amber-100';
-    case 'info':
-    default:
-      return 'bg-blue-100';
-  }
+  return type === 'error' ? 'bg-red-100' : 'bg-green-100';
 }
 
 function toastProgressBarClasses(type?: string) {
-  switch (type) {
-    case 'success':
-      return 'bg-green-300';
-    case 'error':
-      return 'bg-red-300';
-    case 'warning':
-      return 'bg-amber-300';
-    case 'info':
-    default:
-      return 'bg-blue-300';
-  }
+  return type === 'error' ? 'bg-red-300' : 'bg-green-300';
 }
 
 defineExpose({ add, remove });
