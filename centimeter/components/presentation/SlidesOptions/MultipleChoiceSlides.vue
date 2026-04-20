@@ -143,6 +143,7 @@ function chooseChoice(choice: PollsOption, choiceLimit: LimitPollsChoices) {
     choice.amount_chosen += 1
     choice.chosen = true
     console.log(`chosen ${choice.option_text}`)
+    console.log(choice)
   }
 }
 
