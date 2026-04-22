@@ -18,7 +18,7 @@
     </div>
     
     <div v-if="props.currentSlide?.type === 'Multiple Choice'" :class="contentClass">
-      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode" :isHost="props.isHost"/>
+      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode" :isHost="props.isHost" :isParticipant="props.isParticipant"/>
     </div>
 
     <div v-else :class="contentClass">
@@ -67,6 +67,7 @@ const props = defineProps<{
   currentSlide?: Slide
   presentationMode?: boolean
   isHost?: boolean
+  isParticipant?: boolean
 }>();
 
 const CANVAS_WIDTH = 1200;

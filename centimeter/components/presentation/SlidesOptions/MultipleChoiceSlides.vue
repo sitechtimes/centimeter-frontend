@@ -21,7 +21,7 @@
         >
 
         <div class="flex-1 min-h-0" :class="chartLayoutClass">
-          <div v-if="!isPresentationMode && !isHost" :class="chartShellClass">
+          <div v-if="isPresentationMode && isHost" :class="chartShellClass">
             <GraphComponent :options="slideOptions" />
           </div>
 
@@ -30,7 +30,7 @@
               v-for="choice in slideOptions"
               :key="choice.position"
               class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
-              :class="[choiceClass, isPresentationMode ? 'cursor-pointer' : '', choice.chosen && isPresentationMode ? 'bg-[var(--primary-shade-translucent)] border-[var(--primary)]' : '']"
+              :class="[choiceClass, choice.chosen && isPresentationMode ? 'bg-[var(--primary-shade-translucent)] border-[var(--primary)] cursor-pointer' : '']"
               @click="isPresentationMode ? chooseChoice(choice, props.slide?.responseLimit) : null"
             >
               <input
@@ -77,11 +77,12 @@ const props = defineProps<{
   slide?: Slide
   presentationMode?: boolean
   isHost?: boolean
+  isParticipant?: boolean
 }>();
 
 const defaultQuestion = "Ask your question here..."
 const canvasRef = ref<HTMLDivElement>();
-const slideOptions = computed(() => props.slide?.pollsComponents?.options ?? [])
+const slideOptions = computed(() => props.slide?.pollsComponents?.options)
 const isHost = computed(() => props.isHost === true)
 
 function clearQuestion() {
@@ -153,13 +154,11 @@ function chooseChoice(choice: PollsOption, choiceLimit: number | undefined) {
   if (choice.chosen) {
     choice.chosen = false;
   } else if (currentChosenCount < limit) {
-    choice.amount_chosen += 1
     choice.chosen = true
+    choice.amount_chosen += 1
     console.log(`chosen ${choice.option_text}`)
   }
-  console.log(props.slide?.pollsComponents?.options)
-  console.log(isHost.value)
-  console.log(User)
+  console.log(slideOptions.value)
 }
 
 const CANVAS_WIDTH = 1200,
