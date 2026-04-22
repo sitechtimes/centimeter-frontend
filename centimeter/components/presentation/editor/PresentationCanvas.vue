@@ -18,7 +18,7 @@
     </div>
     
     <div v-if="props.currentSlide?.type === 'Multiple Choice'" :class="contentClass">
-      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode"/>
+      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode" :isHost="props.isHost"/>
     </div>
 
     <div v-else :class="contentClass">
@@ -66,6 +66,7 @@ import MultipleChoiceSlides from "../SlidesOptions/MultipleChoiceSlides.vue";
 const props = defineProps<{
   currentSlide?: Slide
   presentationMode?: boolean
+  isHost?: boolean
 }>();
 
 const CANVAS_WIDTH = 1200;

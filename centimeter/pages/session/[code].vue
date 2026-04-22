@@ -31,7 +31,7 @@
           </div>
 
           <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[72vh]">
-            <PresentationCanvas class="!h-full" :currentSlide="currentHostSlide" :presentationMode="true" />
+            <PresentationCanvas class="!h-full" :currentSlide="currentHostSlide" :presentationMode="true" :isHost="true"/>
           </div>
         </div>
 
@@ -86,8 +86,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSessionStore } from "~/stores/sessionStore";
-import { usePresentationStore } from "~/stores/presentationStore";
 import { Copy, Users, Play } from "lucide-vue-next";
 import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";

@@ -219,11 +219,16 @@ const newTextSlide = (newSlide: Slide) => {
 
 const newMultipleChoiceSlide = (newSlide: Slide) => {
   newSlide.question = "Ask your question here...";
-  newSlide.options = [
+
+  const polls = (newSlide.pollsComponents ??= { options: [] } as any);
+
+  polls.options = [
     { color: "#27F5EB", option_text: "Option 1", position: 1, amount_chosen: 0 },
     { color: "#F54927", option_text: "Option 2", position: 2, amount_chosen: 0 },
     { color: "#000000", option_text: "Option 3", position: 3, amount_chosen: 0 }
   ];
+
+  newSlide.pollsComponents!.options = polls.options
 };
 
 function generateUUID(): string {

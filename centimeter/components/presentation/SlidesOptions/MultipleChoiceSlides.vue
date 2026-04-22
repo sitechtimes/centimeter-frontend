@@ -21,17 +21,17 @@
         >
 
         <div class="flex-1 min-h-0" :class="chartLayoutClass">
-          <div v-if="!isPresentationMode" :class="chartShellClass">
-            <GraphComponent :options="props.slide?.options" />
+          <div v-if="!isPresentationMode && !isHost" :class="chartShellClass">
+            <GraphComponent :options="slideOptions" />
           </div>
 
           <div :class="optionsLayoutClass">
             <div
-              v-for="choice in props.slide?.options"
+              v-for="choice in slideOptions"
               :key="choice.position"
               class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
-              :class="[choiceClass, isPresentationMode ? 'cursor-pointer' : '']"
-              @click="isPresentationMode ? chooseChoice(choice, props.limitChoices) : undefined"
+              :class="[choiceClass, isPresentationMode ? 'cursor-pointer' : '', choice.chosen && isPresentationMode ? 'bg-[var(--primary-shade-translucent)] border-[var(--primary)]' : '']"
+              @click="isPresentationMode ? chooseChoice(choice, props.slide?.responseLimit) : null"
             >
               <input
                 type="text"
@@ -70,18 +70,19 @@
 </template>
 
 <script setup lang="ts">
-import type { LimitPollsChoices } from '~/utils/types/pollsTypes';
+import { User } from 'lucide-vue-next';
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
 
 const props = defineProps<{
   slide?: Slide
   presentationMode?: boolean
-  limitChoices: LimitPollsChoices
+  isHost?: boolean
 }>();
 
 const defaultQuestion = "Ask your question here..."
 const canvasRef = ref<HTMLDivElement>();
-const defaultChoiceAmount = 1  
+const slideOptions = computed(() => props.slide?.pollsComponents?.options ?? [])
+const isHost = computed(() => props.isHost === true)
 
 function clearQuestion() {
   if (isPresentationMode.value) return
@@ -111,31 +112,43 @@ const generateHex = (): string => {
 
 function addOption() {
   if (isPresentationMode.value) return
-  if (!props.slide!.options) props.slide!.options = [];
-  const position = props.slide!.options.length + 1;
-  props.slide!.options.push({
+  // Mutate the underlying slide object instead of the computed ref (which is read-only)
+  if (!props.slide) return
+  if (!props.slide.pollsComponents) {
+    (props.slide as any).pollsComponents = { options: [] }
+  }
+  // ts actually looks disgusting
+  if (!props.slide!.pollsComponents!.options) {
+    (props.slide.pollsComponents as any).options = []
+  }
+
+  const opts = props.slide!.pollsComponents!.options
+  const position = opts.length + 1
+  opts.push({
     color: generateHex(),
     option_text: `Option ${position}`,
     position,
     amount_chosen: 0,
     chosen: false
-  });
+  })
 }
 
 function removeOption(choice: PollsOption) {
   if (isPresentationMode.value) return
-  if (props.slide!.options) {
-    const index = props.slide!.options.indexOf(choice);
+  if (props.slide!.pollsComponents?.options) {
+    const index = props.slide!.pollsComponents?.options.indexOf(choice);
     if (index > -1) {
-      props.slide!.options.splice(index, 1);
-      props.slide!.options.forEach((opt, i) => opt.position = i + 1);
+      props.slide!.pollsComponents?.options.splice(index, 1);
+      props.slide!.pollsComponents?.options.forEach((opt, i) => opt.position = i + 1);
     }
   }
 }
 
-function chooseChoice(choice: PollsOption, choiceLimit: LimitPollsChoices) {
-  const currentChosenCount = props.slide?.options?.filter(opt => opt.chosen).length ?? 0;
-  const limit = choiceLimit.limit ?? defaultChoiceAmount;
+function chooseChoice(choice: PollsOption, choiceLimit: number | undefined) {
+  const currentChosenCount = props.slide?.pollsComponents?.options.filter(opt => opt.chosen).length ?? 0;
+  const limit = choiceLimit ?? 1;
+
+  if (isHost.value) { return; }
 
   if (choice.chosen) {
     choice.chosen = false;
@@ -143,8 +156,10 @@ function chooseChoice(choice: PollsOption, choiceLimit: LimitPollsChoices) {
     choice.amount_chosen += 1
     choice.chosen = true
     console.log(`chosen ${choice.option_text}`)
-    console.log(choice)
   }
+  console.log(props.slide?.pollsComponents?.options)
+  console.log(isHost.value)
+  console.log(User)
 }
 
 const CANVAS_WIDTH = 1200,
@@ -196,7 +211,7 @@ const addButtonClass = computed(() => {
 })
 
 const fontSize = computed(() => {
-  const count = props.slide?.options?.length ?? 1;
+  const count = props.slide?.pollsComponents?.options.length ?? 1;
   if (count <= 4) return 'text-base';
   if (count <= 6) return 'text-sm';
   return 'text-xs';
