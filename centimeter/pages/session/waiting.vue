@@ -55,7 +55,6 @@
 import { useSessionStore } from "~/stores/sessionStore";
 import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
-import { useSessionSocket } from "~/utils/slides";
 
 const route = useRoute();
 const router = useRouter();
@@ -68,7 +67,7 @@ const joining = ref(false);
 const hasJoined = ref(false);
 const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const joinedNickname = ref("");
-const { sessionSocket, send } = useSessionSocket()
+const sessionSocket = ref<WebSocket | null>(null);
 const skipLeaveOnUnmount = ref(false);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 

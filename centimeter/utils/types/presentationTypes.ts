@@ -19,6 +19,7 @@ export interface Slide {
   components?: SlideComponent[];
   pollsComponents?: OpenPollsResponse;
   question?: string;
+  responseLimit?: number;
   backgroundColor?: string;
   backgroundImage?: string;
   on_slide?: boolean;

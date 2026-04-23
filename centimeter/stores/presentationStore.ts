@@ -1,3 +1,6 @@
+import { apiCall } from "../utils/apiCall";
+import type { Presentation } from "../utils/types/presentationTypes";
+
 export const usePresentationStore = defineStore("presentationStore", () => {
   const presentations = ref<Presentation[]>([])
 
@@ -15,7 +18,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
       const token = getAuthToken()
 
       const { ok, status, data } = await apiCall<Presentation | Record<string, unknown> | string | string[]>(
-        backendBaseUrl() + "/presentations/create/",
+        import.meta.env.VITE_BACKEND_URL + "/presentations/create/",
         {
           method: "POST",
           headers: {
@@ -42,7 +45,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
     const token = getAuthToken()
 
     const { ok, status, data } = await apiCall<Presentation[] | Record<string, unknown> | string | string[]>(
-      backendBaseUrl() + "/presentations/list/",
+      import.meta.env.VITE_BACKEND_URL + "/presentations/list/",
       {
         method: "GET",
         headers: {
@@ -65,7 +68,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
   async function getPresentation(code: string): Promise<any> {
     const token = getAuthToken()
     const { ok, status, data } = await apiCall<any>(
-      backendBaseUrl() + `/presentations/${code}/get/`,
+      import.meta.env.VITE_BACKEND_URL + `/presentations/${code}/get/`,
       {
         method: "GET",
         headers: {
@@ -83,7 +86,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
   async function attachPresentationToSession(presentationCode: string, sessionId: string | number): Promise<void> {
     const token = getAuthToken()
     const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
-      backendBaseUrl() + `/presentations/${presentationCode}/attach/`,
+      import.meta.env.VITE_BACKEND_URL + `/presentations/${presentationCode}/attach/`,
       {
         method: "POST",
         headers: {
@@ -100,7 +103,7 @@ export const usePresentationStore = defineStore("presentationStore", () => {
   async function changeActiveSlide(presentationCode: string, slideId: string): Promise<void> {
     const token = getAuthToken()
     const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
-      backendBaseUrl() + `/presentations/${presentationCode}/slide/`,
+      import.meta.env.VITE_BACKEND_URL + `/presentations/${presentationCode}/slide/`,
       {
         method: "POST",
         headers: {

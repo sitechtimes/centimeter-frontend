@@ -36,7 +36,6 @@
 import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
-import { useSessionSocket } from "~/utils/slides";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,10 +48,9 @@ const sessionIdentifier = ref("");
 const hostName = ref("");
 const presentationStatus = ref("open");
 const slides = ref<Slide[]>([]);
-const { sessionSocket, send } = useSessionSocket()
+const sessionSocket = ref<WebSocket | null>(null);
 const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
-const pollsStore = usePollsStore();
 
 const currentSlide = computed<Slide | undefined>(() => {
   if (!slides.value.length) return undefined;
@@ -173,18 +171,6 @@ function connectSessionSocket(): void {
         slides.value = Array.isArray(presentationPayload?.data?.slides) ? presentationPayload.data.slides : slides.value;
       }
       currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value;
-    }
-
-    if (eventName === "active_poll_changed") {
-      pollsStore.setActivePoll(data?.active_poll ?? null)
-    }
-
-    if (eventName === "poll_closed") {
-      pollsStore.setActivePoll(null)
-    }
-
-    if (eventName === "vote_updated") {
-      pollsStore.applyVoteBroadcast(data?.updates ?? [])
     }
   };
 
