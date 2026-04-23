@@ -72,18 +72,21 @@
 <script setup lang="ts">
 import { User } from 'lucide-vue-next';
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
+import { useResponsesStore } from '~/stores/responesStore';
 
 const props = defineProps<{
   slide?: Slide
   presentationMode?: boolean
   isHost?: boolean
   isParticipant?: boolean
+  sessionJoinCode?:
 }>();
 
 const defaultQuestion = "Ask your question here..."
 const canvasRef = ref<HTMLDivElement>();
 const slideOptions = computed(() => props.slide?.pollsComponents?.options)
 const isHost = computed(() => props.isHost === true)
+const responseStore = useResponsesStore()
 
 function clearQuestion() {
   if (isPresentationMode.value) return
@@ -149,15 +152,8 @@ function chooseChoice(choice: PollsOption, choiceLimit: number | undefined) {
   const currentChosenCount = props.slide?.pollsComponents?.options.filter(opt => opt.chosen).length ?? 0;
   const limit = choiceLimit ?? 1;
 
-  if (isHost.value) { return; }
+  responseStore.votePolls(props.slide!.id, sessionJoinCode.value, choice)
 
-  if (choice.chosen) {
-    choice.chosen = false;
-  } else if (currentChosenCount < limit) {
-    choice.chosen = true
-    choice.amount_chosen += 1
-    console.log(`chosen ${choice.option_text}`)
-  }
   console.log(slideOptions.value)
 }
 
