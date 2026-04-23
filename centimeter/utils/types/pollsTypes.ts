@@ -15,4 +15,5 @@ export interface OpenPollsResponse{
   show_results?: boolean;
   created_at?: string;
   options: PollsOption[];
+  responseLimit?: number;
 }

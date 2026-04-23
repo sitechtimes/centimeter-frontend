@@ -31,7 +31,7 @@
               :key="choice.position"
               class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
               :class="[choiceClass, choice.chosen && isPresentationMode ? 'bg-[var(--primary-shade-translucent)] border-[var(--primary)] cursor-pointer' : '']"
-              @click="isPresentationMode ? chooseChoice(choice, props.slide?.responseLimit) : null"
+              @click="isPresentationMode ? chooseChoice(choice) : null"
             >
               <input
                 type="text"
@@ -70,8 +70,8 @@
 </template>
 
 <script setup lang="ts">
-import { User } from 'lucide-vue-next';
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
+import { useSessionSocket } from '~/utils/slides'
 
 const props = defineProps<{
   slide?: Slide
@@ -84,6 +84,8 @@ const defaultQuestion = "Ask your question here..."
 const canvasRef = ref<HTMLDivElement>();
 const slideOptions = computed(() => props.slide?.pollsComponents?.options)
 const isHost = computed(() => props.isHost === true)
+const pollsStore = usePollsStore();
+const { sessionSocket, send } = useSessionSocket()
 
 function clearQuestion() {
   if (isPresentationMode.value) return
@@ -113,12 +115,10 @@ const generateHex = (): string => {
 
 function addOption() {
   if (isPresentationMode.value) return
-  // Mutate the underlying slide object instead of the computed ref (which is read-only)
   if (!props.slide) return
   if (!props.slide.pollsComponents) {
     (props.slide as any).pollsComponents = { options: [] }
   }
-  // ts actually looks disgusting
   if (!props.slide!.pollsComponents!.options) {
     (props.slide.pollsComponents as any).options = []
   }
@@ -145,20 +145,23 @@ function removeOption(choice: PollsOption) {
   }
 }
 
-function chooseChoice(choice: PollsOption, choiceLimit: number | undefined) {
-  const currentChosenCount = props.slide?.pollsComponents?.options.filter(opt => opt.chosen).length ?? 0;
-  const limit = choiceLimit ?? 1;
+socket.on('vote_updated', (updates) => {
+  pollsStore.applyVoteBroadcast(updates)
+})
 
-  if (isHost.value) { return; }
+socket.on('active_poll_changed', ({ active_poll }) => {
+  pollsStore.setActivePoll(active_poll)
+})
 
-  if (choice.chosen) {
-    choice.chosen = false;
-  } else if (currentChosenCount < limit) {
-    choice.chosen = true
-    choice.amount_chosen += 1
-    console.log(`chosen ${choice.option_text}`)
-  }
-  console.log(slideOptions.value)
+socket.on('poll_closed', () => {
+  pollsStore.clearActivePoll()
+})
+
+function chooseChoice(choice: PollsOption, limit: number = 1) {
+  if (isHost.value) return
+  pollsStore.toggleOption(choice, limit, (updates) => {
+    send('vote_updated', { session_code: sessionCode.value, updates })
+  })
 }
 
 const CANVAS_WIDTH = 1200,

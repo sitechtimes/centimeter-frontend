@@ -1,11 +1,3 @@
-import { apiCall } from "~/utils/apiCall";
-import type {
-  JoinSessionResponse,
-  ParticipantPresencePayload,
-  SessionParticipant,
-  SessionStatus,
-} from "../utils/types/sessionTypes";
-
 export const useSessionStore = defineStore("sessionStore", () => {
   const currentSession = ref<JoinSessionResponse | null>(null);
   const isInSession = ref(false);
@@ -18,7 +10,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function checkSessionStatus(code: string): Promise<SessionStatus | null> {
     const { ok, data } = await apiCall<SessionStatus>(
-      import.meta.env.VITE_BACKEND_URL + `/session/${code}/status/`,
+      backendBaseUrl() + `/session/${code}/status/`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" }
@@ -32,7 +24,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function joinSession(join_code: string, nickname: string) {
     const { ok, status, data } = await apiCall<JoinSessionResponse | Record<string, unknown> | string | string[]>(
-      import.meta.env.VITE_BACKEND_URL + "/session/join/",
+      backendBaseUrl() + "/session/join/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,7 +51,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
     const normalizedTitle = normalizeSessionTitle(title)
 
     const { ok, status, data } = await apiCall<JoinSessionResponse | Record<string, unknown> | string | string[]>(
-      import.meta.env.VITE_BACKEND_URL + "/session/open/",
+      backendBaseUrl() + "/session/open/",
       {
         method: "POST",
         headers: {
@@ -93,7 +85,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
     const token = userStore.user?.access;
     
     const { ok } = await apiCall(
-      import.meta.env.VITE_BACKEND_URL + `/session/${sessionCode}/close/`,
+      backendBaseUrl() + `/session/${sessionCode}/close/`,
       {
         method: "POST",
         headers: {
@@ -112,7 +104,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
   }
   async function listParticipants(code: string): Promise<SessionParticipant[]> {
     const { ok, data } = await apiCall<SessionParticipant[]>(
-      import.meta.env.VITE_BACKEND_URL + `/participants/${code}/list/`,
+      backendBaseUrl() + `/participants/${code}/list/`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" }
@@ -126,7 +118,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function sendHeartbeat(payload: ParticipantPresencePayload) {
     const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
-      import.meta.env.VITE_BACKEND_URL + "/participants/heartbeat/",
+      backendBaseUrl() + "/participants/heartbeat/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,7 +133,7 @@ export const useSessionStore = defineStore("sessionStore", () => {
 
   async function leaveParticipant(payload: ParticipantPresencePayload) {
     const { ok, status } = await apiCall<Record<string, unknown> | string | string[]>(
-      import.meta.env.VITE_BACKEND_URL + "/participants/leave/",
+      backendBaseUrl() + "/participants/leave/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
