@@ -145,22 +145,14 @@ function removeOption(choice: PollsOption) {
   }
 }
 
-socket.on('vote_updated', (updates) => {
-  pollsStore.applyVoteBroadcast(updates)
-})
-
-socket.on('active_poll_changed', ({ active_poll }) => {
-  pollsStore.setActivePoll(active_poll)
-})
-
-socket.on('poll_closed', () => {
-  pollsStore.clearActivePoll()
-})
 
 function chooseChoice(choice: PollsOption, limit: number = 1) {
   if (isHost.value) return
   pollsStore.toggleOption(choice, limit, (updates) => {
-    send('vote_updated', { session_code: sessionCode.value, updates })
+    send('vote_updated', { 
+      session_code: props.slide?.pollsComponents?.session_id, 
+      updates 
+    })
   })
 }
 
