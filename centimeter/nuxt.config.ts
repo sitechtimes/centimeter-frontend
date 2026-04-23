@@ -14,9 +14,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      // Use VITE_URL if present (original key), otherwise fall back to VITE_BACKEND_URL.
-      // This keeps existing code working while supporting LAN testing.
-      url: import.meta.env.VITE_URL ?? import.meta.env.VITE_BACKEND_URL
+      url: import.meta.env.VITE_URL
     }
   },
   modules: ["@pinia/nuxt", "pinia-plugin-persistedstate/nuxt"],
