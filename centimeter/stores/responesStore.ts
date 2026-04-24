@@ -2,25 +2,43 @@ import { defineStore } from 'pinia';
 
 export const useResponsesStore = defineStore("responsesStore", () => {
 
-   async function votePolls(polls_id?: String, join_code?: String, option?: PollsOption) {
-
-         const { ok, status } = await apiCall<OpenPollsResponse | Record<string, unknown> | string | string[]>(
-            import.meta.env.VITE_BACKEND_URL + "/response/vote/",
-            {
-               method: "POST",
-               headers: {
-                  "Content-Type": "application/json",
-               },
-               body: JSON.stringify({ polls_id, join_code, option })
-            }
+   async function votePolls(poll_id: string | number, join_code: string, nickname: string, option_id: string | number) {
+      console.log('sending vote:', { poll_id, join_code, nickname, option_id })
+      const response  = await fetch(
+         import.meta.env.VITE_BACKEND_URL + "/responses/vote/",
+         {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ poll_id, join_code, nickname, option_id }),
+         }
       );
-
-      if (!ok) {
-         throw new Error(`Failed to change active slide (HTTP ${status})`);
+      
+      const errorBody = await response.json().catch(() => null)
+      console.log('vote response:', response.status, errorBody)
+   
+      if (!response.ok) {
+         console.error('Vote failed:', response.status, errorBody);
+         throw new Error(`Failed to submit vote (HTTP ${response.status})`);
       }
    }
 
-  return {
-      votePolls
-  }
+   async function voteMultiSelect(poll_id: string | number, join_code: string, nickname: string, option_ids: (string | number)[]) {
+      const { ok, status } = await apiCall<Record<string, unknown>>(
+         import.meta.env.VITE_BACKEND_URL + "/responses/vote/",
+         {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ poll_id, join_code, nickname, option_ids }),
+         }
+      );
+   
+      if (!ok) {
+         throw new Error(`Failed to submit multi-select vote (HTTP ${status})`);
+      }
+   }
+
+   return {
+      votePolls,
+      voteMultiSelect
+   }
 });

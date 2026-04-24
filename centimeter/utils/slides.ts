@@ -4,3 +4,5 @@ export const slides = ref<Slide[]>([])
 export const chartType = ref<'bar' | 'doughnut' | 'pie'>('bar')
 
 export const sessionJoinCode = ref<string>("")
+
+ 

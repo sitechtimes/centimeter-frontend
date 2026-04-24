@@ -53,6 +53,7 @@
 
 <script setup lang="ts">
 import { useSessionStore } from "~/stores/sessionStore";
+import type { SessionParticipant, ParticipantPresencePayload } from "~/utils/types/sessionTypes";
 import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 
@@ -153,6 +154,9 @@ const joinSession = async (nicknameValue: string) => {
     joinedNickname.value = nicknameValue;
     hasJoined.value = true;
     localStorage.setItem(sessionJoinStorageKey(sessionCode.value), nicknameValue);
+
+    await fetchParticipants();
+
     startHeartbeat();
   } catch (err: any) {
     toastContainer.value?.add({
@@ -336,6 +340,7 @@ async function pollSessionStatus(): Promise<void> {
     if (status?.presentation) {
       routeToLiveFromStatus(status);
     }
+    await fetchParticipants();
   } catch (error) {
     console.error("Failed to poll session status:", error);
   }
@@ -359,4 +364,15 @@ function disconnectSessionSocket(): void {
     sessionSocket.value = null;
   }
 }
+
+const participants = ref<SessionParticipant[]>([]);
+
+const fetchParticipants = async () => {
+  try {
+    participants.value = await sessionStore.listParticipants(sessionCode.value);
+  } catch (error) {
+    console.error("Failed to fetch participants:", error);
+  }
+};
+
 </script>

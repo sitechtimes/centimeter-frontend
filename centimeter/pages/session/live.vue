@@ -25,7 +25,14 @@
         </div>
 
         <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[70vh]">
-          <PresentationCanvas class="!h-full" :currentSlide="currentSlide" :presentationMode="true" />
+          <PresentationCanvas 
+            class="!h-full" 
+            :currentSlide="currentSlide" 
+            :presentationMode="true" 
+            :sessionJoinCode="sessionCode"
+            :nickname="nickname"
+            :activePollId="activePollId"
+          />
         </div>
       </div>
     </div>
@@ -43,6 +50,7 @@ const sessionStore = useSessionStore();
 
 const toastContainer = ref<InstanceType<typeof ToastContainer>>();
 const sessionCode = ref((route.query.code as string) || "");
+const nickname = ref("");
 const currentSlideId = ref((route.query.slide as string) || "");
 const sessionIdentifier = ref("");
 const hostName = ref("");
@@ -51,12 +59,38 @@ const slides = ref<Slide[]>([]);
 const sessionSocket = ref<WebSocket | null>(null);
 const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
+const activePollId = ref<number | undefined>(undefined)
+
+async function fetchActivePoll(): Promise<void> {
+  if (!currentSlide.value || currentSlide.value.type !== 'Multiple Choice') {
+    activePollId.value = undefined
+    return
+  }
+
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/polls/${sessionCode.value}/active/`
+  )
+  const body = await response.json()
+  activePollId.value = body?.active_poll?.id ?? undefined
+
+  const backendOptions = body?.active_poll?.options ?? []
+  backendOptions.forEach((backendOpt: any, i: number) => {
+    const localOpt = currentSlide.value?.pollsComponents?.options?.[i]
+    if (localOpt) {
+      localOpt.backendId = backendOpt.id
+    }
+  })
+}
 
 const currentSlide = computed<Slide | undefined>(() => {
   if (!slides.value.length) return undefined;
   const matched = slides.value.find((slide) => slide.id === currentSlideId.value);
   return matched || slides.value[0];
 });
+
+watch(currentSlide, () => {
+  void fetchActivePoll()
+}, { immediate: true })
 
 function sessionJoinStorageKey(code: string): string {
   return `centimeter.session.joined.${code}`;
@@ -265,6 +299,7 @@ onMounted(() => {
     return;
   }
 
+  nickname.value = getJoinedNickname();
   restorePresentationState();
   connectSessionSocket();
   startHeartbeat();

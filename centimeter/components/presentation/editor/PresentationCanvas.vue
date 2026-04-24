@@ -18,7 +18,14 @@
     </div>
     
     <div v-if="props.currentSlide?.type === 'Multiple Choice'" :class="contentClass">
-      <MultipleChoiceSlides :slide="props.currentSlide" :presentationMode="isPresentationMode" :isHost="props.isHost" :isParticipant="props.isParticipant"/>
+      <MultipleChoiceSlides
+        :slide="props.currentSlide"
+        :presentationMode="isPresentationMode"
+        :isHost="props.isHost"
+        :isParticipant="props.isParticipant"
+        :sessionJoinCode="props.sessionJoinCode"
+        :nickname="props.nickname"
+        :activePollId="props.activePollId"/>
     </div>
 
     <div v-else :class="contentClass">
@@ -68,6 +75,9 @@ const props = defineProps<{
   presentationMode?: boolean
   isHost?: boolean
   isParticipant?: boolean
+  sessionJoinCode?: string
+  nickname?: string
+  activePollId?: number 
 }>();
 
 const CANVAS_WIDTH = 1200;
