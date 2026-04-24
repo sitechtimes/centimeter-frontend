@@ -59,7 +59,7 @@ const slides = ref<Slide[]>([]);
 const sessionSocket = ref<WebSocket | null>(null);
 const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
-const activePollId = ref<number | undefined>(undefined)
+const activePollId = ref<number | undefined>(undefined);
 
 async function fetchActivePoll(): Promise<void> {
   if (!currentSlide.value || currentSlide.value.type !== 'Multiple Choice') {
