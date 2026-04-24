@@ -1,11 +1,10 @@
 import { defineStore } from "pinia";
+const userStore = useUserStore();
+const token = userStore.user?.access;
 
 export const usePollsStore = defineStore("pollsStore", () => {
 
   async function createPollsSlide(payload: CreatePollPayload) {
-    const userStore = useUserStore();
-    const token = userStore.user?.access;
- 
     const body = {
       session_id:    payload.session_id,
       question:      payload.question,
@@ -42,29 +41,48 @@ export const usePollsStore = defineStore("pollsStore", () => {
   }
 
   async function closePoll(pollId: number) {
-  const userStore = useUserStore();
-  const token = userStore.user?.access;
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "/polls/close/",  
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ poll_id: pollId }),
+      }
+    );
 
-  const response = await fetch(
-    import.meta.env.VITE_BACKEND_URL + "/polls/close/",  
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({ poll_id: pollId }),
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => null);
+      throw new Error(JSON.stringify(errorBody) ?? "Failed to close poll");
     }
-  );
-
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => null);
-    throw new Error(JSON.stringify(errorBody) ?? "Failed to close poll");
   }
-}
+
+  async function fetchPollsData(pollId: string) {
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/polls/${pollId}/active/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => null);
+      throw new Error(JSON.stringify(errorBody) ?? "Failed to fetch poll results");
+    }
+
+    return await response.json();
+  }
+
 
   return {
     createPollsSlide,
-    closePoll
+    closePoll,
+    fetchPollsData
   }
 })

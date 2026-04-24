@@ -118,6 +118,7 @@ const canvasRef = ref<HTMLDivElement>();
 const slideOptions = computed(() => props.slide?.pollsComponents?.options ?? [])
 const isHost = computed(() => props.isHost === true)
 const responseStore = useResponsesStore()
+const pollsStore = usePollsStore()
 const hasVoted = ref(false)
 const isSubmitting = ref(false)
 
@@ -241,6 +242,7 @@ async function chooseChoice(choice: PollsOption) {
       }
     }
   }
+  console.log(await pollsStore.fetchPollsData(String(props.activePollId!)))
 }
 
 const CANVAS_WIDTH = 1200,
