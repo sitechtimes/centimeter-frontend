@@ -22,6 +22,15 @@
 
           <p class="text-sm text-[var(--faded-text-color)]">Presentation status</p>
           <p class="text-lg text-[var(--text-color)]">{{ presentationStatus }}</p>
+
+          <p class="text-sm text-[var(--faded-text-color)]">WebSocket status</p>
+          <p class="text-lg font-mono" :class="{
+            'text-green-500': websocketStatus === 'connected',
+            'text-yellow-500': websocketStatus === 'connecting',
+            'text-red-500': websocketStatus === 'disconnected'
+          }">
+            {{ websocketStatus.toUpperCase() }}
+          </p>
         </div>
 
         <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[70vh]">
@@ -52,6 +61,7 @@ const slides = ref<Slide[]>([]);
 const sessionSocket = ref<WebSocket | null>(null);
 const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
+const websocketStatus = ref<"connecting" | "connected" | "disconnected">("disconnected");
 
 const currentSlide = computed<Slide | undefined>(() => {
   if (!slides.value.length) return undefined;
@@ -121,34 +131,70 @@ async function ensureSlideExists(slideId: string): Promise<void> {
 
 function buildSessionSocketUrl(code: string): string {
   const baseUrl = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "");
-  if (!baseUrl) return "";
+  if (!baseUrl) {
+    console.error("[WebSocket] VITE_BACKEND_URL is not set");
+    return "";
+  }
 
   const wsBase = baseUrl.replace(/^http:\/\//i, "ws://").replace(/^https:\/\//i, "wss://");
+  const fullUrl = `${wsBase}/ws/session/${code}/`;
+  
+  console.log("[WebSocket] URL Details:", {
+    VITE_BACKEND_URL: baseUrl,
+    wsBase,
+    sessionCode: code,
+    fullUrl
+  });
 
-  return `${wsBase}/ws/session/${code}/`;
+  return fullUrl;
 }
 
 function connectSessionSocket(): void {
-  if (!sessionCode.value || sessionSocket.value) return;
+  if (!sessionCode.value || sessionSocket.value) {
+    console.log("[WebSocket] Skipping connection - sessionCode:", sessionCode.value, "existing socket:", !!sessionSocket.value);
+    return;
+  }
 
   const socketUrl = buildSessionSocketUrl(sessionCode.value);
-  if (!socketUrl) return;
+  if (!socketUrl) {
+    console.error("[WebSocket] No socket URL generated");
+    return;
+  }
 
-  const socket = new WebSocket(socketUrl);
-  sessionSocket.value = socket;
+  console.log("[WebSocket] Attempting to connect to:", socketUrl);
+  websocketStatus.value = "connecting";
+  
+  try {
+    const socket = new WebSocket(socketUrl);
+    sessionSocket.value = socket;
 
-  socket.onmessage = (event: MessageEvent) => {
+    socket.onopen = () => {
+      console.log("[WebSocket] ✅ Connected successfully to:", socketUrl);
+      websocketStatus.value = "connected";
+    };
+
+    socket.onerror = (error: Event) => {
+      console.error("[WebSocket] ❌ Error event:", error);
+      console.error("[WebSocket] Socket readyState:", socket.readyState);
+      websocketStatus.value = "disconnected";
+    };
+
+    socket.onmessage = (event: MessageEvent) => {
     let payload: any;
     try {
       payload = JSON.parse(event.data);
     } catch {
+      console.error("[WebSocket] Failed to parse message:", event.data);
       return;
     }
 
     const eventName = payload?.event;
     const data = payload?.data || {};
 
+    console.log("[WebSocket] Received event:", eventName, "Data:", data);
+
     if (eventName === "slide_changed") {
+      console.log("[WebSocket] Slide changed:", data?.active_slide);
       currentSlideId.value = data?.active_slide || "";
       if (currentSlideId.value) {
         localStorage.setItem(sessionActiveSlideStorageKey(sessionCode.value), currentSlideId.value);
@@ -176,8 +222,14 @@ function connectSessionSocket(): void {
   };
 
   socket.onclose = () => {
+    console.log("[WebSocket] Disconnected");
+    websocketStatus.value = "disconnected";
     sessionSocket.value = null;
   };
+  } catch (err) {
+    console.error("[WebSocket] ❌ Failed to create WebSocket:", err);
+    websocketStatus.value = "disconnected";
+  }
 }
 
 function disconnectSessionSocket(): void {
@@ -285,4 +337,25 @@ onBeforeRouteLeave(async () => {
   stopStatusPolling();
   await leaveSession();
 });
+
+// Expose debugging functions to window
+if (typeof window !== "undefined") {
+  (window as any).debugWebSocket = {
+    getStatus: () => websocketStatus.value,
+    getSocketUrl: () => buildSessionSocketUrl(sessionCode.value),
+    isConnected: () => sessionSocket.value?.readyState === WebSocket.OPEN,
+    sendTestMessage: () => {
+      if (sessionSocket.value?.readyState === WebSocket.OPEN) {
+        sessionSocket.value.send(JSON.stringify({ test: true }));
+        console.log("[DEBUG] Test message sent");
+      } else {
+        console.error("[DEBUG] Socket not connected");
+      }
+    },
+    getSocketReadyState: () => {
+      const states = { 0: "CONNECTING", 1: "OPEN", 2: "CLOSING", 3: "CLOSED" };
+      return `${states[sessionSocket.value?.readyState || 3]} (${sessionSocket.value?.readyState})`;
+    }
+  };
+}
 </script>
