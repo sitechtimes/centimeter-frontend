@@ -130,7 +130,6 @@ const activePollIds = ref<Map<string, number>>(new Map())
 
 const currentActivePollId = computed(() => {
   const slideId = currentHostSlide.value?.id
-  console.log('currentActivePollId:', slideId, activePollIds.value.get(slideId!))  // ← check this
   if (!slideId) return undefined
   return activePollIds.value.get(slideId)
 })
@@ -230,12 +229,8 @@ const startPresentation = async () => {
 };
 
 async function maybeCreatePoll(slide: Slide | undefined): Promise<void> {
-  console.log('maybeCreatePoll called', slide?.id, slide?.type, sessionId.value)
   if (!slide) return;
   if (!slide.id) return;
-  console.log('slide.type:', slide.type)
-  console.log('sessionId:', sessionId.value)   
-  console.log('options:', slide.pollsComponents?.options)
   if (slide.type !== "Multiple Choice") return;
   if (!sessionId.value) return;
   if (createdPollSlideIds.value.has(slide.id)) return;
@@ -250,15 +245,12 @@ async function maybeCreatePoll(slide: Slide | undefined): Promise<void> {
       type: "single",
       options,
     });
-    console.log('created poll options:', poll?.options)
     if (poll?.id) {
       activePollIds.value.set(slide.id, poll.id)
       poll.options?.forEach((backendOpt: any, i: number) => {
       const localOpt = slide.pollsComponents?.options?.[i]
       if (localOpt) localOpt.backendId = backendOpt.id  // store backend id
-      console.log(`mapped local option ${localOpt?.option_text} -> backendId ${backendOpt.id}`)
     })
-      console.log('stored poll id:', slide.id, '->', poll.id)  // ← check this
       createdPollSlideIds.value.add(slide.id)
     }
   } catch (error) {

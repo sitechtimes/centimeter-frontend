@@ -177,7 +177,6 @@ function removeOption(choice: PollsOption) {
 async function chooseChoice(choice: PollsOption) {
   if (!isPresentationMode.value) return
   if (hasVoted.value || isSubmitting.value) return
-  console.log(props.slide?.id + " " + props.sessionJoinCode + " " + props.nickname)
   if (!props.slide?.id || !props.sessionJoinCode || !props.nickname) {
     console.warn('[MultipleChoiceSlide] Missing slide id, join code, or nickname — cannot vote.')
     return
@@ -203,7 +202,6 @@ async function chooseChoice(choice: PollsOption) {
       choice.chosen = false
       choice.amount_chosen = Math.max(0, (choice.amount_chosen ?? 1) - 1)
       console.error('[MultipleChoiceSlide] Vote failed:', err)
-      console.log(choice.backendId, choice.position)
     } finally {
       isSubmitting.value = false
     }

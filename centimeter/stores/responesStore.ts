@@ -3,7 +3,6 @@ import { defineStore } from 'pinia';
 export const useResponsesStore = defineStore("responsesStore", () => {
 
    async function votePolls(poll_id: string | number, join_code: string, nickname: string, option_id: string | number) {
-      console.log('sending vote:', { poll_id, join_code, nickname, option_id })
       const response  = await fetch(
          import.meta.env.VITE_BACKEND_URL + "/responses/vote/",
          {
@@ -14,7 +13,6 @@ export const useResponsesStore = defineStore("responsesStore", () => {
       );
       
       const errorBody = await response.json().catch(() => null)
-      console.log('vote response:', response.status, errorBody)
    
       if (!response.ok) {
          console.error('Vote failed:', response.status, errorBody);

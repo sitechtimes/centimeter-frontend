@@ -19,9 +19,6 @@ export const usePollsStore = defineStore("pollsStore", () => {
       ...(payload.scale_min != null && { scale_min: payload.scale_min }),
       ...(payload.scale_max != null && { scale_max: payload.scale_max }),
     };
-
-  const bang = JSON.stringify(body)
-  console.log('creating poll with:', bang)
  
   const response = await fetch(
     import.meta.env.VITE_BACKEND_URL + "/polls/open/",
