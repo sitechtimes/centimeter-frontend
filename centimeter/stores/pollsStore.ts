@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-const userStore = useUserStore();
-const token = userStore.user?.access;
 
 export const usePollsStore = defineStore("pollsStore", () => {
 
   async function createPollsSlide(payload: CreatePollPayload) {
+    const userStore = useUserStore();
+    const token = userStore.user?.access;
+
     const body = {
       session_id:    payload.session_id,
       question:      payload.question,
@@ -41,6 +42,8 @@ export const usePollsStore = defineStore("pollsStore", () => {
   }
 
   async function closePoll(pollId: number) {
+    const userStore = useUserStore();
+    const token = userStore.user?.access;
     const response = await fetch(
       import.meta.env.VITE_BACKEND_URL + "/polls/close/",  
       {
@@ -59,25 +62,26 @@ export const usePollsStore = defineStore("pollsStore", () => {
     }
   }
 
-  async function fetchPollsData(pollId: string) {
-    const response = await fetch(
-      import.meta.env.VITE_BACKEND_URL + `/polls/${pollId}/active/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
+  async function fetchPollsData(joinCode: string) {
+    const activeRes = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/polls/${joinCode}/active/`
+    )
+    const activeBody = await activeRes.json()
+    const pollId = activeBody?.active_poll?.id
+    if (!pollId) return activeBody
+
+    const resultsRes = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/responses/${pollId}/results/`
+    )
+    const resultsBody = await resultsRes.json()
+    
+    return {
+      active_poll: {
+        ...activeBody.active_poll,
+        options: resultsBody.results 
       }
-    );
-
-    if (!response.ok) {
-      const errorBody = await response.json().catch(() => null);
-      throw new Error(JSON.stringify(errorBody) ?? "Failed to fetch poll results");
     }
-
-    return await response.json();
-  }
+}
 
 
   return {

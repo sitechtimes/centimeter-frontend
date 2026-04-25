@@ -97,10 +97,8 @@
 </template>
 
 <script setup lang="ts">
-import { User } from 'lucide-vue-next';
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
 import { useResponsesStore } from '~/stores/responesStore';
-import { sessionJoinCode } from '~/utils/slides';
 import { chartType } from '~/utils/slides'
 
 const props = defineProps<{
@@ -122,11 +120,22 @@ const pollsStore = usePollsStore()
 const hasVoted = ref(false)
 const isSubmitting = ref(false)
 
-watch(() => props.slide?.id, () => {
-  hasVoted.value = false
-  isSubmitting.value = false
-  slideOptions.value.forEach(opt => opt.chosen = false)
-})
+const pollResultsTimer = ref<ReturnType<typeof setInterval> | null>(null)
+
+watch(() => props.slide?.id, async () => {
+  if (!isPresentationMode.value || !props.sessionJoinCode) return
+
+  try {
+    const body = await pollsStore.fetchPollsData(props.sessionJoinCode)
+    const backendOptions = body?.active_poll?.options ?? []
+    backendOptions.forEach((backendOpt: any, i: number) => {
+      const localOpt = slideOptions.value[i]
+      if (localOpt) localOpt.backendId = backendOpt.id
+    })
+  } catch (err) {
+    console.error('Failed to fetch poll data:', err)
+  }
+}, { immediate: true })
 
 function clearQuestion() {
   if (isPresentationMode.value) return
@@ -182,7 +191,14 @@ async function chooseChoice(choice: PollsOption) {
     console.warn('[MultipleChoiceSlide] Missing slide id, join code, or nickname — cannot vote.')
     return
   }
- 
+  if (!choice.backendId) {
+  await refreshPollResults()
+  if (!choice.backendId) {
+    console.error('backendId still missing after refresh')
+    return
+  }
+}
+
   const responseLimit = props.slide.responseLimit ?? 1
  
   if (responseLimit === 1) {
@@ -242,12 +258,58 @@ async function chooseChoice(choice: PollsOption) {
       }
     }
   }
-  console.log(await pollsStore.fetchPollsData(String(props.activePollId!)))
 }
 
 const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;
 const isPresentationMode = computed(() => props.presentationMode === true)
+
+async function refreshPollResults(): Promise<void> {
+  if (!props.sessionJoinCode || !isPresentationMode.value) return
+
+  try {
+    const body = await pollsStore.fetchPollsData(props.sessionJoinCode)
+    const backendOptions = body?.active_poll?.options ?? []
+    
+    backendOptions.forEach((backendOpt: any) => {
+      const localOpt = slideOptions.value.find(
+        o => o.option_text === backendOpt.option_text
+      )
+      if (localOpt) {
+        localOpt.backendId = backendOpt.id ?? backendOpt.option_id
+        localOpt.amount_chosen = backendOpt.votes ?? backendOpt.amount_chosen ?? 0
+      }
+    })
+  } catch (err) {
+    console.error('Failed to refresh poll results:', err)
+  }
+}
+
+watch(isPresentationMode, (val) => {
+  if (val) {
+    refreshPollResults()
+    pollResultsTimer.value = setInterval(refreshPollResults, 3000)
+  } else {
+    if (pollResultsTimer.value) clearInterval(pollResultsTimer.value)
+  }
+}, { immediate: true })
+
+watch(() => props.slide?.id, () => {
+  hasVoted.value = false
+  isSubmitting.value = false
+  slideOptions.value.forEach(opt => { opt.chosen = false; opt.amount_chosen = 0 })
+  refreshPollResults()
+})
+
+onBeforeUnmount(() => {
+  if (pollResultsTimer.value) clearInterval(pollResultsTimer.value)
+})
+
+onMounted(async () => {
+  if (isPresentationMode.value) {
+    await refreshPollResults()
+  }
+})
 
 const rootClass = computed(() => {
   return isPresentationMode.value

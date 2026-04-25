@@ -183,7 +183,6 @@ const handlePresent = async () => {
         path: `/session/${session.join_code}`,
         query: { presentation: presentationCode.value }
       })
-      sessionJoinCode.value = session.join_code
     }
   } catch (error) {
     console.error('Failed to open session:', error)
