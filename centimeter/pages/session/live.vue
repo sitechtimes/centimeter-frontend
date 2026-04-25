@@ -90,7 +90,7 @@ const currentSlide = computed<Slide | undefined>(() => {
 
 watch(currentSlide, () => {
   void fetchActivePoll()
-}, { immediate: true })
+}, { immediate: true });
 
 function sessionJoinStorageKey(code: string): string {
   return `centimeter.session.joined.${code}`;
