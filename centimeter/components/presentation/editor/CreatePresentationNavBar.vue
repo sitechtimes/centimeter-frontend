@@ -95,11 +95,11 @@
 
 <script setup lang="ts">
 import { Share2, Plus, Eye, Settings, ChevronLeft, UserRound, Play, Save } from 'lucide-vue-next'
-import type { Slide } from '@/utils/types/presentationTypes'
 
 const props = defineProps<{
   slides?: Slide[]
   title?: string
+  
 }>()
 
 const emit = defineEmits<{

@@ -17,10 +17,12 @@ export interface Slide {
   type?: string;
   title?: string;
   components?: SlideComponent[];
-  options?: PollsOption[];
+  pollsComponents?: OpenPollsResponse;
   question?: string;
+  responseLimit?: number;
   backgroundColor?: string;
   backgroundImage?: string;
+  on_slide?: boolean;
 }
 
 export interface SlideComponent {
