@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[var(--bg-color)]">
-    <NavBar />
+  <div class="min-h-screen w-screen bg-[var(--bg-color)]">
     <ToastContainer ref="toastContainer" />
 
     <div class="container mx-auto px-4 py-12">
@@ -95,7 +94,6 @@
 
 <script setup lang="ts">
 import { Copy, Users, Play } from "lucide-vue-next";
-import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
 
