@@ -125,8 +125,30 @@ const currentHostSlide = computed<Slide | undefined>(() => {
   if (!hostSlides.value.length) return undefined;
   return hostSlides.value[hostSlideIndex.value];
 });
-
+const syncFullscreen = async () => {
+  if (isLiveHost.value) {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (e) {
+        console.warn("Fullscreen blocked:", e);
+      }
+    }
+  } else {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    }
+  }
+};
+const handleFullscreenChange = () => {
+  if (!document.fullscreenElement && isLiveHost.value) {
+    isLiveHost.value = false; // this triggers sync + cleanup
+    void endSession();
+  }
+};
+watch(isLiveHost, syncFullscreen);
 onMounted(async () => {
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
   if (!joinCode.value) {
     router.push("/app/dashboard");
     return;
@@ -140,6 +162,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   stopParticipantsPolling();
   window.removeEventListener("keydown", onHostKeyDown);
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
 });
 
 const copyJoinCode = () => {
@@ -297,7 +320,9 @@ const endSession = async () => {
 
   isEndingSession.value = true;
   stopParticipantsPolling();
-
+  if (document.fullscreenElement) {
+    await document.exitFullscreen();
+  }
   try {
     await sessionStore.endSession(joinCode.value);
 
