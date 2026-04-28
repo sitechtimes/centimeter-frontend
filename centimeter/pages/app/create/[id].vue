@@ -13,11 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "@/components/presentation/editor/CreatePresentationNavBar.vue";
-import SideBar from "@/components/presentation/editor/SideBar.vue";
-import EditorBar from "@/components/presentation/editor/EditorBar.vue";
-import PresentationCanvas from "@/components/presentation/editor/PresentationCanvas.vue";
-import EditPanel from "@/components/presentation/panels/EditPanel.vue";
+import NavBar from "@/components/Presentation/editor/CreatePresentationNavBar.vue";
+import SideBar from "@/components/Presentation/editor/SideBar.vue";
+import EditorBar from "@/components/Presentation/editor/EditorBar.vue";
+import PresentationCanvas from "@/components/Presentation/editor/PresentationCanvas.vue";
+import EditPanel from "@/components/Presentation/panels/EditPanel.vue";
 
 const route = useRoute();
 const userStore = useUserStore();

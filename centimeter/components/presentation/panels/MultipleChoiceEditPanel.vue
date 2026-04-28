@@ -32,7 +32,6 @@
 
 <script setup lang="ts">
 import { X, ChartColumn, ChartPie, CircleDot } from 'lucide-vue-next'
-import { chartType } from '~/utils/slides'
 
 const emit = defineEmits<{ close: [] }>()
 

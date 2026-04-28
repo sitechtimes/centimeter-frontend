@@ -31,7 +31,15 @@
           </div>
 
           <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[72vh]">
-            <PresentationCanvas class="!h-full" :currentSlide="currentHostSlide" :presentationMode="true" />
+            <PresentationCanvas 
+              class="!h-full" 
+              :currentSlide="currentHostSlide" 
+              :presentationMode="true" 
+              :isHost="true"
+              :sessionJoinCode="joinCode"
+              :nickname="'Host'"
+              :activePollId="currentActivePollId"
+            />
           </div>
         </div>
 
@@ -86,23 +94,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useSessionStore } from "~/stores/sessionStore";
-import { usePresentationStore } from "~/stores/presentationStore";
-import type { SessionParticipant, SessionStatus } from "~/utils/types/sessionTypes";
-import type { Slide } from "~/utils/types/presentationTypes";
 import { Copy, Users, Play } from "lucide-vue-next";
-import NavBar from "~/components/presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
-import PresentationCanvas from "~/components/presentation/editor/PresentationCanvas.vue";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
+import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
 
 const route = useRoute();
 const router = useRouter();
 const sessionStore = useSessionStore();
 const presentationStore = usePresentationStore();
+const pollsStore = usePollsStore();
 const toastContainer = ref<InstanceType<typeof ToastContainer>>();
-
+ 
 const joinCode = ref(route.params.code as string);
 const statusData = ref<SessionStatus | null>(null);
 const presentationCode = computed(() => {
@@ -120,6 +123,16 @@ const isLiveHost = ref(false);
 const hostSlides = ref<Slide[]>([]);
 const hostSlideIndex = ref(0);
 const pollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
+
+const createdPollSlideIds = ref<Set<string>>(new Set());
+
+const activePollIds = ref<Map<string, number>>(new Map())
+
+const currentActivePollId = computed(() => {
+  const slideId = currentHostSlide.value?.id
+  if (!slideId) return undefined
+  return activePollIds.value.get(slideId)
+})
 
 const currentHostSlide = computed<Slide | undefined>(() => {
   if (!hostSlides.value.length) return undefined;
@@ -147,6 +160,13 @@ const handleFullscreenChange = () => {
   }
 };
 watch(isLiveHost, syncFullscreen);
+
+const sessionId = computed<string | undefined>(() => {
+  return sessionData.value?.id || statusData.value?.id
+    ? String(sessionData.value?.id || statusData.value?.id)
+    : undefined;
+});
+
 onMounted(async () => {
   document.addEventListener("fullscreenchange", handleFullscreenChange);
   if (!joinCode.value) {
@@ -175,7 +195,7 @@ const copyJoinCode = () => {
 
 const startPresentation = async () => {
   if (isStartingPresentation.value) return;
-
+ 
   if (!presentationCode.value) {
     toastContainer.value?.add({
       title: "Missing presentation",
@@ -183,55 +203,117 @@ const startPresentation = async () => {
     });
     return;
   }
-
-  const sessionId = sessionData.value?.id || statusData.value?.id;
-  if (!sessionId) {
+ 
+  if (!sessionId.value) {
     toastContainer.value?.add({
       title: "Missing session",
       message: "Session ID not found. Please reopen the session from the editor."
     });
     return;
   }
-
+ 
   isStartingPresentation.value = true;
-  try {
-    await presentationStore.attachPresentationToSession(presentationCode.value, sessionId);
 
+  try {
+    await presentationStore.attachPresentationToSession(presentationCode.value, sessionId.value);
+ 
     const presentation = await presentationStore.getPresentation(presentationCode.value);
     const incomingSlides = Array.isArray(presentation?.data?.slides) ? presentation.data.slides : [];
     hostSlides.value = incomingSlides;
-
+ 
     const activeSlide = presentation?.data?.active_slide;
     const firstSlideId = presentation?.data?.slides?.[0]?.id;
     const slideIdToBroadcast = activeSlide || firstSlideId;
-
+ 
     if (slideIdToBroadcast) {
       await presentationStore.changeActiveSlide(presentationCode.value, slideIdToBroadcast);
       currentSlideId.value = slideIdToBroadcast;
       const foundIndex = hostSlides.value.findIndex((slide) => slide.id === slideIdToBroadcast);
       hostSlideIndex.value = foundIndex >= 0 ? foundIndex : 0;
       localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slideIdToBroadcast);
+ 
+      await maybeCreatePoll(hostSlides.value[hostSlideIndex.value]);
     }
-
+ 
     localStorage.setItem(`centimeter.session.presentationData.${joinCode.value}`, JSON.stringify(presentation));
-
+ 
     isLiveHost.value = true;
     window.addEventListener("keydown", onHostKeyDown);
-
+ 
     toastContainer.value?.add({
       title: "Live session started",
       message: "Participants will now receive live session updates."
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to start presentation";
-    toastContainer.value?.add({
-      title: "Failed to start",
-      message
-    });
+    toastContainer.value?.add({ title: "Failed to start", message });
   } finally {
     isStartingPresentation.value = false;
   }
 };
+
+async function maybeCreatePoll(slide: Slide | undefined): Promise<void> {
+  if (!slide) return;
+  if (!slide.id) return;
+  if (slide.type !== "Multiple Choice") return;
+  if (!sessionId.value) return;
+  if (createdPollSlideIds.value.has(slide.id)) return;
+ 
+  const options = slide.pollsComponents?.options?.map((o) => o.option_text).filter(Boolean) ?? [];
+  if (options.length < 2) return;
+
+  try {
+    const poll = await pollsStore.createPollsSlide({
+      session_id: sessionId.value,
+      question: slide.question || "Untitled Question",
+      type: "single",
+      options,
+    });
+    if (poll?.id) {
+      activePollIds.value.set(slide.id, poll.id)
+      poll.options?.forEach((backendOpt: any, i: number) => {
+      const localOpt = slide.pollsComponents?.options?.[i]
+      if (localOpt) localOpt.backendId = backendOpt.id  // store backend id
+    })
+      createdPollSlideIds.value.add(slide.id)
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create poll";
+    toastContainer.value?.add({ title: "Poll creation failed", message });
+  }
+}
+
+async function maybeClosePoll(): Promise<void> {
+  const leavingSlide = hostSlides.value[hostSlideIndex.value];
+  if (!leavingSlide?.id) return;
+  if (leavingSlide.type !== "Multiple Choice") return;
+
+  const pollId = activePollIds.value.get(leavingSlide.id);
+  if (!pollId) return;
+
+  try {
+    await pollsStore.closePoll(pollId);
+  } catch (error) {
+    console.error("Failed to close poll:", error);
+  }
+}
+
+async function broadcastSlideByIndex(index: number): Promise<void> {
+  const slide = hostSlides.value[index];
+  if (!slide?.id || !presentationCode.value) return;
+
+  try {
+    await maybeClosePoll()  // ← close current slide's poll first
+    await presentationStore.changeActiveSlide(presentationCode.value, slide.id);
+    hostSlideIndex.value = index;
+    currentSlideId.value = slide.id;
+    localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slide.id);
+    await maybeCreatePoll(slide)  // ← then create new one if needed
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to change slide";
+    toastContainer.value?.add({ title: "Slide change failed", message });
+  }
+}
 
 function onHostKeyDown(event: KeyboardEvent): void {
   if (!isLiveHost.value) return;
@@ -254,20 +336,6 @@ function navigateHostBy(delta: number): void {
   void broadcastSlideByIndex(next);
 }
 
-async function broadcastSlideByIndex(index: number): Promise<void> {
-  const slide = hostSlides.value[index];
-  if (!slide?.id || !presentationCode.value) return;
-
-  try {
-    await presentationStore.changeActiveSlide(presentationCode.value, slide.id);
-    hostSlideIndex.value = index;
-    currentSlideId.value = slide.id;
-    localStorage.setItem(`centimeter.session.activeSlide.${joinCode.value}`, slide.id);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to change slide";
-    toastContainer.value?.add({ title: "Slide change failed", message });
-  }
-}
 
 async function refreshParticipants(showErrorToast: boolean = true): Promise<void> {
   try {
@@ -324,6 +392,7 @@ const endSession = async () => {
     await document.exitFullscreen();
   }
   try {
+    await maybeClosePoll()
     await sessionStore.endSession(joinCode.value);
 
     toastContainer.value?.add({

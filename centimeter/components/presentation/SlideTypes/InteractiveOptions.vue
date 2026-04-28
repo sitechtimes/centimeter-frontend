@@ -28,9 +28,8 @@ const interactiveOptions = [
   { icon: MapPin, label: "Pin on Image", color: "text-purple-600" }
 ];
 
-function handleClick(option: Option): void {
-  console.log("Option clicked:", option.label);
-  emit("add-slide", option.label);
+function handleClick(option: typeof interactiveOptions[number]): void {
+  emit('add-slide', option.label); 
 }
 
 const emit = defineEmits<{

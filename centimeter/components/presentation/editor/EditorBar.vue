@@ -11,8 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Slide } from '@/utils/types/presentationTypes'
 import NewSlides from './NewSlides.vue'
 import SlidesList from './SlidesList.vue'
 

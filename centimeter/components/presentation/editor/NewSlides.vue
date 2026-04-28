@@ -27,7 +27,7 @@
           </button>
         </div>
         <div class="p-6 space-y-6">
-          <InteractiveOptions @add-slide="forwardAddSlide" />
+          <InteractiveOptions @add-slide="forwardAddSlide"/>
           <ContentSlides @add-slide="forwardAddSlide" />
           <QuizCompletions @add-slide="forwardAddSlide" />
         </div>

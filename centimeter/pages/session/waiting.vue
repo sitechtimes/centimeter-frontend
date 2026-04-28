@@ -53,10 +53,9 @@
 
 <script setup lang="ts">
 import { useSessionStore } from "~/stores/sessionStore";
-import type { ParticipantPresencePayload, SessionStatus } from "~/utils/types/sessionTypes";
-import type { Slide } from "~/utils/types/presentationTypes";
-import NavBar from "~/components/presentation/ui/NavBar.vue";
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
+import type { SessionParticipant, ParticipantPresencePayload } from "~/utils/types/sessionTypes";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -155,6 +154,9 @@ const joinSession = async (nicknameValue: string) => {
     joinedNickname.value = nicknameValue;
     hasJoined.value = true;
     localStorage.setItem(sessionJoinStorageKey(sessionCode.value), nicknameValue);
+
+    await fetchParticipants();
+
     startHeartbeat();
   } catch (err: any) {
     toastContainer.value?.add({
@@ -338,6 +340,7 @@ async function pollSessionStatus(): Promise<void> {
     if (status?.presentation) {
       routeToLiveFromStatus(status);
     }
+    await fetchParticipants();
   } catch (error) {
     console.error("Failed to poll session status:", error);
   }
@@ -361,4 +364,15 @@ function disconnectSessionSocket(): void {
     sessionSocket.value = null;
   }
 }
+
+const participants = ref<SessionParticipant[]>([]);
+
+const fetchParticipants = async () => {
+  try {
+    participants.value = await sessionStore.listParticipants(sessionCode.value);
+  } catch (error) {
+    console.error("Failed to fetch participants:", error);
+  }
+};
+
 </script>
