@@ -26,7 +26,6 @@
           <div  :class="chartShellClass">
             <GraphComponent :options="slideOptions" :chartType="currentChartType"/>
           </div>
-<!-- v-if="isPresentationMode && (isHost || hasVoted)" -->
           <div :class="optionsLayoutClass">
             <div
               v-for="choice in slideOptions"
