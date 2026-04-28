@@ -23,6 +23,7 @@ export interface Slide {
   backgroundColor?: string;
   backgroundImage?: string;
   on_slide?: boolean;
+  chartType?: "bar" | "doughnut" | "pie";
 }
 
 export interface SlideComponent {
