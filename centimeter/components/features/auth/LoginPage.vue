@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from "~/stores/userStore";
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 
 const route = useRoute();
 const userStore = useUserStore();

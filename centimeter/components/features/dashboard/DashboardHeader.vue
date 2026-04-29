@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { Bell, User } from "lucide-vue-next";
-import ThemeToggle from "~/components/presentation/ui/ThemeToggle.vue";
+import ThemeToggle from "~/components/Presentation/ui/ThemeToggle.vue";
 const userStore = useUserStore();
 const isImportedAvatar = ref(userStore.profilePic !== "");
 const profileDropdown = ref(false);

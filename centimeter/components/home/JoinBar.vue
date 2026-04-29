@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
+import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 import { useSessionStore } from "~/stores/sessionStore";
 
 const router = useRouter();
