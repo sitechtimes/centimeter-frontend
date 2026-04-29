@@ -17,24 +17,21 @@
         </div>
 
         <div v-if="isLiveHost" class="bg-[var(--faded-bg-color-light)] rounded-xl p-4 md:p-6 space-y-4">
-          <div class="flex items-center justify-between gap-4 flex-wrap">
-            <div>
-              <h2 class="text-2xl font-semibold text-[var(--text-color)]">Host Live</h2>
-              <p class="text-sm text-[var(--faded-text-color)]">Use Left/Right arrow keys to change slides.</p>
-            </div>
-            <div class="text-right">
-              <p class="text-sm text-[var(--faded-text-color)]">Current slide ID</p>
-              <p class="text-xl font-mono text-[var(--text-color)]">{{ currentSlideId || "No slide selected" }}</p>
-              <p class="text-sm text-[var(--faded-text-color)] mt-1">Slide {{ hostSlides.length ? hostSlideIndex + 1 : 0 }} / {{ hostSlides.length }}</p>
-            </div>
-          </div>
-
           <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[72vh]">
-            <PresentationCanvas 
+<!--             <PresentationCanvas 
               class="!h-full" 
               :currentSlide="currentHostSlide" 
               :presentationMode="true" 
               :isHost="true"
+              :sessionJoinCode="joinCode"
+              :nickname="'Host'"
+              :activePollId="currentActivePollId"
+            /> -->
+            <MultipleChoiceSlide
+              v-if="currentHostSlide?.type === 'Multiple Choice'"
+              class="h-full"
+              :slide="currentHostSlide"
+              :presentationMode="true"
               :sessionJoinCode="joinCode"
               :nickname="'Host'"
               :activePollId="currentActivePollId"
@@ -96,6 +93,7 @@
 import { Copy, Users, Play } from "lucide-vue-next";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
+import MultipleChoiceSlide from "~/components/Presentation/SlidesOptions/MultipleChoiceSlides.vue";
 
 const route = useRoute();
 const router = useRouter();

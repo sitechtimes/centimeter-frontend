@@ -32,6 +32,7 @@
             :nickname="nickname"
             :activePollId="activePollId"
           />
+          
         </div>
       </div>
     </div>
