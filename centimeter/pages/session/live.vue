@@ -312,10 +312,6 @@ async function leaveSession(): Promise<void> {
 
 onMounted(() => {
   document.addEventListener("fullscreenchange", handleFullscreenChange);
-  if (!joinCode.value) {
-    router.push("/");
-    return;
-  }
 
   if (!sessionCode.value) {
     router.push("/");
