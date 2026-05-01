@@ -8,21 +8,6 @@
           <h1 class="text-4xl font-bold text-[var(--text-color)]">Live Session</h1>
           <p class="text-lg text-[var(--faded-text-color)]">Session code: {{ sessionCode }}</p>
         </div>
-
-        <div class="rounded-lg bg-[var(--bg-color)] border border-[var(--faded-bg-color)] p-4 md:p-6 space-y-3">
-          <p class="text-sm text-[var(--faded-text-color)]">Current slide</p>
-          <p class="text-2xl font-mono text-[var(--text-color)]">{{ currentSlideId || "No slide selected" }}</p>
-
-          <p class="text-sm text-[var(--faded-text-color)]">Current session</p>
-          <p class="text-lg font-mono text-[var(--text-color)]">{{ sessionIdentifier }}</p>
-
-          <p class="text-sm text-[var(--faded-text-color)]">Host</p>
-          <p class="text-lg text-[var(--text-color)]">{{ hostName || "Unknown" }}</p>
-
-          <p class="text-sm text-[var(--faded-text-color)]">Presentation status</p>
-          <p class="text-lg text-[var(--text-color)]">{{ presentationStatus }}</p>
-        </div>
-
         <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[70vh]">
           <PresentationCanvas 
             class="!h-full" 

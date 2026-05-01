@@ -18,20 +18,11 @@
 
         <div v-if="isLiveHost" class="bg-[var(--faded-bg-color-light)] rounded-xl p-4 md:p-6 space-y-4">
           <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[72vh]">
-<!--             <PresentationCanvas 
+             <PresentationCanvas 
               class="!h-full" 
               :currentSlide="currentHostSlide" 
               :presentationMode="true" 
               :isHost="true"
-              :sessionJoinCode="joinCode"
-              :nickname="'Host'"
-              :activePollId="currentActivePollId"
-            /> -->
-            <MultipleChoiceSlide
-              v-if="currentHostSlide?.type === 'Multiple Choice'"
-              class="h-full"
-              :slide="currentHostSlide"
-              :presentationMode="true"
               :sessionJoinCode="joinCode"
               :nickname="'Host'"
               :activePollId="currentActivePollId"
