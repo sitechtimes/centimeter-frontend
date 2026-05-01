@@ -10,18 +10,20 @@
 import { Bar, Doughnut, Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
-import { chartType } from '~/utils/slides'
 
-const props = defineProps<{ options?: PollsOption[]}>()
+const props = defineProps<{ 
+  options?: PollsOption[]
+  chartType: "bar" | "doughnut" | "pie"
+}>()
 
 const wrapperStyle = computed(() => {
-  if (chartType.value === 'pie' || chartType.value === 'doughnut') {
+  if (props.chartType === 'pie' || props.chartType === 'doughnut') {
     return {
       width: '100%',
       height: '100%'
     }
   }
-  if (chartType.value === 'bar') {
+  if (props.chartType === 'bar') {
     return {
       width: '100%',
       height: '100%'

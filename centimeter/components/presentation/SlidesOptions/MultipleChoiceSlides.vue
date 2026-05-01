@@ -23,10 +23,9 @@
         </p>
 
         <div class="flex-1 min-h-0" :class="chartLayoutClass">
-          <div v-if="isPresentationMode && (isHost || hasVoted)" :class="chartShellClass">
-            <GraphComponent :options="slideOptions" />
+          <div  :class="chartShellClass">
+            <GraphComponent :options="slideOptions" :chartType="currentChartType"/>
           </div>
-
           <div :class="optionsLayoutClass">
             <div
               v-for="choice in slideOptions"
@@ -99,7 +98,6 @@
 <script setup lang="ts">
 import GraphComponent from '../SlideComponents/GraphComponent.vue'
 import { useResponsesStore } from '~/stores/responesStore';
-import { chartType } from '~/utils/slides'
 
 const props = defineProps<{
   slide?: Slide
@@ -121,6 +119,8 @@ const hasVoted = ref(false)
 const isSubmitting = ref(false)
 
 const pollResultsTimer = ref<ReturnType<typeof setInterval> | null>(null)
+
+const currentChartType = computed(() => props.slide?.chartType ?? 'bar')
 
 watch(() => props.slide?.id, async () => {
   if (!isPresentationMode.value || !props.sessionJoinCode) return
@@ -330,29 +330,29 @@ const canvasStyle = computed(() => {
 });
 
 const chartLayoutClass = computed(() => {
-  return chartType.value === 'bar'
+  return currentChartType.value === 'bar'
     ? 'grid h-full grid-rows-[1.4fr_1fr] gap-4'
     : 'grid h-full grid-cols-[1.1fr_1fr] gap-4 items-center'
 })
 
 const chartShellClass = computed(() => {
-  return chartType.value === 'bar'
+  return currentChartType.value === 'bar'
     ? 'min-h-0 rounded-lg border border-[var(--faded-bg-color)] p-2'
     : 'min-h-0 h-full rounded-lg border border-[var(--faded-bg-color)] p-2'
 })
 
 const optionsLayoutClass = computed(() => {
-  return chartType.value === 'bar'
+  return currentChartType.value === 'bar'
     ? 'min-h-0 flex flex-wrap items-stretch gap-3 overflow-y-auto pr-1'
     : 'min-h-0 flex flex-col gap-2 overflow-y-auto pr-1'
 })
 
 const choiceClass = computed(() => {
-  return chartType.value === 'bar' ? 'px-3 py-2 h-12 flex-1' : 'px-3 py-2'
+  return currentChartType.value === 'bar' ? 'px-3 py-2 h-12 flex-1' : 'px-3 py-2'
 })
 
 const addButtonClass = computed(() => {
-  return chartType.value === 'bar' ? 'px-4 py-2 h-12' : 'px-3 py-2'
+  return currentChartType.value === 'bar' ? 'px-4 py-2 h-12' : 'px-3 py-2'
 })
 
 const fontSize = computed(() => {

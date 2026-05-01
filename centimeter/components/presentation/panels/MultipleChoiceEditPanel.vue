@@ -17,7 +17,7 @@
         v-for="chart in chartButtons"
         :key="chart"
         class="flex items-center justify-center w-[30px] min-w-[72px] rounded-2xl border px-3 py-3 transition-colors duration-200 cursor-pointer"
-        :class="chartType === chart ? 'border-[var(--primary)] bg-[var(--primary-shade-translucent)]' : 'border-[var(--faded-bg-color)] hover:border-[var(--bg-color-contrast)] bg-[var(--bg-color)]'"
+        :class="props.chartType === chart ? 'border-[var(--primary)] bg-[var(--primary-shade-translucent)]' : 'border-[var(--faded-bg-color)] hover:border-[var(--bg-color-contrast)] bg-[var(--bg-color)]'"
         @click="setChartType(chart)"
       >
         <ChartColumn v-if="chart === 'bar'" class="text-[var(--text-color)]" :size="18" />
@@ -33,7 +33,13 @@
 <script setup lang="ts">
 import { X, ChartColumn, ChartPie, CircleDot } from 'lucide-vue-next'
 
-const emit = defineEmits<{ close: [] }>()
+const props = defineProps<{
+   chartType: "bar" | "doughnut" | "pie"
+}>()
+const emit = defineEmits<{ 
+  close: [],
+  updateChartType: ["bar" | "doughnut" | "pie"]
+ }>()
 
 const closeEditPanel = () => {
   emit('close')
@@ -42,7 +48,7 @@ const closeEditPanel = () => {
 const chartButtons = ['bar', 'doughnut', 'pie'] as const
 
 const setChartType = (type: 'bar' | 'doughnut' | 'pie') => {
-    chartType.value = type
+    emit('updateChartType', type)
 }
 
 </script>
