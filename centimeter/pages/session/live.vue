@@ -8,17 +8,14 @@
           <h1 class="text-4xl font-bold text-[var(--text-color)]">Live Session</h1>
           <p class="text-lg text-[var(--faded-text-color)]">Session code: {{ sessionCode }}</p>
         </div>
-        <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[70vh]">
           <PresentationCanvas 
-            class="!h-full" 
+            class="h-[90%]" 
             :currentSlide="currentSlide" 
             :presentationMode="true" 
             :sessionJoinCode="sessionCode"
             :nickname="nickname"
             :activePollId="activePollId"
           />
-          
-        </div>
       </div>
     </div>
   </div>
@@ -45,7 +42,6 @@ const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const activePollId = ref<number | undefined>(undefined);
 const isLiveHost = ref(false);
-const joinCode = ref(route.params.code as string);  
 
 async function fetchActivePoll(): Promise<void> {
   if (!currentSlide.value || currentSlide.value.type !== 'Multiple Choice') {
