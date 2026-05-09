@@ -1,10 +1,42 @@
 <template>
   <div class="min-h-screen w-screen bg-[var(--bg-color)]">
-    <ToastContainer ref="toastContainer" />
+    <ToastContainer class="z-[100]" ref="toastContainer"  />
 
     <div class="container mx-auto px-4 py-12">
       <div class="max-w-4xl mx-auto space-y-8">
-        <div class="text-center space-y-4">
+        <div v-if="isLiveHost" class="fixed inset-0 z-50 bg-[var(--bg-color)] flex flex-col">
+          <div class="flex items-center justify-between px-6 py-3 shrink-0">
+            <div class="flex items-center gap-3">
+              <span class="text-[var(--text-color)] font-medium">Join Code:</span>
+              <span class="font-mono font-bold bg-[var(--primary)] text-[var(--text-color-contrast)] px-4 py-1.5 rounded-lg">{{ joinCode }}</span>
+              <button @click="copyJoinCode" class="p-2 hover:bg-[var(--faded-bg-color)] rounded-lg transition-colors">
+                <Copy class="w-4 h-4 text-[var(--text-color)]" />
+              </button>
+            </div>
+            <button
+              @click="endSession"
+              :disabled="isEndingSession"
+              class="px-5 py-2 text-sm font-semibold text-[var(--text-color)] bg-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-full transition-colors disabled:opacity-50"
+            >
+              {{ isEndingSession ? "Ending..." : "End Session" }}
+            </button>
+          </div>
+
+          <div class="flex-1 overflow-hidden px-4 pb-4">
+            <PresentationCanvas
+              class="w-full h-full rounded-lg overflow-hidden"
+              :currentSlide="currentHostSlide"
+              :presentationMode="true"
+              :isHost="true"
+              :sessionJoinCode="joinCode"
+              :nickname="'Host'"
+              :activePollId="currentActivePollId"
+            />
+          </div>
+        </div>
+
+        <div v-else class="bg-[var(--faded-bg-color-light)] rounded-xl p-8 space-y-6">
+          <div class="text-center space-y-4">
           <h1 class="text-5xl font-bold text-[var(--text-color)]">{{ sessionData?.title || "Presentation Session" }}</h1>
           <div class="flex items-center justify-center gap-4">
             <p class="text-2xl text-[var(--text-color)] opacity-80">
@@ -15,22 +47,6 @@
             </button>
           </div>
         </div>
-
-        <div v-if="isLiveHost" class="bg-[var(--faded-bg-color-light)] rounded-xl p-4 md:p-6 space-y-4">
-          <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[72vh]">
-             <PresentationCanvas 
-              class="!h-full" 
-              :currentSlide="currentHostSlide" 
-              :presentationMode="true" 
-              :isHost="true"
-              :sessionJoinCode="joinCode"
-              :nickname="'Host'"
-              :activePollId="currentActivePollId"
-            />
-          </div>
-        </div>
-
-        <div v-else class="bg-[var(--faded-bg-color-light)] rounded-xl p-8 space-y-6">
           <div class="flex items-center justify-between">
             <h2 class="text-2xl font-semibold text-[var(--text-color)]">Participants</h2>
             <span class="text-lg text-[var(--faded-text-color)]">{{ participants.length }} joined</span>
@@ -66,14 +82,6 @@
             <Play class="w-6 h-6" />
             {{ isStartingPresentation ? "Starting..." : "Start Presentation" }}
           </button>
-
-          <button
-            @click="endSession"
-            :disabled="isEndingSession"
-            class="px-8 py-4 text-lg font-semibold text-[var(--text-color)] bg-[var(--faded-bg-color)] hover:bg-[var(--faded-bg-color-dark)] rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {{ isEndingSession ? "Ending..." : "End Session" }}
-          </button>
         </div>
       </div>
     </div>
@@ -84,7 +92,6 @@
 import { Copy, Users, Play } from "lucide-vue-next";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
-import MultipleChoiceSlide from "~/components/Presentation/SlidesOptions/MultipleChoiceSlides.vue";
 
 const route = useRoute();
 const router = useRouter();

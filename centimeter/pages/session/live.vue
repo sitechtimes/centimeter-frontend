@@ -9,7 +9,7 @@
           <p class="text-lg text-[var(--faded-text-color)]">Session code: {{ sessionCode }}</p>
         </div>
           <PresentationCanvas 
-            class="h-[90%]" 
+            class="w-full h-full rounded-lg overflow-hidden" 
             :currentSlide="currentSlide" 
             :presentationMode="true" 
             :sessionJoinCode="sessionCode"
