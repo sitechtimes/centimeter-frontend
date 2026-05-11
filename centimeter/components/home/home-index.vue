@@ -10,7 +10,7 @@
           Get started, it's free
         </button>
         <p class="text-sm text-gray-600 dark:text-gray-300">No credit card needed</p>
-      </section>
+      </section>  
       <div class="video-container">
         <video loop autoplay muted src="https://static.mentimeter.com/static/motion/Square.mp4"></video>
       </div>
