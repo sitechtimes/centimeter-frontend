@@ -18,14 +18,10 @@
           v-model="props.slide!.question"
           class="w-full bg-transparent text-3xl font-semibold text-[var(--text-color)] border-b border-[var(--faded-bg-color)] pb-3 outline-none"
         >
-
-        <p
-          v-else-if="isPresentationMode && isHost"
-          class="w-full text-3xl font-semibold text-[var(--text-color)] border-b border-[var(--faded-bg-color)] pb-3"
-        >
+        <p v-else class="w-full text-3xl font-semibold text-[var(--text-color)] border-b border-[var(--faded-bg-color)] pb-3">
           {{ props.slide?.question }}
         </p>
-        
+
         <div class="flex-1 min-h-0" :class="chartLayoutClass">
           <div  :class="chartShellClass">
             <GraphComponent :options="slideOptions" :chartType="currentChartType"/>

@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen w-screen bg-[var(--bg-color)]">
+  <div class="min-h-screen bg-[var(--bg-color)]">
+    <NavBar />
     <ToastContainer ref="toastContainer" />
 
     <div class="container mx-auto px-4 py-12 max-w-2xl">
@@ -53,6 +54,7 @@
 <script setup lang="ts">
 import { useSessionStore } from "~/stores/sessionStore";
 import type { SessionParticipant, ParticipantPresencePayload } from "~/utils/types/sessionTypes";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 
 const route = useRoute();
