@@ -90,7 +90,11 @@
       </div>
       </div>
   </div>
-  <MultipleChoiceEditPanel v-if="(openSlideTypeEditPanel(props.selectedSlide) === 'Multiple Choice') && props.isOpen" @close="$emit('close')"/>
+  <MultipleChoiceEditPanel v-if="(openSlideTypeEditPanel(props.selectedSlide) === 'Multiple Choice') && props.isOpen"
+  :chartType="props.selectedSlide?.chartType ?? 'bar'"
+  @updateChartType="updateChartType"
+  @close="$emit('close')"
+  />
 </template>
 
 <script setup lang="ts">
@@ -109,6 +113,12 @@ const openSlideTypeEditPanel = (selectedSlide?: Slide) => {
     return selectedSlide?.type
   } else {
     return false
+  }
+}
+
+function updateChartType(type: 'bar' | 'doughnut' | 'pie') {
+  if (props.selectedSlide) {
+    props.selectedSlide.chartType = type
   }
 }
 
