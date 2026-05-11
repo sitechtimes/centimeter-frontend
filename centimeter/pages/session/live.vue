@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[var(--bg-color)]">
-    <NavBar />
+  <div class="min-h-screen w-screen bg-[var(--bg-color)]">
     <ToastContainer ref="toastContainer" />
 
     <div class="container mx-auto px-4 py-12 max-w-3xl">
@@ -9,38 +8,20 @@
           <h1 class="text-4xl font-bold text-[var(--text-color)]">Live Session</h1>
           <p class="text-lg text-[var(--faded-text-color)]">Session code: {{ sessionCode }}</p>
         </div>
-
-        <div class="rounded-lg bg-[var(--bg-color)] border border-[var(--faded-bg-color)] p-4 md:p-6 space-y-3">
-          <p class="text-sm text-[var(--faded-text-color)]">Current slide</p>
-          <p class="text-2xl font-mono text-[var(--text-color)]">{{ currentSlideId || "No slide selected" }}</p>
-
-          <p class="text-sm text-[var(--faded-text-color)]">Current session</p>
-          <p class="text-lg font-mono text-[var(--text-color)]">{{ sessionIdentifier }}</p>
-
-          <p class="text-sm text-[var(--faded-text-color)]">Host</p>
-          <p class="text-lg text-[var(--text-color)]">{{ hostName || "Unknown" }}</p>
-
-          <p class="text-sm text-[var(--faded-text-color)]">Presentation status</p>
-          <p class="text-lg text-[var(--text-color)]">{{ presentationStatus }}</p>
-        </div>
-
-        <div class="rounded-lg overflow-hidden border border-[var(--faded-bg-color)] h-[70vh]">
           <PresentationCanvas 
-            class="!h-full" 
+            class="w-full h-full rounded-lg overflow-hidden" 
             :currentSlide="currentSlide" 
             :presentationMode="true" 
             :sessionJoinCode="sessionCode"
             :nickname="nickname"
             :activePollId="activePollId"
           />
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import ToastContainer from "~/components/Presentation/ui/ToastContainer.vue";
 import PresentationCanvas from "~/components/Presentation/editor/PresentationCanvas.vue";
 
@@ -60,6 +41,7 @@ const sessionSocket = ref<WebSocket | null>(null);
 const heartbeatTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const activePollId = ref<number | undefined>(undefined);
+const isLiveHost = ref(false);
 
 async function fetchActivePoll(): Promise<void> {
   if (!currentSlide.value || currentSlide.value.type !== 'Multiple Choice') {
@@ -81,6 +63,28 @@ async function fetchActivePoll(): Promise<void> {
     }
   })
 }
+
+const syncFullscreen = async () => {
+  if (isLiveHost.value) {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (e) {
+        console.warn("Fullscreen blocked:", e);
+      }
+    }
+  } else {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    }
+  }
+};
+const handleFullscreenChange = () => {
+  if (!document.fullscreenElement && isLiveHost.value) {
+    isLiveHost.value = false; // this triggers sync + cleanup
+  }
+};
+watch(isLiveHost, syncFullscreen);
 
 const currentSlide = computed<Slide | undefined>(() => {
   if (!slides.value.length) return undefined;
@@ -289,6 +293,8 @@ async function leaveSession(): Promise<void> {
 }
 
 onMounted(() => {
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+
   if (!sessionCode.value) {
     router.push("/");
     return;
@@ -307,6 +313,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(async () => {
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
   disconnectSessionSocket();
   stopHeartbeat();
   stopStatusPolling();
