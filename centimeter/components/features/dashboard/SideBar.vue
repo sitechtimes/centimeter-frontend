@@ -29,7 +29,7 @@
 
 
         <div class="pt-6 pb-3">
-          <p class="text-xs font-medium text-[var(--gray)] px-4 uppercase">{{ userStore.nickname }}'s team</p> 
+          <p class="text-xs font-medium text-[var(--gray)] px-4 uppercase">{{ userStore.user?.username }}'s team</p> 
         </div>
 
 

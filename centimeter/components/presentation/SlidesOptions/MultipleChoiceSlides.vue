@@ -27,7 +27,7 @@
         </p>
         
         <div class="flex-1 min-h-0" :class="chartLayoutClass">
-          <div  :class="chartShellClass">
+          <div v-if="isPresentationMode && isHost" :class="chartShellClass">
             <GraphComponent :options="slideOptions" :chartType="currentChartType"/>
           </div>
           <div :class="optionsLayoutClass">

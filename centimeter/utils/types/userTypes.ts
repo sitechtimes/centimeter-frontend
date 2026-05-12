@@ -6,4 +6,5 @@ export interface User {
   last_name?: string;
   access?: string;
   refresh?: string;
+  profile_pic?: string;
 }

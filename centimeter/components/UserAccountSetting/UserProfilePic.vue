@@ -6,38 +6,14 @@
         <ChevronDown @click="changeProfileDropdown" class="w-5 h-5 cursor-pointer transition-transform duration-300 text-gray-500 dark:text-gray-400" :class="{ 'rotate-180': changeAvatar }" />
       </h2>
       <div class="flex items-center gap-3">
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Logged in as {{ userStore.user?.email }}.</p>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Logged in as {{ userStore.user!.email }}.</p>
         <div class="mt-4 flex items-center gap-3">
           <div class="h-10 w-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-gray-100 dark:bg-neutral-800">
             <User v-if="!isImportedAvatar" class="h-5 w-5 text-gray-500 dark:text-gray-400" />
-            <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="Avatar" class="h-full w-full object-cover" />
+            <img v-if="isImportedAvatar" :src="userStore.user?.profile_pic" alt="Avatar" class="h-full w-full object-cover" />
           </div>
         </div>
-
-        <div class="flex flex-col gap-4 mt-4 w-40">
-
-            <div class="flex rounded-full max-h-16 max-w-16 border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)] overflow-hidden">   
-                    <User v-if="!isImportedAvatar" class="rounded-full h-16 w-16 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]"/>
-                    <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-16 w-16 rounded-full object-contain">            
-            </div>
-
-                <theme-toggle/>
-
-            <transition enter-active-class="transition-opacity duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-opacity duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0">    
-                <div v-if="changeAvatar">
-                    <div class="h-10 w-60">
-                        <label class=" cursor-pointer rounded-md hover:bg-[var(--gray)] border-2 border-[var(--primary-shade-translucent)] dark:border-[var(--primary-shade-translucent)] text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" for="uploadAvatar">Upload Picture</label>
-                        <input type="file" accept="image/*" id="uploadAvatar" hidden @change="getAvatar">
-                    </div>
-                <h1>Username</h1>
-                <h2>Logged in as {{ userStore.user?.email }}</h2>
-                    <input type="text" placeholder="Username" ref="UsernameInput" class="text-[color:var(--text-color)] dark:text-[color:var(--text-color)] border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)]">
-                    <br>
-                    <button @click="saveProfileChanges" class="flex w-20 h-6 border-[var(--bg-color-contrast)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded-md">Save</button>
-                </div>
-            </transition>
-          </div>
-        </div>            
+      </div>            
 
     </div>
     <transition
@@ -54,7 +30,8 @@
           <input
             type="text"
             placeholder="Enter your username"
-            ref="UsernameInput"
+            ref="usernameInput"
+            v-model="username"
             class="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
           />
         </div>
@@ -82,21 +59,22 @@ import { ChevronDown, User, Trash } from "lucide-vue-next";
 
 const userStore = useUserStore()
 const changeAvatar = ref(false)
-const isImportedAvatar = computed(() => userStore.profilePic !== "")
+const isImportedAvatar = computed(() => userStore.user?.profile_pic !== "")
 
-const UsernameInput = ref("");
+const usernameInput = ref<HTMLInputElement | null>(null);
+const username = ref("");
 
 const changeProfileDropdown = () => {
   changeAvatar.value = !changeAvatar.value;
 };
 const saveProfileChanges = () => {
-  userStore.user?.username == UsernameInput.value;
-  UsernameInput.value = UsernameInput.value;
+  console.log(username.value);
+  userStore.user!.username = username.value;
   changeAvatar.value = !changeAvatar.value;
 };
 const getAvatar = async (event) => {
     const picture = event.target.files[0]
-    userStore.profilePic = URL.createObjectURL(picture)
+    userStore.user!.profile_pic = URL.createObjectURL(picture)
     changeAvatar.value = false
 }
 

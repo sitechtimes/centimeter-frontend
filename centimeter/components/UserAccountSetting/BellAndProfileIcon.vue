@@ -17,7 +17,7 @@
       ]"
     >
       <User v-if="!isImportedAvatar" class="rounded-full h-10 w-10 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
-      <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-10 w-10 rounded-full object-cover" />
+      <img v-if="isImportedAvatar" :src="userStore.user?.profile_pic" alt="CustomAvatar" class="h-10 w-10 rounded-full object-cover" />
     </div>
     <div v-if="profileDropdown && !isMail" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md p-2">
       <button 
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { Bell, User } from "lucide-vue-next";
 const userStore = useUserStore();
-const isImportedAvatar = computed(() => userStore.profilePic !== "");
+const isImportedAvatar = computed(() => userStore.user?.profile_pic !== "");
 const isMail = ref(false);
 const profileDropdown = ref(false);
 

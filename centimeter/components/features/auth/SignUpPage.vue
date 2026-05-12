@@ -104,7 +104,7 @@ watch(
   (value: string) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (value.length > 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
-    else emailErr.value = "";
+    else emailErr.value = ""; userStore.user!.email = email.value;
   }
 );
 
@@ -123,7 +123,7 @@ watch(
   (value: string) => {
     if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
     else if (value.length > 40) nameErr.value = "Name must be less than 40 characters.";
-    else nameErr.value = ""; userStore.nickname = value;
+    else nameErr.value = ""; userStore.user!.username = value;
   }
 );
 

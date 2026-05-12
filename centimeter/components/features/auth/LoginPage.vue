@@ -108,7 +108,7 @@ watch(
   (value: string) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
-    else emailErr.value = "";
+    else emailErr.value = ""; userStore.user!.email = email.value;
   }
 );
 
@@ -166,6 +166,7 @@ const loginButtons = [
 async function loginWithEmail() {
   try {
     await userStore.logIn(email.value, password.value);
+    userStore.user!.email = email.value;
 
     if (userStore.isAuth) {
       toastRef.value?.add({

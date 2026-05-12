@@ -12,9 +12,7 @@ export const useUserStore = defineStore(
     const user = ref<User | null>(null);
     const isAuth = ref(false);
     const theme = ref<"light" | "dark">("light");
-    const profilePic = ref<string>("");
     const presentations = ref<Presentation[]>([]);
-    const nickname = ref<string>("");
 
     function splitName(fullName?: string): { first_name?: string; last_name?: string } {
       const trimmed = (fullName || "").trim();
@@ -151,9 +149,7 @@ export const useUserStore = defineStore(
       user,
       isAuth,
       theme,
-      profilePic,
       presentations,
-      nickname,
       logIn,
       signUp,
       logOut,

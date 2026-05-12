@@ -11,7 +11,7 @@
         class="flex rounded-full max-h-9 max-w-9 border-2 border-[var(--bg-color-contrast)] dark:border-[var(--bg-color-contrast)] bg-[var(--primary-light)] dark:bg-[var(--primary-light)] overflow-hidden"
       >
         <User v-if="!isImportedAvatar" class="rounded-full h-9 w-9 text-[color:var(--text-color)] dark:text-[color:var(--text-color)]" />
-        <img v-if="isImportedAvatar" :src="userStore.profilePic" alt="CustomAvatar" class="h-9 w-9 rounded-full object-contain" />
+        <img v-if="isImportedAvatar" :src="userStore.user?.profile_pic" alt="CustomAvatar" class="h-9 w-9 rounded-full object-contain" />
       </div>
       <div v-if="profileDropdown" class="absolute top-14 right-10 bg-[color:var(--bg-color)] dark:bg-[color:var(--bg-color-contrast)] rounded-lg shadow-md p-2 flex flex-col gap-2 min-w-[150px] z-50">
         <button @click="handleLogout" class="w-full px-4 py-2 text-left border-[var(--bg-color-contrast)] text-[color:var(--text-color)] cursor-pointer transition-all hover:bg-[var(--gray)] rounded">
@@ -32,7 +32,7 @@
 import { Bell, User } from "lucide-vue-next";
 import ThemeToggle from "~/components/presentation/ui/ThemeToggle.vue";
 const userStore = useUserStore();
-const isImportedAvatar = ref(userStore.profilePic !== "");
+const isImportedAvatar = ref(userStore.user?.profile_pic !== "");
 const profileDropdown = ref(false);
 
 const toggleProfileDropdown = () => {
@@ -40,7 +40,7 @@ const toggleProfileDropdown = () => {
 };
 
 const goToAccSetting = () => {
-  navigateTo("/UserProfile");
+  navigateTo("/user/profile");
 };
 
 const handleLogout = () => {

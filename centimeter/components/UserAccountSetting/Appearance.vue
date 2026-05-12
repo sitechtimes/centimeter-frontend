@@ -47,8 +47,8 @@ function toggleTheme() {
   } else if (!isdark.value) {
     userStore.theme = "dark";
   }
-
   document.body.classList[isdark.value ? "add" : "remove"]("dark");
   localStorage.setItem("theme", isdark.value ? "dark" : "light");
+  console.log(userStore.user?.username);
 }
 </script>

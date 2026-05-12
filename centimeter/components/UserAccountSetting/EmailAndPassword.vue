@@ -6,7 +6,7 @@
     </h2>
 
     <p class="mt-2 text-sm text-gray-600">
-      Your email is <span class="font-medium text-gray-900">{{ email }}</span>
+      Your email is <span class="font-medium text-gray-900">{{ userStore.user!.email }}</span>
     </p>
   </section>
 
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-const email = ref("edsiaohdfos@gmail.com");
+const userStore = useUserStore();
 const isVerified = ref(true);
 
 const lastPasswordChange = ref("2 months ago");
