@@ -126,6 +126,8 @@ const pollResultsTimer = ref<ReturnType<typeof setInterval> | null>(null)
 
 const currentChartType = computed(() => props.slide?.chartType ?? 'bar')
 
+const isPresentationMode = computed(() => props.presentationMode === true)
+
 watch(() => props.slide?.id, async () => {
   if (!isPresentationMode.value || !props.sessionJoinCode) return
 
@@ -266,7 +268,6 @@ async function chooseChoice(choice: PollsOption) {
 
 const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;
-const isPresentationMode = computed(() => props.presentationMode === true)
 
 async function refreshPollResults(): Promise<void> {
   if (!props.sessionJoinCode || !isPresentationMode.value) return

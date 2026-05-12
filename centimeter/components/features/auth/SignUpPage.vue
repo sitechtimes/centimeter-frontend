@@ -86,7 +86,6 @@
 <script setup lang="ts">
 import ToastContainer from "~/components/presentation/ui/ToastContainer.vue";
 
-import { useUserStore } from "~/stores/userStore";
 const userStore = useUserStore();
 const toastRef = ref<InstanceType<typeof ToastContainer> | null>(null);
 
@@ -124,7 +123,7 @@ watch(
   (value: string) => {
     if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
     else if (value.length > 40) nameErr.value = "Name must be less than 40 characters.";
-    else nameErr.value = "";
+    else nameErr.value = ""; userStore.nickname = value;
   }
 );
 

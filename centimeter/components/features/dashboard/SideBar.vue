@@ -29,7 +29,7 @@
 
 
         <div class="pt-6 pb-3">
-          <p class="text-xs font-medium text-[var(--gray)] px-4 uppercase">Eric's team</p> 
+          <p class="text-xs font-medium text-[var(--gray)] px-4 uppercase">{{ userStore.nickname }}'s team</p> 
         </div>
 
 
@@ -62,6 +62,7 @@
 
 <script setup>
 import {HouseIcon, UserIcon, InboxIcon, UsersIcon, FilePlusCornerIcon} from 'lucide-vue-next'
+const userStore = useUserStore()
 </script>
 
 <style scoped>
