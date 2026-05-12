@@ -77,13 +77,6 @@
               </button>
             </div>
 
-            <div
-              v-if="isPresentationMode && hasVoted"
-              class="mt-2 text-sm text-[var(--primary)] font-semibold"
-            >
-              ✓ Vote submitted
-            </div>
-
             <button
               v-if="!isPresentationMode"
               @click="addOption"
@@ -119,29 +112,90 @@ const slideOptions = computed(() => props.slide?.pollsComponents?.options ?? [])
 const isHost = computed(() => props.isHost === true)
 const responseStore = useResponsesStore()
 const pollsStore = usePollsStore()
-const hasVoted = ref(false)
 const isSubmitting = ref(false)
+
+const isPresentationMode = computed(() => props.presentationMode === true)
 
 const pollResultsTimer = ref<ReturnType<typeof setInterval> | null>(null)
 
 const currentChartType = computed(() => props.slide?.chartType ?? 'bar')
 
-const isPresentationMode = computed(() => props.presentationMode === true)
+const slideVoteState = reactive<Record<string, { hasVoted: boolean; pollId?: number }>>({});
 
-watch(() => props.slide?.id, async () => {
-  if (!isPresentationMode.value || !props.sessionJoinCode) return
+const slideKey = computed(() => props.slide?.id ?? "unknown-slide");
+
+const hasVoted = computed<boolean>(() => {
+  const key = slideKey.value;
+  if (!props.slide?.id) return false;
+  const state = slideVoteState[key];
+  const pollId = props.activePollId;
+  if (!state) return false;
+  if (!pollId) return false;
+  return state.hasVoted === true && state.pollId === pollId;
+});
+
+function setHasVotedForCurrentSlide(value: boolean): void {
+  const key = slideKey.value;
+  if (!slideVoteState[key]) slideVoteState[key] = { hasVoted: false };
+  slideVoteState[key].hasVoted = value;
+  if (props.activePollId != null) slideVoteState[key].pollId = props.activePollId;
+}
+
+function saveLocalPollSnapshot(): void {
+  if (!props.sessionJoinCode || !props.slide?.id) return;
+  try {
+    const payload = {
+      slideId: props.slide.id,
+      joinCode: props.sessionJoinCode,
+      pollId: props.activePollId ?? null,
+      options: (slideOptions.value ?? []).map((o) => ({
+        backendId: (o as any).backendId ?? null,
+        position: o.position,
+        amount_chosen: o.amount_chosen ?? 0
+      }))
+    };
+    localStorage.setItem(`centimeter.pollSnapshot.${props.sessionJoinCode}.${props.slide.id}`, JSON.stringify(payload));
+  } catch {}
+}
+
+function restoreLocalPollSnapshot(): void {
+  if (!props.sessionJoinCode || !props.slide?.id) return;
+  const raw = localStorage.getItem(`centimeter.pollSnapshot.${props.sessionJoinCode}.${props.slide.id}`);
+  if (!raw) return;
 
   try {
-    const body = await pollsStore.fetchPollsData(props.sessionJoinCode)
-    const backendOptions = body?.active_poll?.options ?? []
-    backendOptions.forEach((backendOpt: any, i: number) => {
-      const localOpt = slideOptions.value[i]
-      if (localOpt) localOpt.backendId = backendOpt.id
-    })
-  } catch (err) {
-    console.error('Failed to fetch poll data:', err)
-  }
-}, { immediate: true })
+    const parsed = JSON.parse(raw);
+    const options = Array.isArray(parsed?.options) ? parsed.options : [];
+    options.forEach((snap: any) => {
+      const local =
+        slideOptions.value.find((o) => ((o as any).backendId ?? null) === (snap.backendId ?? null) && snap.backendId != null) ?? slideOptions.value.find((o) => o.position === snap.position);
+      if (local) {
+        local.amount_chosen = snap.amount_chosen ?? local.amount_chosen ?? 0;
+      }
+    });
+  } catch {}
+}
+
+watch(
+  () => [props.slide?.id, props.activePollId, props.sessionJoinCode],
+  async () => {
+    if (!isPresentationMode.value || !props.sessionJoinCode) return;
+
+    restoreLocalPollSnapshot();
+
+    if (pollResultsTimer.value) {
+      clearInterval(pollResultsTimer.value);
+      pollResultsTimer.value = null;
+    }
+
+    await refreshPollResults();
+    pollResultsTimer.value = setInterval(async () => {
+      await refreshPollResults();
+      saveLocalPollSnapshot();
+    }, 3000);
+  },
+  { immediate: true }
+);
 
 function clearQuestion() {
   if (isPresentationMode.value) return
@@ -220,7 +274,7 @@ async function chooseChoice(choice: PollsOption) {
         props.nickname,
         choice.backendId!,
       )
-      hasVoted.value = true
+      setHasVotedForCurrentSlide(true)
     } catch (err) {
       choice.chosen = false
       choice.amount_chosen = Math.max(0, (choice.amount_chosen ?? 1) - 1)
@@ -249,7 +303,7 @@ async function chooseChoice(choice: PollsOption) {
             props.nickname,
             chosenIds
           )
-          hasVoted.value = true
+          setHasVotedForCurrentSlide(true)
         } catch (err) {
           slideOptions.value.forEach(o => {
             if (o.chosen) {
@@ -270,41 +324,70 @@ const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;
 
 async function refreshPollResults(): Promise<void> {
-  if (!props.sessionJoinCode || !isPresentationMode.value) return
+  if (!props.sessionJoinCode || !isPresentationMode.value) return;
 
   try {
-    const body = await pollsStore.fetchPollsData(props.sessionJoinCode)
-    const backendOptions = body?.active_poll?.options ?? []
-    
-    backendOptions.forEach((backendOpt: any) => {
-      const localOpt = slideOptions.value.find(
-        o => o.option_text === backendOpt.option_text
-      )
-      if (localOpt) {
-        localOpt.backendId = backendOpt.id ?? backendOpt.option_id
-        localOpt.amount_chosen = backendOpt.votes ?? backendOpt.amount_chosen ?? 0
+    const body = await pollsStore.fetchPollsData(props.sessionJoinCode);
+    const backendOptions = body?.active_poll?.options ?? [];
+
+    const byId = new Map<number | string, any>();
+    backendOptions.forEach((o: any) => {
+      const id = o?.id ?? o?.option_id;
+      if (id != null) byId.set(id, o);
+    });
+
+    slideOptions.value.forEach((local) => {
+      const localId = (local as any).backendId;
+      if (localId != null && byId.has(localId)) {
+        const backendOpt = byId.get(localId);
+        local.amount_chosen = backendOpt?.votes ?? backendOpt?.amount_chosen ?? 0;
+        return;
       }
-    })
+    });
+      backendOptions.forEach((backendOpt: any, i: number) => {
+      const backendId = backendOpt?.id ?? backendOpt?.option_id;
+      const localAtIndex = slideOptions.value[i];
+
+      if (backendId != null) {
+        const existing = slideOptions.value.find((o) => (o as any).backendId === backendId);
+        if (existing) {
+          existing.amount_chosen = backendOpt?.votes ?? backendOpt?.amount_chosen ?? 0;
+          return;
+        }
+        if (localAtIndex && (localAtIndex as any).backendId == null) {
+          (localAtIndex as any).backendId = backendId;
+          localAtIndex.amount_chosen = backendOpt?.votes ?? backendOpt?.amount_chosen ?? 0;
+        }
+      }
+    });
+    saveLocalPollSnapshot();
   } catch (err) {
-    console.error('Failed to refresh poll results:', err)
+    console.error("Failed to refresh poll results:", err);
   }
 }
 
-watch(isPresentationMode, (val) => {
-  if (val) {
-    refreshPollResults()
-    pollResultsTimer.value = setInterval(refreshPollResults, 3000)
-  } else {
-    if (pollResultsTimer.value) clearInterval(pollResultsTimer.value)
-  }
-}, { immediate: true })
+watch(
+  isPresentationMode,
+  (val) => {
+    if (!val) {
+      if (pollResultsTimer.value) clearInterval(pollResultsTimer.value);
+      pollResultsTimer.value = null;
+    }
+  },
+  { immediate: true }
+);
 
-watch(() => props.slide?.id, () => {
-  hasVoted.value = false
-  isSubmitting.value = false
-  slideOptions.value.forEach(opt => { opt.chosen = false; opt.amount_chosen = 0 })
-  refreshPollResults()
-})
+watch(
+  () => props.slide?.id,
+  () => {
+    isSubmitting.value = false;
+    slideOptions.value.forEach((opt) => {
+      opt.chosen = false;
+    });
+    restoreLocalPollSnapshot();
+    refreshPollResults();
+  }
+);
 
 onBeforeUnmount(() => {
   if (pollResultsTimer.value) clearInterval(pollResultsTimer.value)
