@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavBar from "~/components/presentation/ui/NavBar.vue";
+import NavBar from "~/components/Presentation/ui/NavBar.vue";
 import homeindex from "~/components/home/home-index.vue";
 import JoinBar from "~/components/home/JoinBar.vue";
 </script>

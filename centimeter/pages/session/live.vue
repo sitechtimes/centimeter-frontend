@@ -43,25 +43,38 @@ const statusPollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
 const activePollId = ref<number | undefined>(undefined);
 const isLiveHost = ref(false);
 
+const activePollRequestSeq = ref(0);
+
 async function fetchActivePoll(): Promise<void> {
-  if (!currentSlide.value || currentSlide.value.type !== 'Multiple Choice') {
-    activePollId.value = undefined
-    return
+  const seq = ++activePollRequestSeq.value;
+
+  if (!currentSlide.value || currentSlide.value.type !== "Multiple Choice") {
+    activePollId.value = undefined;
+    return;
   }
 
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/polls/${sessionCode.value}/active/`
-  )
-  const body = await response.json()
-  activePollId.value = body?.active_poll?.id ?? undefined
+  const activeUrl = `${import.meta.env.VITE_BACKEND_URL}/polls/${sessionCode.value}/active/`;
 
-  const backendOptions = body?.active_poll?.options ?? []
+  let body: any;
+  try {
+    const response = await fetch(activeUrl);
+    body = await response.json();
+  } catch {
+    if (seq === activePollRequestSeq.value) activePollId.value = undefined;
+    return;
+  }
+
+  if (seq !== activePollRequestSeq.value) return;
+
+  activePollId.value = body?.active_poll?.id ?? undefined;
+
+  const backendOptions = body?.active_poll?.options ?? [];
   backendOptions.forEach((backendOpt: any, i: number) => {
-    const localOpt = currentSlide.value?.pollsComponents?.options?.[i]
+    const localOpt = currentSlide.value?.pollsComponents?.options?.[i];
     if (localOpt) {
-      localOpt.backendId = backendOpt.id
+      localOpt.backendId = backendOpt.id;
     }
-  })
+  });
 }
 
 const syncFullscreen = async () => {
@@ -92,9 +105,14 @@ const currentSlide = computed<Slide | undefined>(() => {
   return matched || slides.value[0];
 });
 
-watch(currentSlide, () => {
-  void fetchActivePoll()
-}, { immediate: true });
+watch(
+  currentSlide,
+  () => {
+    activePollId.value = undefined;
+    void fetchActivePoll();
+  },
+  { immediate: true }
+);
 
 function sessionJoinStorageKey(code: string): string {
   return `centimeter.session.joined.${code}`;
