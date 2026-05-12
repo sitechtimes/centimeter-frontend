@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-11-16",
   devtools: { enabled: true },
-  css: ["assets/main.css"],
+  css: ["~/assets/main.css"],
   vite: {
     css: {
       preprocessorOptions: {
