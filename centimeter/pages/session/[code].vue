@@ -24,6 +24,7 @@
 
           <div class="flex-1 overflow-hidden px-4 pb-4">
             <PresentationCanvas
+              :key="`slide-${currentHostSlide?.id}-${lastResultsUpdate}`"
               class="w-full h-full rounded-lg overflow-hidden"
               :currentSlide="currentHostSlide"
               :presentationMode="true"
@@ -116,7 +117,8 @@ const currentSlideId = ref("");
 const isLiveHost = ref(false);
 const hostSlides = ref<Slide[]>([]);
 const hostSlideIndex = ref(0);
-const pollTimerId = ref<ReturnType<typeof setInterval> | null>(null);
+const sessionSocket = ref<WebSocket | null>(null);
+const lastResultsUpdate = ref<number>(0);
 
 const createdPollSlideIds = ref<Set<string>>(new Set());
 
@@ -161,6 +163,58 @@ const sessionId = computed<string | undefined>(() => {
     : undefined;
 });
 
+function buildSessionSocketUrl(code: string): string {
+  const baseUrl = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "");
+  if (!baseUrl) return "";
+
+  const wsBase = baseUrl.replace(/^http:\/\//i, "ws://").replace(/^https:\/\//i, "wss://");
+
+  return `${wsBase}/ws/session/${code}/`;
+}
+
+function connectSessionSocket(): void {
+  if (!joinCode.value || sessionSocket.value) return;
+
+  const socketUrl = buildSessionSocketUrl(joinCode.value);
+  if (!socketUrl) return;
+
+  const socket = new WebSocket(socketUrl);
+  sessionSocket.value = socket;
+
+  socket.onmessage = (event: MessageEvent) => {
+    let payload: any;
+    try {
+      payload = JSON.parse(event.data);
+    } catch {
+      return;
+    }
+
+    const eventName = payload?.event;
+    const data = payload?.data || {};
+
+
+    if (eventName === "participant_joined" || eventName === "participant_left") {
+      void refreshParticipants();
+    }
+    
+    if (eventName === "results_updated") {
+      lastResultsUpdate.value = Date.now();
+    }
+  
+  };
+
+  socket.onclose = () => {
+    sessionSocket.value = null;
+  };
+}
+
+function disconnectSessionSocket(): void {
+  if (sessionSocket.value) {
+    sessionSocket.value.close();
+    sessionSocket.value = null;
+  }
+}
+
 onMounted(async () => {
   document.addEventListener("fullscreenchange", handleFullscreenChange);
   if (!joinCode.value) {
@@ -170,11 +224,11 @@ onMounted(async () => {
 
   await refreshParticipants();
   await refreshSessionStatus();
-  startParticipantsPolling();
+  connectSessionSocket();
 });
 
 onBeforeUnmount(() => {
-  stopParticipantsPolling();
+  disconnectSessionSocket();
   window.removeEventListener("keydown", onHostKeyDown);
   document.removeEventListener("fullscreenchange", handleFullscreenChange);
 });
@@ -381,7 +435,7 @@ const endSession = async () => {
   if (isEndingSession.value) return;
 
   isEndingSession.value = true;
-  stopParticipantsPolling();
+  disconnectSessionSocket();
   if (document.fullscreenElement) {
     await document.exitFullscreen();
   }

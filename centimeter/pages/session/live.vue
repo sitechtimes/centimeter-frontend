@@ -106,12 +106,11 @@ const currentSlide = computed<Slide | undefined>(() => {
 });
 
 watch(
-  currentSlide,
+  currentSlideId,
   () => {
     activePollId.value = undefined;
     void fetchActivePoll();
-  },
-  { immediate: true }
+  }
 );
 
 function sessionJoinStorageKey(code: string): string {
@@ -228,8 +227,6 @@ function connectSessionSocket(): void {
       }
       currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value;
     }
-  };
-
   socket.onclose = () => {
     sessionSocket.value = null;
   };
@@ -327,21 +324,19 @@ onMounted(() => {
   restorePresentationState();
   connectSessionSocket();
   startHeartbeat();
-  startStatusPolling();
+  void fetchActivePoll();
 });
 
 onBeforeUnmount(async () => {
   document.removeEventListener("fullscreenchange", handleFullscreenChange);
   disconnectSessionSocket();
   stopHeartbeat();
-  stopStatusPolling();
   await leaveSession();
 });
 
 onBeforeRouteLeave(async () => {
   disconnectSessionSocket();
   stopHeartbeat();
-  stopStatusPolling();
   await leaveSession();
 });
 </script>

@@ -25,8 +25,32 @@
         >
           {{ props.slide?.question }}
         </p>
+
+        <p
+          v-else-if="isPresentationMode && !isHost"
+          class="w-full text-3xl font-semibold text-[var(--text-color)] border-b border-[var(--faded-bg-color)] pb-3"
+        >
+          {{ props.slide?.question }}
+        </p>
         
-        <div class="flex-1 min-h-0" :class="chartLayoutClass">
+        <div v-if="isPresentationMode && !isHost && hasVoted" class="flex-1 min-h-0 flex flex-col items-center justify-center gap-6">
+          <div class="text-center space-y-4">
+            <div class="text-6xl text-[var(--primary)]">✓</div>
+            <h2 class="text-2xl font-semibold text-[var(--text-color)]">Vote Submitted</h2>
+          </div>
+          
+          <div v-if="selectedChoice" class="flex items-center gap-3 bg-[var(--primary-shade-translucent)] border-2 border-[var(--primary)] rounded-lg px-6 py-4 max-w-sm">
+            <span
+              class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
+              :style="{ backgroundColor: selectedChoice.color }"
+            >
+              {{ selectedChoice.position }}
+            </span>
+            <span class="text-lg font-semibold text-[var(--text-color)]">{{ selectedChoice.option_text }}</span>
+          </div>
+        </div>
+        
+        <div v-else class="flex-1 min-h-0" :class="chartLayoutClass">
           <div  :class="chartShellClass">
             <GraphComponent :options="slideOptions" :chartType="currentChartType"/>
           </div>
@@ -77,13 +101,6 @@
               </button>
             </div>
 
-            <div
-              v-if="isPresentationMode && hasVoted"
-              class="mt-2 text-sm text-[var(--primary)] font-semibold"
-            >
-              ✓ Vote submitted
-            </div>
-
             <button
               v-if="!isPresentationMode"
               @click="addOption"
@@ -117,9 +134,11 @@ const defaultQuestion = "Ask your question here..."
 const canvasRef = ref<HTMLDivElement>();
 const slideOptions = computed(() => props.slide?.pollsComponents?.options ?? [])
 const isHost = computed(() => props.isHost === true)
+const isPresentationMode = computed(() => props.presentationMode === true)
 const responseStore = useResponsesStore()
 const pollsStore = usePollsStore()
 const hasVoted = ref(false)
+const selectedChoice = ref<PollsOption | null>(null)
 const isSubmitting = ref(false)
 
 const pollResultsTimer = ref<ReturnType<typeof setInterval> | null>(null)
@@ -205,20 +224,44 @@ async function chooseChoice(choice: PollsOption) {
 
   const responseLimit = props.slide.responseLimit ?? 1
  
+  let pollId = props.activePollId
+  if (!pollId) {
+    console.warn('[MultipleChoiceSlide] Poll ID not provided, fetching active poll...')
+    try {
+      const body = await pollsStore.fetchPollsData(props.sessionJoinCode)
+      pollId = body?.active_poll?.id
+      if (!pollId) {
+        console.error('[MultipleChoiceSlide] Failed to fetch poll ID from backend')
+        return
+      }
+    } catch (err) {
+      console.error('[MultipleChoiceSlide] Error fetching poll ID:', err)
+      return
+    }
+  }
+
   if (responseLimit === 1) {
     isSubmitting.value = true
+    
+    slideOptions.value.forEach(opt => {
+      if (opt !== choice && opt.chosen) {
+        opt.chosen = false
+        opt.amount_chosen = Math.max(0, (opt.amount_chosen ?? 1) - 1)
+      }
+    })
  
     choice.chosen = true
     choice.amount_chosen = (choice.amount_chosen ?? 0) + 1
  
     try {
       await responseStore.votePolls(
-        props.activePollId!,
+        pollId,
         props.sessionJoinCode,
         props.nickname,
         choice.backendId!,
       )
       hasVoted.value = true
+      selectedChoice.value = choice
     } catch (err) {
       choice.chosen = false
       choice.amount_chosen = Math.max(0, (choice.amount_chosen ?? 1) - 1)
@@ -239,10 +282,10 @@ async function chooseChoice(choice: PollsOption) {
  
       if (currentlyChosen.length + 1 === responseLimit) {
         isSubmitting.value = true
-        const chosenIds = slideOptions.value.filter(o => o.chosen).map(o => o.position!)
+        const chosenIds = slideOptions.value.filter(o => o.chosen).map(o => o.backendId!)
         try {
           await responseStore.voteMultiSelect(
-            props.activePollId!,
+            pollId,
             props.sessionJoinCode,
             props.nickname,
             chosenIds
@@ -266,7 +309,6 @@ async function chooseChoice(choice: PollsOption) {
 
 const CANVAS_WIDTH = 1200,
   CANVAS_HEIGHT = 800;
-const isPresentationMode = computed(() => props.presentationMode === true)
 
 async function refreshPollResults(): Promise<void> {
   if (!props.sessionJoinCode || !isPresentationMode.value) return
@@ -292,7 +334,6 @@ async function refreshPollResults(): Promise<void> {
 watch(isPresentationMode, (val) => {
   if (val) {
     refreshPollResults()
-    pollResultsTimer.value = setInterval(refreshPollResults, 3000)
   } else {
     if (pollResultsTimer.value) clearInterval(pollResultsTimer.value)
   }
@@ -300,6 +341,7 @@ watch(isPresentationMode, (val) => {
 
 watch(() => props.slide?.id, () => {
   hasVoted.value = false
+  selectedChoice.value = null
   isSubmitting.value = false
   slideOptions.value.forEach(opt => { opt.chosen = false; opt.amount_chosen = 0 })
   refreshPollResults()

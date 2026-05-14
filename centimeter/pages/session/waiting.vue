@@ -103,14 +103,12 @@ onMounted(() => {
 
   connectSessionSocket();
   restoreJoinedParticipant();
-  startStatusPolling();
   window.addEventListener("beforeunload", handleBeforeUnload);
 });
 
 onBeforeUnmount(async () => {
   window.removeEventListener("beforeunload", handleBeforeUnload);
   disconnectSessionSocket();
-  stopStatusPolling();
   stopHeartbeat();
   if (!skipLeaveOnUnmount.value) {
     await leaveIfJoined();
@@ -122,7 +120,6 @@ onBeforeRouteLeave(async (to) => {
   skipLeaveOnUnmount.value = navigatingToLive;
 
   disconnectSessionSocket();
-  stopStatusPolling();
   stopHeartbeat();
 
   if (!navigatingToLive) {
@@ -183,7 +180,10 @@ async function sendHeartbeat(): Promise<void> {
   if (!payload) return;
 
   try {
-    await sessionStore.sendHeartbeat(payload);
+    await Promise.all([
+      sessionStore.sendHeartbeat(payload),
+      fetchParticipants()
+    ]);
   } catch (error) {
     console.error("Heartbeat failed:", error);
 
