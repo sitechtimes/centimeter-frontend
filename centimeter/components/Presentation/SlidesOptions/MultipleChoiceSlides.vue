@@ -60,8 +60,8 @@
               :key="choice.position"
               class="flex items-center gap-2 bg-[var(--bg-color)] rounded border border-[var(--faded-bg-color)] min-w-0"
               :class="[choiceClass, choice.chosen && isPresentationMode ? 'bg-[var(--primary-shade-translucent)] border-[var(--primary)] cursor-pointer' : '',
-              isPresentationMode && hasVoted && !choice.chosen? 'opacity-50': '',]"
-              @click="isPresentationMode && !hasVoted ? chooseChoice(choice) : null"
+              isPresentationMode && hasVoted && !choice.chosen ? 'opacity-50': '',]"
+              @click="isPresentationMode && !hasVoted && !isHost ? chooseChoice(choice) : null"
             >
 
               <span

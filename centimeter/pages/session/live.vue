@@ -227,6 +227,7 @@ function connectSessionSocket(): void {
       }
       currentSlideId.value = presentationPayload?.data?.active_slide || currentSlideId.value;
     }
+  };
   socket.onclose = () => {
     sessionSocket.value = null;
   };
@@ -316,7 +317,7 @@ onMounted(() => {
   }
 
   if (!getJoinedNickname()) {
-    router.push({ path: "/session/waiting", query: { code: sessionCode.value } });
+    router.push({ path: "/session/waiting.vue", query: { code: sessionCode.value } });
     return;
   }
 
