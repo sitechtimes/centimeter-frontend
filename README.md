@@ -1,5 +1,8 @@
 <p align="center">
-	<img src="centimeter/public/logo/logoWithWords.svg" alt="Centimeter" width="420" />
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="centimeter/public/logo/logoWithWords-white.svg" />
+		<img src="centimeter/public/logo/logoWithWords.svg" alt="Centimeter" width="420" />
+	</picture>
 </p>
 
 # Centimeter
@@ -9,7 +12,7 @@ Centimeter is a Nuxt 3 frontend for creating presentations, editing slides, and 
 The runnable app lives in the [centimeter/](centimeter/) directory.
 
 > [!IMPORTANT]
-> This app depends on a working backend API. Configure `.env` before you try the editor, session, or poll flows, and make sure the backend server is running. Then, follow the readme on centimeter-backend to get the API running.
+> This app depends on a working backend API. Configure `.env` before you try the editor, session, or poll flows, and make sure the backend server is running.
 
 ## About Centimeter
 
